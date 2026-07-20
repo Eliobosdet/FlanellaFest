@@ -1,0 +1,49 @@
+{% extends 'festival/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="py-5" style="background-min-height: 80vh; display: flex; align-items: center;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                
+                <div class="card rustic-card shadow-lg p-4 p-md-5 text-center">
+                    
+                    <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4 rustic-number" style="width: 80px; height: 80px; background-box-shadow: 0 0 0 2px #31ac34;">
+                        <i class="fas fa-check text-white fs-1"></i>
+                    </div>
+                    
+                    <h2 class="display-4 fw-bold mb-3 rustic-title" style="letter-spacing: 2px;">PAGAMENTO RICEVUTO!</h2>
+                    
+                    <div class="mx-auto rustic-divider mb-4" style="width: 120px; height: 4px; background-border-radius: 2px; position: relative;">
+                        <div style="position: absolute; top: -2px; left: 10px; width: 8px; height: 8px; background-border-radius: 50%; transform: rotate(45deg);"></div>
+                        <div style="position: absolute; top: -2px; right: 10px; width: 8px; height: 8px; background-border-radius: 50%; transform: rotate(45deg);"></div>
+                    </div>
+
+                    <p class="fs-4 lh-lg rustic-text mb-4" style="font-weight: 500;">
+                        Ci siamo, sei ufficialmente dei nostri!<br>
+                        I tuoi posti sono stati riservati.
+                    </p>
+                    
+                    <div class="p-3 mb-5 mx-auto rounded" style="background-color: rgba(49, 172, 52, 0.05); ">
+                        <p class="fs-5 lh-lg rustic-text mb-0" >
+                            Abbiamo inviato un'email con i QR Code.<br>
+                            <span >CONTROLLA ANCHE LA CARTELLA SPAM!</span>
+                        </p>
+                    </div>
+
+                    <div>
+                        <a href="{% url 'home' %}" class="btn btn-lg px-5 py-3 rustic-button text-white shadow-lg" style="border-radius: 25px; font-size: 1.2rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px;">
+                            TORNA ALLA HOME
+                        </a>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}

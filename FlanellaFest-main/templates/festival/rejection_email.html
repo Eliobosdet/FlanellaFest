@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Registrazione non approvata - Flanella Fest</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header {
+            background-color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+        }
+        .notice {
+            background-border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Flanella Fest</h1>
+        <h2>Registrazione non approvata</h2>
+    </div>
+
+    <div class="content">
+        <p>Ciao {{ participant.first_name }},</p>
+
+        <p>Ci dispiace informarti che la tua registrazione al Flanella Fest non è stata approvata.</p>
+
+        <div class="notice">
+            <p>Questo potrebbe essere dovuto a uno dei seguenti motivi:</p>
+            <ul>
+                <li>Prova di pagamento non valida o illeggibile</li>
+                <li>Informazioni mancanti o non corrette</li>
+            </ul>
+        </div>
+
+        <p>Se pensi che ci sia stato un errore o desideri maggiori informazioni, ti preghiamo di contattarci rispondendo a questa email oppure a contattarci telefonicamente.</p>
+
+        <p>Cordiali saluti,<br>
+        Il team di Flanella Fest</p>
+    </div>
+
+    <div class="footer">
+        <p>© {% now "Y" %} Flanella Fest. Tutti i diritti riservati.</p>
+    </div>
+</body>
+</html>

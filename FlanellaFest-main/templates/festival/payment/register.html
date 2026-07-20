@@ -1,0 +1,273 @@
+{% extends 'festival/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container p-2 mt-5 mb-5">
+    
+    <div class="text-center mb-5">
+        <h2 class="display-4 fw-bold mb-3 rustic-title" style="letter-spacing: 2px; text-shadow: 2px 2px 0px rgba(49, 172, 52, 0.1);">BIGLIETTERIA</h2>
+        <div class="mx-auto rustic-divider" style="width: 120px; height: 4px;"></div>
+    </div>
+
+    <form hx-post="" hx-target="body" enctype="multipart/form-data" id="registration-form">
+        {% csrf_token %}
+        <div class="row g-4">
+            
+            <div class="col-lg-8 col-md-12">
+                <div class="card rustic-card shadow-sm mb-4" style="z-index: 1;">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; background-box-shadow: 0 0 0 2px #31ac34;">
+                                <i class="fas fa-address-book text-white fs-4"></i>
+                            </div>
+                            <h3 class="mb-0 rustic-subtitle fw-bold" style="font-size: 1.8rem; letter-spacing: 1px;">Referente Ordine</h3>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold rustic-text"  for="{{ registration_form.email.id_for_label }}">Email per comunicazioni*</label>
+                                {{ registration_form.email }}
+                                {% if registration_form.email.errors %}
+                                    <div class="text-danger small mt-1 fw-bold">{{ registration_form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold rustic-text"  for="{{ registration_form.confirm_email.id_for_label }}">Conferma Email*</label>
+                                {{ registration_form.confirm_email }}
+                                {% if registration_form.confirm_email.errors %}
+                                    <div class="text-danger small mt-1 fw-bold">{{ registration_form.confirm_email.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold rustic-text"  for="{{ registration_form.phone.id_for_label }}">Telefono*</label>
+                                {{ registration_form.phone }}
+                                {% if registration_form.phone.errors %}
+                                    <div class="text-danger small mt-1 fw-bold">{{ registration_form.phone.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-12"> 
+                                <div class="form-check p-3 rounded" style="background-color: rgba(49, 172, 52, 0.05); ">
+                                    {{ registration_form.privacy_tick }} 
+                                    <label class="form-check-label ms-2 rustic-text" style="font-weight: 500; " for="{{ registration_form.privacy_tick.id_for_label }}">
+                                        {{ registration_form.privacy_tick.label }} 
+                                    </label>
+                                </div>
+                                {% if registration_form.privacy_tick.errors %}
+                                    <div class="text-danger small mt-1 fw-bold">{{ registration_form.privacy_tick.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card rustic-card shadow-sm" style="z-index: 1;">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; background-box-shadow: 0 0 0 2px #31ac34;">
+                                <i class="fas fa-users text-white fs-4"></i>
+                            </div>
+                            <h3 class="mb-0 rustic-subtitle fw-bold" style="font-size: 1.8rem; letter-spacing: 1px;">Partecipanti</h3>
+                        </div>
+                        <p class="mb-4 ms-5 ps-3 rustic-text" style="font-size: 1.1rem;">Aggiungi fino a 5 partecipanti in un unico ordine. Ognuno riceverà un QR code personale.</p>
+
+                        {{ participant_formset.management_form }}
+
+                        <div id="participant-forms">
+                            {% for form in participant_formset %}
+                                <div class="participant-form mb-4 p-4 position-relative" style="background-border-radius: 12px;">
+                                    
+                                    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                                        <h5 class="mb-0 fw-bold rustic-subtitle" style="font-size: 1.4rem;">
+                                            TICKET #<span class="participant-number">{{ forloop.counter }}</span>
+                                        </h5>
+                                        {% if forloop.counter > 1 %}
+                                            <button type="button" class="btn btn-sm btn-outline-danger remove-participant fw-bold">
+                                                <i class="fas fa-trash-alt me-1"></i>Rimuovi
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold rustic-text"  for="{{ form.first_name.id_for_label }}">Nome*</label>
+                                            {{ form.first_name }}
+                                            {% if form.first_name.errors %}
+                                                <div class="text-danger small mt-1 fw-bold">{{ form.first_name.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold rustic-text"  for="{{ form.last_name.id_for_label }}">Cognome*</label>
+                                            {{ form.last_name }}
+                                            {% if form.last_name.errors %}
+                                                <div class="text-danger small mt-1 fw-bold">{{ form.last_name.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold rustic-text"  for="{{ form.email.id_for_label }}">Email Partecipante*</label>
+                                            {{ form.email }}
+                                            {% if form.email.errors %}
+                                                <div class="text-danger small mt-1 fw-bold">{{ form.email.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold rustic-text"  for="{{ form.confirm_email.id_for_label }}">Conferma Email*</label>
+                                            {{ form.confirm_email }}
+                                            {% if form.confirm_email.errors %}
+                                                <div class="text-danger small mt-1 fw-bold">{{ form.confirm_email.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="text-center mt-2">
+                            <button type="button" id="add-participant" class="btn w-100 py-3 rustic-text fw-bold" style="background-color: transparent; border-radius: 12px; font-size: 1.2rem; transition: all 0.3s ease;">
+                                <i class="fas fa-plus-circle me-2"></i>AGGIUNGI UN ALTRO BIGLIETTO
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-12">
+                <div class="card rustic-card shadow-lg" style="position: sticky; top: 20px; z-index: 2;">
+                    <div class="card-body p-4">
+                        <h4 class="mb-4 text-center rustic-title" style="font-size: 2rem; letter-spacing: 1px;">RIEPILOGO ORDINE</h4>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="rustic-text text-muted fw-bold">Prezzo unitario:</span>
+                            <span class="fw-bold fs-5"><span id="single-ticket-price" data-price="{{ ticket_price|stringformat:'f' }}">{{ ticket_price|floatformat:2 }}</span> €</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-success border-opacity-25">
+                            <span class="rustic-text text-muted fw-bold">Quantità biglietti:</span>
+                            <span class="fw-bold fs-5">x <span id="total-participants">1</span></span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-4 pt-2">
+                            <span class="rustic-title mb-0" style="font-size: 1.5rem; ">TOTALE:</span>
+                            <span class="rustic-title mb-0" style="font-size: 2.2rem;"><span id="total-price">{{ ticket_price|floatformat:2 }}</span> €</span>
+                        </div>
+
+                        <button type="submit" class="btn w-100 py-3 rustic-button text-white shadow-sm" style="border-radius: 25px; font-size: 1.2rem; font-weight: bold; letter-spacing: 1px;">
+                            <i class="fas fa-lock me-2"></i> PAGA CON STRIPE
+                        </button>
+                        
+                        <div class="text-center mt-4">
+                            <div class="d-flex justify-content-center gap-2 mb-2" >
+                                <i class="fab fa-cc-visa fs-3"></i>
+                                <i class="fab fa-cc-mastercard fs-3"></i>
+                                <i class="fab fa-cc-apple-pay fs-3"></i>
+                                <i class="fab fa-google-pay fs-3"></i>
+                            </div>
+                            <p class="text-muted small mb-0 rustic-text" style="font-weight: 500;">
+                                Transazione sicura e crittografata.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+/* Piccoli aggiustamenti specifici per i form di Bootstrap in questa pagina */
+.form-control {
+    border-radius: 8px;
+    padding: 10px 15px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.form-control:focus {
+    border-box-shadow: 0 0 0 0.25rem rgba(49, 172, 52, 0.25);
+}
+#add-participant:hover {
+    background-color: rgba(49, 172, 52, 0.1) !important;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        
+        function updateOrderSummary() {
+            var numParticipants = $('.participant-form').length;
+            var rawPrice = $('#single-ticket-price').data('price').replace(',', '.');
+            var ticketPrice = parseFloat(rawPrice);
+            var total = numParticipants * ticketPrice;
+
+            $('#total-participants').text(numParticipants);
+            $('#total-price').text(total.toFixed(2).replace('.', ','));
+        }
+
+        updateOrderSummary();
+
+        function updateParticipantNumbers() {
+            $('.participant-number').each(function(index) {
+                $(this).text(index + 1);
+            });
+        }
+
+        $('#add-participant').click(function() {
+            var form_idx = $('#id_participants-TOTAL_FORMS').val();
+        
+            if (form_idx >= 5) {
+                alert('Non puoi aggiungere più di 5 partecipanti!');
+                return;
+            }
+        
+            var newForm = $('.participant-form').first().clone(true);
+        
+            newForm.find(':input').each(function() {
+                var name = $(this).attr('name');
+                if (name) {
+                    name = name.replace('-0-', '-' + form_idx + '-');
+                    $(this).attr('name', name);
+                    $(this).attr('id', 'id_' + name);
+        
+                    if ($(this).is(':checkbox')) {
+                        $(this).prop('checked', false);
+                    } else {
+                        $(this).val('');
+                    }
+                }
+            });
+        
+            newForm.find('label').each(function() {
+                var newFor = $(this).attr('for').replace('-0-', '-' + form_idx + '-');
+                $(this).attr('for', newFor);
+            });
+        
+            if (newForm.find('.remove-participant').length === 0) {
+                newForm.find('.border-bottom').append('<button type="button" class="btn btn-sm btn-outline-danger remove-participant fw-bold"><i class="fas fa-trash-alt me-1"></i>Rimuovi</button>');
+            }
+        
+            $('#participant-forms').append(newForm);
+            $('#id_participants-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+            
+            updateParticipantNumbers();
+            updateOrderSummary();
+        });
+
+        $(document).on('click', '.remove-participant', function() {
+            $(this).closest('.participant-form').remove();
+
+            var form_idx = $('#id_participants-TOTAL_FORMS').val();
+            $('#id_participants-TOTAL_FORMS').val(parseInt(form_idx) - 1);
+
+            updateParticipantNumbers();
+            updateOrderSummary();
+        });
+    });
+</script>
+{% endblock %}

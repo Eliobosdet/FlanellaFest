@@ -1,0 +1,31 @@
+
+{% extends 'festival/base.html' %}
+
+{% block content %}
+    <h1>Dettagli Partecipante</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">{{ participant.first_name }} {{ participant.last_name }}</h5>
+            <p><strong>Email:</strong> {{ participant.email }}</p>
+            <p><strong>Telefono:</strong> {{ participant.phone }}</p>
+            <p><strong>Stato:</strong> {{ participant.get_status_display }}</p>
+            <p><strong>Data richiesta:</strong> {{ participant.created_at|date:"d/m/Y H:i" }}</p>
+        </div>
+    </div>
+
+    {% if participant.status == 'pending' %}
+        <div class="d-flex gap-2 mb-4">
+            <form hx-post="{% url 'approve_participant' participant.pk %}" hx-target="body" >
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Approva</button>
+            </form>
+            <form hx-post="{% url 'reject_participant' participant.pk %}" hx-target="body" >
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Rifiuta</button>
+            </form>
+        </div>
+    {% endif %}
+
+    <a href="{% url 'approved_partecipants' %}" class="btn btn-secondary">Torna alla lista</a>
+{% endblock %}

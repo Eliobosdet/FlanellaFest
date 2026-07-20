@@ -1,0 +1,43 @@
+{% extends 'festival/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Dettagli Registrazione</h1>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Informazioni di contatto</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>Email:</strong> {{ registration.email }}</p>
+            <p><strong>Telefono:</strong> {{ registration.phone }}</p>
+            <p><strong>Data richiesta:</strong> {{ registration.created_at|date:"d/m/Y H:i" }}</p>
+        </div>
+    </div>
+
+    <h2 class="mb-3">Partecipanti ({{ participants.count }})</h2>
+
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Nome</th>
+                    <th>Cognome</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for participant in participants %}
+                <tr>
+                    <td>{{ participant.first_name }}</td>
+                    <td>{{ participant.last_name }}</td>
+                    <td>{{ participant.email }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="{% url 'approved_requests' %}" class="btn btn-secondary">Torna alla lista</a>
+</div>
+{% endblock %}

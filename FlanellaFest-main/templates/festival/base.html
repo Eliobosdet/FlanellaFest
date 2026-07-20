@@ -1,0 +1,349 @@
+{% load static %}
+{% load auth_extras %}
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flanella Fest</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Merriweather:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* STILI GLOBALI BASE: MEDIEVAL THEME */
+        body {
+            background-color: #f4e8d1;
+            /* Parchment color */
+            background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+            font-family: 'Merriweather', serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            /* color: #3b2f2f; */
+            /* Dark ink */
+        }
+
+        /* NAVBAR MEDIEVALE */
+        .navbar-custom {
+            background-color: #2c1a16;
+            /* Dark wood */
+            border-bottom: 4px solid #5a3a29;
+            /* Lighter wood accent */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            padding: 10px 0;
+            /* border-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png') 30 stretch; */
+        }
+
+        .navbar-brand img {
+            height: 55px;
+            border-radius: 4px;
+            border: 2px solid #b89947;
+            /* Gold trim */
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand img:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-link {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            color: #e6d3a8 !important;
+            /* Gold/Parchment text */
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .nav-link:hover {
+            color: #fff !important;
+            text-shadow: 0 0 10px #b89947;
+            transform: translateY(-2px);
+        }
+
+        /* CLASSI MEDIEVALI GLOBALI */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .rustic-title,
+        .rustic-subtitle {
+            font-family: 'MedievalSharp', cursive !important;
+            color: #612115 !important;
+            /* Burgundy / Blood red */
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        .rustic-text {
+            font-family: 'Merriweather', serif !important;
+            color: #3b2f2f !important;
+            line-height: 1.8;
+        }
+
+        .rustic-card {
+            background-color: #fdfaf3 !important;
+            /* Lighter parchment */
+            border: 3px solid #8b5a2b !important;
+            /* Wood border */
+            border-radius: 4px !important;
+            /* Less rounded for medieval */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            position: relative;
+        }
+
+        .rustic-card::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            border: 1px dashed #c0a062;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .rustic-button {
+            font-family: 'MedievalSharp', cursive !important;
+            background-color: #612115 !important;
+            /* Burgundy */
+            border: 2px solid #b89947 !important;
+            /* Gold trim */
+            color: #f4e8d1 !important;
+            transition: all 0.3s ease;
+            border-radius: 3px !important;
+            text-transform: uppercase;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .rustic-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(97, 33, 21, 0.4) !important;
+            background-color: #4a1910 !important;
+            /* Darker burgundy */
+            color: #fff !important;
+        }
+
+        .rustic-divider {
+            position: relative;
+            background-color: #8b5a2b !important;
+            border-radius: 0 !important;
+            height: 2px !important;
+            margin: 2rem auto;
+        }
+
+        .rustic-divider::before,
+        .rustic-divider::after {
+            content: '⚔';
+            position: absolute;
+            top: -16px;
+            color: #8b5a2b;
+            font-size: 24px;
+        }
+
+        .rustic-divider::before {
+            left: -35px;
+        }
+
+        .rustic-divider::after {
+            right: -35px;
+        }
+
+        /* Number icons for steps */
+        .rustic-number {
+            background-color: #8b5a2b !important;
+            border-color: #b89947 !important;
+            color: #f4e8d1 !important;
+            border-radius: 5px !important;
+        }
+
+        .admin-btn {
+            background-color: #2c1a16 !important;
+            border-color: #b89947 !important;
+            color: #e6d3a8 !important;
+            font-family: 'MedievalSharp', cursive !important;
+        }
+
+        .admin-btn:hover {
+            background-color: #612115 !important;
+            color: #fff !important;
+        }
+
+        /* FOOTER MEDIEVALE */
+        .footer-medieval {
+            background-color: #2c1a16;
+            border-top: 4px solid #5a3a29;
+            /* color: #e6d3a8; */
+            /* border-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png') 30 stretch; */
+            padding: 3rem 0;
+            margin-top: auto;
+            /* spinge il footer in fondo al body flex */
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .footer-title {
+            font-family: 'MedievalSharp', cursive;
+            color: #c4b490 !important;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            /* text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); */
+        }
+
+        .footer-text {
+            font-family: 'Merriweather', serif;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #d1bfae;
+        }
+
+        .footer-link {
+            color: #b89947;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #fff;
+            text-shadow: 0 0 5px #b89947;
+        }
+
+        .footer-divider {
+            border-color: #5a3a29;
+            margin: 2rem 0 1rem;
+        }
+    </style>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+
+<body hx-boost="true">
+    {% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container">
+            {% comment %} <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'img/flanella-logo.png' %}" alt="Flanella Fest Logo">
+            </a> {% endcomment %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}"><i class="fas fa-home me-0"></i> Home
+                            </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}"><i class="fas fa-info-circle me-0"></i> About
+                            </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    {% if user.is_staff or request.user|has_group:"Organizer" %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_management' %}"><i class="fas fa-ticket me-1"></i>
+                            Biglietti</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'approved_requests' %}"><i class="fas fa-clock me-1"></i>
+                            Registrazioni</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'check_qr' %}"><i class="fas fa-qrcode me-1"></i> Verifica
+                            QR</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'all_participants' %}"><i class="fas fa-users me-1"></i>
+                            Partecipanti</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-warning" href="{% url 'logout' %}"><i
+                                class="fas fa-sign-out-alt me-1"></i> Esci</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% endblock %}
+
+    {% if messages %}
+    <div class="container mt-4" style="position: relative; z-index: 10;">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} shadow-sm rounded-3 border-0"
+            style="border-left: 5px solid {% if message.tags == 'success' %}#31ac34{% else %}#f9792b{% endif %};">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <main class="flex-grow-1 mb-5">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer-medieval text-center text-lg-start">
+        <div class="container">
+            <div class="row align-items-center">
+
+                <div class="col-lg-3 mb-4 mb-lg-0 text-center text-lg-start">
+                    <h5 class="footer-title"><i class="fas fa-beer me-2"></i> Flanella Fest</h5>
+                    <p class="footer-text">
+                        29 Agosto - Castello di Spezzano<br>
+                        Festival di musica indipendente e arti performative. Live music, dj set, food & beverage.
+                    </p>
+                </div>
+
+                <div class="col-lg-2 mb-4 mb-lg-0 text-center">
+                    <h5 class="footer-title">Link Utili</h5>
+                    <ul class="list-unstyled mb-0 footer-text">
+                        <li><a href="{% url 'about' %}" class="footer-link">About the Festival</a></li>
+                        <li><a href="{% url 'register' %}" class="footer-link">Tickets / Registrazione</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 text-center text-lg-center mb-4 mb-lg-0">
+                    <h5 class="footer-title">Seguici</h5>
+                    <a href="#" class="footer-link me-3 fs-4" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://www.instagram.com/flanellafest/" class="footer-link me-3 fs-4" title="Instagram"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="#" class="footer-link fs-4" title="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+
+                <div class="col-lg-4 text-center text-lg-end">
+                    <h5 class="footer-title"><i class="fas fa-map-marked-alt me-2"></i> Dove Siamo</h5>
+                    <div class="rounded overflow-hidden shadow-sm" style="border: 2px solid #5a3a29;">
+                        <iframe
+                            src="https://maps.google.com/maps?q=Castello+di+Spezzano+MO+Italy&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                            width="100%" height="150" style="border:0;" allowfullscreen="" loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr class="footer-divider">
+
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="mb-0 footer-text" style="font-size: 0.8rem;">
+                        &copy; 2026 Flanella Fest. Tutti i diritti riservati.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

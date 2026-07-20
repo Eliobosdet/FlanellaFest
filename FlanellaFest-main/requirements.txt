@@ -1,0 +1,8 @@
+Django==4.2.9
+Pillow
+qrcode==7.4.2
+python-dotenv==1.0.0
+django-crispy-forms==2.0
+crispy-bootstrap5==0.7
+gunicorn==21.2.0
+weasyprint>=60.0

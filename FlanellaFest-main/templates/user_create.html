@@ -1,0 +1,9 @@
+{% extends "festival/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<form hx-post="" hx-target="body"> {% csrf_token %}
+    {{form | crispy}}
+    <input type="submit" class="btn btn-info" value="Registra Organizzatore">
+</form>
+{% endblock %}

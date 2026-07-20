@@ -1,0 +1,108 @@
+{% extends 'festival/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="py-5" style="background-color: transparent;">
+    <div class="container mt-5">
+
+        <div class="text-center mb-5">
+            <h1 class="display-3 fw-bold mb-3 rustic-title" style="letter-spacing: 2px;">About the Festival</h1>
+            <div class="mx-auto rustic-divider"></div>
+            <p class="lead rustic-text mx-auto mt-4" style="max-width: 700px; font-style: italic; ">
+                Costruito attorno alla musica, alla condivisione e al rispetto del luogo in cui ci troviamo. Flanella
+                Fest è nato come un esperimento diventato una vera e propria tradizione indipendente dell'Emilia.
+            </p>
+        </div>
+
+        <div class="row justify-content-center g-5 mt-3">
+            <div class="col-lg-10">
+                <div class="card rustic-card shadow-lg border-0 p-5">
+                    <div class="card-body text-center">
+                        <i class="fas fa-info-circle fa-3x mb-4" style="color: #8b5a2b;"></i>
+                        <h2 class="rustic-subtitle mb-4">La Nostra Storia</h2>
+                        <div class="rustic-text text-start fs-5" style="line-height: 1.9;">
+                            <p>
+                                Nato dall'utopia di un piccolo gruppo di amici, musicisti e appassionati, Flanella Fest
+                                parte da una visione comune: abbandonare le logiche commerciali stressanti dei grandi
+                                format cittadini per ritagliare uno spazio a impatto puramente musicale. Nessun brand
+                                invasivo, nessuna pubblicità aggressiva, solo pura musica e connessione interpersonale.
+                            </p>
+                            <p>
+                                E quale luogo migliore della magnetica e secolare struttura del <strong>Castello di
+                                    Spezzano</strong> per dare forma alla nostra rassegna? Una fusione tra l'antico e
+                                l'indipendente post-moderno.
+                            </p>
+
+                            <hr class="my-5" style="border-top: 2px dashed #b89947; opacity: 1;">
+
+                            <h3 class="rustic-subtitle mb-4 text-center">I Pilastri dell'Organizzazione</h3>
+
+                            <div class="row mt-4">
+                                <div class="col-md-6 mb-4">
+                                    <div class="d-flex align-items-start">
+                                        <i class="fas fa-hamburger fa-2x me-3" style="color: #612115;"></i>
+                                        <div>
+                                            <h4 class="rustic-subtitle fs-4">Food & Diet</h4>
+                                            <p class="rustic-text fs-6">Siamo inclusivi anche sul cibo. L'area Food &
+                                                Beverage è stata attentamente curata dai nostri partner per accogliere
+                                                dietari flessibili: piatti per onnivori, postazioni rigorosamente Vegan
+                                                friendly e ampie alternative per ospiti intolleranti al glutine. Nessuno
+                                                resta a secco o a vuoto.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div class="d-flex align-items-start">
+                                        <i class="fas fa-glass-cheers fa-2x me-3" style="color: #b89947;"></i>
+                                        <div>
+                                            <h4 class="rustic-subtitle fs-4">Eco Experience</h4>
+                                            <p class="rustic-text fs-6">La salvaguardia degli spazi storici è
+                                                fondamentale. I nostri operatori si impegneranno a minimizzare gli
+                                                sprechi, distribuendo birra artigianale tramite circuiti green e
+                                                mantenendo le location intonse. Ti invitiamo e obblighiamo a smaltire
+                                                civilmente l'immondizia nelle apposite recycling zone.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div class="d-flex align-items-start">
+                                        <i class="fas fa-campground fa-2x me-3" style="color: #3e2723;"></i>
+                                        <div>
+                                            <h4 class="rustic-subtitle fs-4">Area Camping</h4>
+                                            <p class="rustic-text fs-6">Non vogliamo abbreviare la festa e costringerti
+                                                a dormire in alberghi. L'area camping adiacente offre uno spazio per chi
+                                                desidera prolungare l'esperienza con la propria tenda. Svegliarsi alla
+                                                luce del mattino tra storicità e natura è impagabile.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div class="d-flex align-items-start">
+                                        <i class="fas fa-microphone-alt fa-2x me-3" style="color: #8b5a2b;"></i>
+                                        <div>
+                                            <h4 class="rustic-subtitle fs-4">Indie Attitude</h4>
+                                            <p class="rustic-text fs-6">Diamo spazio a band, dj selector emergenti ed
+                                                established. Il Flanella Fest non discrimina i generi, premia la
+                                                performance live. L'impianto sarà poderoso. Abbandona le inibizioni
+                                                sotto il palco.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="mt-5">
+                            <a href="{% url 'register' %}" class="btn btn-lg rustic-button px-5 py-3">ACQUISTA
+                                TICKET</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

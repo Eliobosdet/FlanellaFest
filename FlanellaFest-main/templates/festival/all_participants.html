@@ -1,0 +1,160 @@
+{% extends 'festival/base.html' %}
+{% block content %}
+<div class="container-fluid py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); min-height: 100vh;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold mb-3" >Lista Partecipanti</h1>
+            <div class="mx-auto mb-4" style="width: 80px; height: 3px; background-border-radius: 2px;"></div>
+            <div class="alert border-0 shadow-sm d-inline-block" style="background-border-left: 4px solid #dc3545 !important;">
+                <p class="mb-0 fs-5 fw-bold" >
+                    <i class="fas fa-users me-2"></i>Totale Partecipanti: {{ participants|length }}, Arrivati: {{ n_checked_in }}
+                </p>
+            </div>
+            <div class="mx-auto mb-4" style="width: 80px; height: 3px; background-border-radius: 2px;"></div>
+            <a href="{% url 'all_participants_pdf' %}" class="btn btn-light btn-sm shadow-sm" style="pointer-events: auto; font-size: 0.9rem; border-radius: 25px; font-weight: 500; ">
+                <i class="fas fa-clock me-1"></i>Scarica PDF
+            </a>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-lg border-0" style="border-radius: 15px; overflow: hidden;">
+                    <div class="card-header text-white py-3" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                        <h3 class="mb-0 fw-bold text-center">
+                            <i class="fas fa-table me-2"></i>Elenco Completo
+                        </h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0" style="font-size: 0.95rem;">
+                                <thead style="background-border-bottom: 2px solid #dc3545;">
+                                    <tr>
+                                        <th scope="col" class="py-3 px-4 fw-bold" style="border-right: 1px solid #dee2e6;">
+                                            <i class="fas fa-fingerprint me-2"></i>ID Unico
+                                        </th>
+                                        <th scope="col" class="py-3 px-4 fw-bold" style="border-right: 1px solid #dee2e6;">
+                                            <i class="fas fa-user me-2"></i>Nome
+                                        </th>
+                                        <th scope="col" class="py-3 px-4 fw-bold" style="border-right: 1px solid #dee2e6;">
+                                            <i class="fas fa-user me-2"></i>Cognome
+                                        </th>
+                                        <th scope="col" class="py-3 px-4 fw-bold" style="border-right: 1px solid #dee2e6;">
+                                            <i class="fas fa-envelope me-2"></i>Email
+                                        </th>
+                                        <th scope="col" class="py-3 px-4 fw-bold" style="border-right: 1px solid #dee2e6;">
+                                            <i class="fas fa-envelope me-2"></i>Telefono
+                                        </th>
+                                        <th scope="col" class="py-3 px-4 fw-bold" style="border-right: 1px solid #dee2e6;">
+                                            <i class="fas fa-info-circle me-2"></i>Stato
+                                        </th>
+                                        <th scope="col" class="py-3 px-4 fw-bold" >
+                                            <i class="fas fa-calendar me-2"></i>Data Creazione
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for p in participants %}
+                                    <tr style="transition: all 0.3s ease;">
+                                        <td class="py-3 px-4 border-end" style="font-size: 0.85rem; color: #666;">
+                                            {{ p.unique_id }}
+                                        </td>
+                                        <td class="py-3 px-4 border-end fw-semibold">
+                                            {{ p.first_name }}
+                                        </td>
+                                        <td class="py-3 px-4 border-end fw-semibold">
+                                            {{ p.last_name }}
+                                        </td>
+                                        <td class="py-3 px-4 border-end" style="color: #666;">
+                                            {{ p.email }}
+                                        </td>
+                                        <td class="py-3 px-4 border-end" style="color: #666;">
+                                            {{ p.phone }}
+                                        </td>
+                                        <td class="py-3 px-4 border-end">
+                                            <span class="badge rounded-pill px-3 py-2 fw-normal" 
+                                                  style="font-size: 0.8rem;
+                                                         {% if p.status == 'checked_in' %}
+                                                             background-{% else%}
+                                                             background-{% endif %}">
+                                                         {% if p.status == 'checked_in' %}
+                                                            Arrivato
+                                                         {% else%}
+                                                            Non arrivato
+                                                         {% endif %}
+                                            </span>
+                                        </td>
+                                        <td class="py-3 px-4" style="color: #666;">
+                                            <i class="fas fa-calendar-alt me-2" ></i>
+                                            {{ p.created_at|date }}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center py-5 text-muted">
+                                            <i class="fas fa-users-slash fa-3x mb-3" ></i>
+                                            <p class="fs-5 mb-0">Nessun partecipante trovato</p>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.table tbody tr:hover {
+    background-!important;
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.1);
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.table tbody tr:last-child {
+    border-bottom: none;
+}
+
+@media (max-width: 768px) {
+    .table {
+        font-size: 0.8rem !important;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.5rem !important;
+    }
+    
+    .display-4 {
+        font-size: 2rem !important;
+    }
+    
+    .badge {
+        font-size: 0.7rem !important;
+        padding: 0.25rem 0.5rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .table-responsive {
+        border-radius: 0.5rem;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.375rem !important;
+        font-size: 0.75rem !important;
+    }
+    
+    .table th {
+        white-space: nowrap;
+    }
+}
+</style>
+{% endblock %}

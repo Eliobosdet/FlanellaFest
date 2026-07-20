@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Aggiornamento Registrazione - Flanella Fest</title>
+</head>
+<body style="margin: 0; padding: 40px 20px; background-">
+    
+    <div style="max-width: 600px; margin: 0 auto; background-border-radius: 15px; padding: 40px 30px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+        
+        <div style="width: 80px; height: 80px; background-border-radius: 50%; margin: 0 auto 20px auto; line-height: 80px; text-align: center; box-shadow: 0 0 0 2px #f9792b;">
+            <span style="font-size: 35px; font-family: sans-serif; font-weight: bold;">&#10006;</span>
+        </div>
+        
+        <h2 style="font-size: 28px; font-weight: bold; letter-spacing: 2px; margin-top: 0; margin-bottom: 15px;">OPS... QUALCOSA È ANDATO STORTO!</h2>
+        
+        <div style="width: 120px; height: 4px; background-border-radius: 2px; margin: 0 auto 30px auto;"></div>
+        
+        <p style="font-size: 18px; line-height: 1.6; font-weight: bold; margin-bottom: 20px; margin-top: 0;">
+            Ciao {{ participant.first_name }},
+        </p>
+        
+        <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+            La tua sessione di acquisto per il <strong>Flanella Fest</strong> è scaduta o il pagamento non è andato a buon fine.
+        </p>
+        
+        <p style="font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
+            Non preoccuparti, nessun addebito è stato effettuato sulla tua carta. Tuttavia, <strong>i posti che avevi selezionato sono stati liberati</strong> e la tua registrazione attuale è stata annullata.
+        </p>
+
+        <div style="background-padding: 20px; border-radius: 10px; margin-bottom: 35px;">
+            <p style="font-size: 16px; margin: 0; line-height: 1.6; font-weight: bold;">
+                Se vuoi ancora fare festa con noi, ti basta rifare la procedura sul sito!
+            </p>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <a href="{% url 'register' %}" style="display: inline-block; background-padding: 16px 35px; text-decoration: none; border-radius: 25px; font-weight: bold; font-size: 18px; letter-spacing: 2px; ">RIPROVA L'ACQUISTO</a>
+        </div>
+        
+        <hr style="border: 0; border-top: 1px solid #e9ecef; margin: 30px 0;">
+        
+        <p style="font-size: 13px; line-height: 1.5; margin: 0;">
+            Se hai dubbi o problemi tecnici, rispondi pure a questa email.<br>
+            Ci vediamo sotto cassa!
+        </p>
+        
+    </div>
+
+</body>
+</html>

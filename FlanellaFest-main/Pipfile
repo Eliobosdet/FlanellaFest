@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==4.2.9"
+pillow = "*"
+qrcode = "==7.4.2"
+python-dotenv = "==1.0.0"
+django-crispy-forms = "==2.0"
+crispy-bootstrap5 = "==0.7"
+gunicorn = "==21.2.0"
+weasyprint = ">=60.0"
+stripe = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.13"

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrazione Approvata - Flanella Fest</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #f4f4f4; padding: 10px; text-align: center; }
+        .content { padding: 20px 0; }
+        .footer { font-size: 12px; text-align: center; margin-top: 30px; color: #777; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://flanellafest.it/static/img/flanella_fest_bg_final.jpeg" alt="Flanella Fest" style="width: 100%; height: auto; display: block;">
+        </div>
+        <div class="content">
+            <h2>Registrazione Approvata!</h2>
+            <p>Ciao {{ participant.first_name }},</p>
+            <p>La tua registrazione per Flanella Fest è stata approvata!</p>
+            <p>In allegato troverai il tuo QR code personale. Conservalo con cura e presentalo all'ingresso dell'evento per accedere.</p>
+            <p><strong>Importante:</strong> Il QR code è valido per un solo accesso e verrà disabilitato dopo l'utilizzo.</p>
+            <p>Tutte le info utili le trovi elencate qui di seguito:</p>
+            
+            <p>29 Agosto</p>
+            <p>Castello di Spezzano e Museo della ceramica di Fiorano</p>
+            <p>Via del Castello, 12, 41042 Fiorano Modenese MO</p>
+            <p>INIZIO EVENTO ORE 16:00</p>
+            
+            <p><strong>Organizziamoci in Macchinate!!!! che se no non c'è posto per tutte</strong></p>
+            
+            <p>Si potrà mangiare e bere in loco:</p>
+            <ul>
+                <li>CIBO: CRESCENTINE e non - ci saranno anche opzioni vegane e GlutenFree - Se volete portarvi una bag con il vostro cibo, via libera!</li>
+                <li>BERE: BIRRA, COCKTAIL, BIBITE VARIE e ACQUA (si insomma le solite cose)</li>
+            </ul>
+            <p><strong>Nota importante:</strong></p>
+            <p>L'ACQUISTO DI CIBO E BEVANDE È ESCLUSO DAL CONTRIBUTO VERSATO PER LA PARTECIPAZIONE</p>
+            
+            <p>(Se hai dubbi di qualsiasi tipo, perché può essere che ci siamo scordati anche noi qualcosa, siamo persone come te, scrivi pure a flanellafest@gmail.com : ) )</p>
+            <p>Grazie e a presto!</p>
+            <p>Il team di Flanella Fest</p>
+        </div>
+        <div class="footer">
+            <p>Questo è un messaggio automatico. Per favore, non rispondere a questa email.</p>
+        </div>
+    </div>
+</body>
+</html>

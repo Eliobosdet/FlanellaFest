@@ -1,0 +1,52 @@
+{% extends 'festival/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Registrazioni</h1>
+
+    <p>{{ users_approved }} Partecipanti confermati</p>
+    <p>{{ users_checked_in }} Partecipanti entrati</p>
+    
+    {% if registrations %}
+        <div class="row">
+            {% for registration in registrations %}
+                <div class="col-12 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Registrazione #{{ registration.id }}</h5>
+                                <span class="badge bg-secondary">{{ registration.created_at|date:"d/m/Y H:i" }}</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-3 mb-md-0">
+                                    <h6 class="text-muted">Email</h6>
+                                    <p>{{ registration.email }}</p>
+                                </div>
+                                <div class="col-md-4 mb-3 mb-md-0">
+                                    <h6 class="text-muted">Telefono</h6>
+                                    <p>{{ registration.phone }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="text-muted">Partecipanti</h6>
+                                    <p>{{ registration.participants.count }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white text-end">
+                            <a href="{% url 'registration_detail' registration.pk %}" class="btn btn-primary">
+                                Dettagli
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Non ci sono richieste in attesa.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

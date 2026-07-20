@@ -1,0 +1,144 @@
+
+body, html {
+    height: 100%;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+}
+
+.hero-section {
+    height: 100vh;
+    background-image: url('../img/flanella-background.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+}
+
+.hero-content {
+    padding: 2rem 0;
+}
+
+.festival-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 8rem;
+    letter-spacing: 0.5rem;
+    text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+
+.register-btn {
+    font-weight: bold;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    background-color: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+.register-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    background-color: #ff5252;
+    border-color: #ff5252;
+}
+
+.rules-section {
+    background-color: #f8f9fa;
+}
+
+.rule-card {
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.rule-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.rule-card .card-title {
+    font-weight: bold;
+    color: #ff6b6b;
+    margin-bottom: 1rem;
+}
+
+/* Media query per la responsività */
+@media (max-width: 768px) {
+    .festival-title {
+        font-size: 3.5rem;
+    }
+
+    .hero-section {
+        height: auto;
+        min-height: 100vh;
+    }
+}
+
+@media (max-width: 576px) {
+    .festival-title {
+        font-size: 2.5rem;
+    }
+}
+
+
+
+.about-section {
+    background-color: #f8f9fa;
+    padding: 4rem 0;
+}
+
+.section-title {
+    position: relative;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 0.2rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.section-title:after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: #ff6b6b;
+    margin: 1rem auto 0;
+}
+
+.about-content {
+    line-height: 1.8;
+}
+
+.about-content .lead {
+    font-size: 1.5rem;
+    font-weight: 300;
+}
+
+.about-content p {
+    color: #495057;
+}
+
+.about-content strong {
+    font-weight: 600;
+    color: #212529;
+}
+
+

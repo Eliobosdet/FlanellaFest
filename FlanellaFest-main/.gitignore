@@ -1,0 +1,46 @@
+# Database
+db.sqlite3
+*.sqlite3
+*.db
+
+# Configurazioni sensibili e credenziali
+.env
+*.env
+local_settings.py
+
+# File multimediali caricati dagli utenti
+media/
+
+# File statici raccolti da collectstatic
+staticfiles/
+
+# Python / Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Ambienti Virtuali (Virtual Environments)
+env/
+venv/
+ENV/
+.venv/
+.pipenv/
+
+# Log
+*.log
+
+# IDE, Editor e Strumenti di sviluppo
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# File spazzatura di sistema (Windows / macOS)
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+media/*
+!media/.gitkeep

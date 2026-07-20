@@ -1,0 +1,222 @@
+{% extends 'festival/base.html' %}
+
+{% block content %}
+<div class="container-fluid py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); min-height: 100vh;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold mb-3" >Verifica QR Code</h1>
+            <div class="mx-auto mb-4" style="width: 80px; height: 3px; background-border-radius: 2px;"></div>
+            <div class="alert border-0 shadow-sm d-inline-block" style="background-border-left: 4px solid #dc3545 !important;">
+                <p class="mb-0 fs-4 fw-bold" >
+                    <i class="fas fa-users me-2"></i>{{n_checked_in}}/{{total_approved}} Arrivati
+                </p>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-lg border-0" style="border-radius: 15px; overflow: hidden;">
+                    <div class="card-header text-white text-center py-4" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                        <h3 class="mb-0 fw-bold">
+                            <i class="fas fa-qrcode me-2"></i>Scanner QR Code
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <p class="card-text fs-5 text-center mb-4 text-muted">Scansiona il QR code del partecipante:</p>
+
+                        <!-- Area per la visualizzazione della fotocamera -->
+                        <div class="text-center mb-4">
+                            <div id="reader" class="mx-auto shadow-sm" style="width: 100%; max-width: 400px; border-radius: 10px; overflow: hidden; "></div>
+                        </div>
+
+                        <!-- Area risultato che verrà mostrata dopo la scansione -->
+                        <div id="result-area" class="d-none mt-4">
+                            <div class="alert shadow-sm" id="result-alert" style="border-radius: 10px;">
+                                <h4 id="result-title" class="fw-bold">Risultato</h4>
+                                <p id="result-name" class="mb-1 fs-5"></p>
+                                <p id="result-status" class="mb-0"></p>
+                            </div>
+                            <div class="text-center mt-3">
+                                <button id="scan-again" class="btn btn-lg px-4 py-2 text-white shadow-sm" style="background-border: none; border-radius: 25px; font-weight: 500; transition: all 0.3s ease;">
+                                    <i class="fas fa-redo me-2"></i>Scansiona un altro QR Code
+                                </button>
+                            </div>
+                        </div>
+
+                        <hr class="my-4" style="border-opacity: 0.3;">
+                        
+                        <div class="text-center mb-3">
+                            <h5 class="fw-bold" >
+                                <i class="fas fa-keyboard me-2"></i>Inserimento Manuale
+                            </h5>
+                            <p class="text-muted mb-4">Oppure inserisci l'ID manualmente:</p>
+                        </div>
+
+                        {% if result %}
+                        <div class="mt-4">
+                            <div class="alert shadow-sm {% if result.valid %}alert-success{% else %}alert-danger{% endif %}" style="border-radius: 10px;">
+                                <h4 class="fw-bold">{% if result.valid %}Accesso Confermato!{% else %}Accesso Negato{% endif %}</h4>
+                                {% if result.name %}<p class="mb-1 fs-5">{{ result.name }}</p>{% endif %}
+                                <p class="mb-0">{{ result.status }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <form hx-post="" hx-target="body">
+                            {% csrf_token %}
+                            <div class="mb-4">
+                                <label for="manual_qr_uuid" class="form-label fw-bold" >UUID del QR Code</label>
+                                <input type="text" class="form-control form-control-lg" id="manual_qr_uuid" name="qr_uuid" required 
+                                       style="border-radius: 10px; transition: all 0.3s ease;"
+                                       placeholder="Inserisci l'UUID del QR Code">
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-lg px-5 py-3 text-white shadow-sm" 
+                                        style="background-border: none; border-radius: 25px; font-weight: 600; transition: all 0.3s ease;">
+                                    <i class="fas fa-search me-2"></i>Verifica manualmente
+                                </button>
+                            </div>
+                        </form>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Includi la libreria HTML5-QRCode -->
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+<script>
+    // Elementi DOM per il risultato
+    const resultArea = document.getElementById('result-area');
+    const resultAlert = document.getElementById('result-alert');
+    const resultTitle = document.getElementById('result-title');
+    const resultName = document.getElementById('result-name');
+    const resultStatus = document.getElementById('result-status');
+    const scanAgainButton = document.getElementById('scan-again');
+
+    // Funzione per inizializzare lo scanner
+    function onScanSuccess(decodedText, decodedResult) {
+        // Interrompi la scansione
+        html5QrCode.stop().then(() => {
+            console.log('Scansione fermata');
+        }).catch((err) => {
+            console.error("Errore nell'arresto della fotocamera:", err);
+        });
+
+        // Invia il dato del QR code al server
+        fetch('/check-qr-result/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCsrfToken()
+            },
+            body: JSON.stringify({
+                qr_data: decodedText
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Mostra il risultato all'utente
+            if (data.valid) {
+                resultAlert.className = 'alert alert-success';
+                resultTitle.textContent = 'Accesso Confermato!';
+            } else {
+                resultAlert.className = 'alert alert-danger';
+                resultTitle.textContent = 'Accesso Negato';
+            }
+
+            resultName.textContent = data.name || '';
+            resultStatus.textContent = data.status || '';
+            resultArea.classList.remove('d-none');
+        })
+        .catch(error => {
+            console.error('Errore durante la verifica:', error);
+            resultAlert.className = 'alert alert-danger';
+            resultTitle.textContent = 'Errore';
+            resultStatus.textContent = 'Si è verificato un errore durante la verifica. Riprova.';
+            resultArea.classList.remove('d-none');
+        });
+    }
+
+    // Funzione per ottenere il token CSRF
+    function getCsrfToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    }
+
+    // Configura lo scanner
+    const html5QrCode = new Html5Qrcode("reader");
+    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+    // Funzione per avviare la scansione
+    function startScanning() {
+        resultArea.classList.add('d-none');
+
+        // Inizia la scansione con la fotocamera posteriore (se disponibile)
+        Html5Qrcode.getCameras().then(devices => {
+            if (devices && devices.length) {
+                // Cerca di utilizzare la fotocamera posteriore (di solito è l'ultima)
+                const cameraId = devices.length > 1 ? devices[devices.length - 1].id : devices[0].id;
+
+                html5QrCode.start(
+                    cameraId,
+                    config,
+                    onScanSuccess,
+                    (errorMessage) => {
+                        // Gestisci gli errori (opzionale)
+                        console.log(errorMessage);
+                    }
+                ).catch(err => {
+                    console.log(`Errore nell'inizializzazione della fotocamera: ${err}`);
+                });
+            }
+        }).catch(err => {
+            console.log(`Errore nell'ottenere le fotocamere: ${err}`);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        startScanning();
+
+        scanAgainButton.addEventListener('click', function() {
+            startScanning();
+        });
+    });
+</script>
+
+<style>
+#manual_qr_uuid:focus {
+    border-!important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+button[type="submit"]:hover {
+    background-!important;
+    box-shadow: 0 8px 20px rgba(253, 126, 20, 0.3) !important;
+}
+
+#scan-again:hover {
+    background-!important;
+    box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3) !important;
+}
+
+@media (max-width: 768px) {
+    .card {
+        margin: 0 15px;
+    }
+    
+    #reader {
+        max-width: 300px !important;
+    }
+}
+</style>
+{% endblock %}

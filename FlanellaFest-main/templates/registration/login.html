@@ -1,0 +1,17 @@
+{% extends 'festival/base.html' %}
+{% load static %}
+
+{% block navbar %}
+
+{% endblock %}
+
+{% block content %}
+
+<h2>Login organizzatori</h2>
+    <form hx-post="" hx-target="body">
+        {% csrf_token %}  
+        {{ form.as_p }}   
+    <button type="submit">Login</button>
+</form>
+
+{% endblock %}

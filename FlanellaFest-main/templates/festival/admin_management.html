@@ -1,0 +1,81 @@
+{% extends 'festival/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="py-5" style="background-min-height: 85vh;">
+    <div class="container">
+        
+        <div class="text-center mb-5">
+            <h2 class="display-4 fw-bold mb-3 rustic-title" style="letter-spacing: 2px; text-shadow: 2px 2px 0px rgba(49, 172, 52, 0.1);">PANNELLO DI CONTROLLO</h2>
+            <div class="mx-auto rustic-divider" style="width: 120px; height: 4px;"></div>
+        </div>
+
+        <div class="row justify-content-center g-4">
+            <div class="col-md-6">
+                <div class="card rustic-card shadow-lg h-100 p-4">
+                    <div class="card-body text-center d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px; background-box-shadow: 0 0 0 2px #31ac34;">
+                                <i class="fas fa-euro-sign text-white fs-4"></i>
+                            </div>
+                            <h3 class="rustic-subtitle fw-bold mb-2" >Prezzo Biglietto</h3>
+                            <p class="rustic-text text-muted mb-4">Modifica il costo d'ingresso in tempo reale sul sito.</p>
+                            
+                            <div class="bg-light p-3 rounded border border-success border-opacity-25 mb-4">
+                                <span class="text-muted fw-bold">Prezzo attuale:</span>
+                                <span class="h3 mb-0 ms-2 fw-bold" >{{ current_price_euro|floatformat:2 }} €</span>
+                            </div>
+                        </div>
+
+                        <form hx-post="" hx-target="body" class="mt-2">
+                            {% csrf_token %}
+                            <div class="input-group mb-3 mx-auto" style="max-width: 250px;">
+                                <input type="text" name="ticket_price" class="form-control text-center fw-bold fs-5" placeholder="Es: 15.00" value="{{ current_price_euro|stringformat:'.2f' }}" required>
+                                <span class="input-group-text fw-bold bg-white text-muted">€</span>
+                            </div>
+                            <button type="submit" class="btn rustic-button text-white px-4 py-2 w-100" style="border-radius: 25px; font-weight: bold; letter-spacing: 1px;">
+                                AGGIORNA PREZZO
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card rustic-card shadow-lg h-100 p-4" style="border-!important;">
+                    <div class="card-body text-center d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px; background-box-shadow: 0 0 0 2px #f9792b;">
+                                <i class="fas fa-flask text-white fs-4"></i>
+                            </div>
+                            <h3 class="rustic-subtitle fw-bold mb-2" >Test di Produzione</h3>
+                            <p class="rustic-text text-muted mb-4">Esegui una transazione reale di 1 centesimo per verificare che le API di Stripe e i Webhook rispondano correttamente sul server live.</p>
+                            
+                            <div class="alert p-3 rounded mb-4" style="background-color: rgba(249, 121, 43, 0.05); ">
+                                <p class="small mb-0 fw-bold">
+                                    <i class="fas fa-exclamation-triangle me-1"></i> Sicuro al 100%: Questo acquisto simulato non manderà mail agli utenti e non intaccherà il limite massimo dei 300 partecipanti.
+                                </p>
+                            </div>
+                        </div>
+
+                        <a href="{% url 'stripe_test_checkout' %}" class="btn text-white px-4 py-3 rustic-button w-100" style="background-!important; box-shadow: 0 0 0 2px #f9792b; border-radius: 25px; font-weight: bold; letter-spacing: 1px;">
+                            LAUNCH 1 CENT TEST
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<style>
+.form-control {
+    border-radius: 8px;
+    padding: 10px 15px;
+}
+.form-control:focus {
+    border-box-shadow: 0 0 0 0.25rem rgba(49, 172, 52, 0.25);
+}
+</style>
+{% endblock %}
