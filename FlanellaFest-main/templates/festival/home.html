@@ -1,266 +1,39 @@
 {% extends 'festival/base.html' %}
 {% load static %}
-{% block navbar %}
-{% endblock %}
 {% block content %}
-<div class="hero-section position-relative overflow-hidden d-flex align-items-center" style="min-height: 50vh;">
 
-    {% load auth_extras %}
-    {% if user.is_staff or request.user|has_group:"Organizer" %}
-    <div class="admin-buttons position-fixed d-flex flex-wrap gap-2" style="z-index: 9999; top: 20px; left: 20px;">
-        <a href="{% url 'approved_requests' %}" class="btn admin-btn btn-sm shadow-sm rounded-pill px-3">
-            <i class="fas fa-clock me-1"></i>Registrazioni
-        </a>
-        <a href="{% url 'check_qr' %}" class="btn admin-btn btn-sm shadow-sm rounded-pill px-3">
-            <i class="fas fa-qrcode me-1"></i>Verifica QR
-        </a>
-        <a href="{% url 'all_participants' %}" class="btn admin-btn btn-sm shadow-sm rounded-pill px-3">
-            <i class="fas fa-users me-1"></i>Partecipanti
-        </a>
-        {% if user.is_staff %}
-        <a href="{% url 'register_organizer' %}" class="btn admin-btn btn-sm shadow-sm rounded-pill px-3">
-            <i class="fas fa-user-plus me-1"></i>Registra Organizzatore
-        </a>
-        <a href="{% url 'logout' %}" class="btn admin-btn btn-sm shadow-sm rounded-pill px-3">
-            <i class="fas fa-sign-out-alt me-1"></i>Esci
-        </a>
-        {% endif %}
+<!-- HOMEPAGE ASTRATTA / TIPOGRAFICA -->
+<section class="poster-hero d-flex flex-column justify-content-between px-3 px-md-5 py-4">
+    
+    <!-- IMMAGINE MASCOTTE RESPONSIVE -->
+    <div class="text-center my-2 my-md-4">
+        <img src="{% static 'img/illustrazione_completa.png' %}" alt="Mascotte Flanella" class="hero-mascot-img" style="max-: 800px;">
     </div>
-    {% endif %}
 
-    <div class="hero-overlay w-100 h-100 d-flex flex-column justify-content-center align-items-center text-center">
-        <h1 class="rustic-title hero-title mb-2">FLANELLA FEST</h1>
-        <p class="hero-subtitle mb-4">29 AGOSTO &bull; III EDIZIONE</p>
-        <p class="hero-description rustic-text fw-bold fs-5 mb-5 mx-3">
-            FESTIVAL DI MUSICA INDIPENDENTE E ARTI PERFORMATIVE.
-        </p>
-        <a href="#lineup" class="btn rustic-button btn-lg px-5 py-3 fs-5 mb-4 shadow-lg" style="letter-spacing: 2px;">
-            SCOPRI LA LINEUP
-        </a>
-    </div>
-</div>
-
-<section id="lineup" class="lineup-section py-5">
-    <div class="container my-5">
-        <div class="text-center mb-5">
-            <h2 class="display-3 fw-bold mb-3 rustic-title">I NOSTRI STAGE</h2>
-            <div class="rustic-divider"></div>
-            <p class="lead rustic-text mx-auto mt-4" style="max-width: 700px;">
-                Vivi l'esperienza unica di due stage musicali immersi nella suggestiva cornice del Castello di Spezzano (MO).
-                Dal pomeriggio fino a tarda notte.
-            </p>
-        </div>
-
-        <div class="row g-5">
-            <!-- Second Stage -->
-            <div class="col-lg-5">
-                <div class="card h-100 rustic-card shadow-lg border-0 p-4">
-                    <div class="card-body text-center">
-                        <i class="fas fa-compact-disc fa-4x mb-4" style="color: #612115;"></i>
-                        <h3 class="rustic-subtitle display-6 mb-4">Sala delle Vedute</h3>
-                        <p class="rustic-text text-muted mb-4 fst-italic">Acustic Stage: sonorità alternative e dj set
-                            immersivi all'interno delle mura storiche.</p>
-                        <div class="rustic-divider mx-auto" style="width: 100px; margin-top: 0; margin-bottom: 2rem;">
-                        </div>
-
-                        <ul class="list-unstyled rustic-text fs-4 fw-bold lh-lg artist-list">
-                            <li class="mt-23">Adriano Marinelli<span class="text-muted fs-6 ms-2">16:00</span></li>
-                            <li>Juiliett<span class="text-muted fs-6 ms-2">17:00</span></li>
-                            <li>Tarab<span class="text-muted fs-6 ms-2">18:00</span></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main Stage -->
-            <div class="col-lg-7">
-                <div class="card h-100 rustic-card shadow-lg border-0 p-4">
-                    <div class="card-body text-center">
-                        <i class="fas fa-music fa-4x mb-4" style="color: #612115;"></i>
-                        <h3 class="rustic-subtitle display-5 mb-4">Pavaglione Stage</h3>
-                        <p class="rustic-text text-muted mb-4 fst-italic">Main Stage: il cuore pulsante dell'evento,
-                            dedicato alle performance live principali.</p>
-                        <div class="rustic-divider mx-auto" style="width: 100px; margin-top: 0; margin-bottom: 2rem;">
-                        </div>
-
-                        <ul class="list-unstyled rustic-text fs-4 fw-bold lh-lg artist-list">
-                            <li>Marta Guidoboni<span class="text-muted fs-6 ms-2">20:00</span></li>
-                            <li>Taistoi<span class="text-muted fs-6 ms-2">21:00</span></li>
-                            <li>Envelope<span class="text-muted fs-6 ms-2">22:00</span></li>
-                            <li>????<span class="text-muted fs-6 ms-2">23:00</span></li>
-                            <li>Umarelll<span class="text-muted fs-6 ms-2">00:00</span></li>
-                            <li>DJ set<span class="text-muted fs-6 ms-2">01:00</span></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="info" class="about-section py-5" style="background-color: rgba(44, 26, 22, 0.03);">
-    <div class="container my-5">
-        <div class="row align-items-center">
-            <div class="col-lg-6 mb-5 mb-lg-0">
-                <h2 class="display-4 fw-bold rustic-title mb-4">INFO UTILI E SERVIZI</h2>
-                <div class="rustic-divider" style="margin-left: 0;"></div>
-                <p class="fs-5 lh-lg rustic-text mt-4">
-                    <i class="fas fa-hamburger me-2" style="color:#612115;"></i> Food Area? <strong>Eccerto, cibo disponibile per tutto l'evento, 
-                        con varie opzioni.</strong><br>
-                    <i class="fas fa-beer me-2" style="color:#b89947;"></i> Beverage? <strong>Bar attrezzati con birra, drink e molto altro.</strong><br>
-                    <i class="fas fa-leaf me-2" style="color:#2d5a27;"></i> Opzioni Vegan? <strong>Garantiti piatti vegani.</strong><br>
-                    <i class="fas fa-plate-wheat me-2" style="color:#d4a373;"></i> Celiaco? <strong>Menu senza glutine
-                        disponibili in area ristoro.</strong><br>
-                    <i class="fas fa-campground me-2" style="color:#3e2723;"></i> Pernottamento? <strong>A differenza delle scorse edizioni, non è prevista nessuna area dove poter dormire :(</strong>
-                </p>
-            </div>
-            <div class="col-lg-6">
-                <div class="card rustic-card shadow-lg p-4 text-center">
-                    <i class="fas fa-lock fa-3x mb-3" style="color: #b89947;"></i>
-                    <h3 class="rustic-subtitle fs-3 mb-3">Evento a Numero Chiuso</h3>
-                    <p class="rustic-text">
-                        Flanella Fest è un festival privato organizzato dall'Associazione. Non si tratta di un
-                        festival commerciale:
-                        l'accesso è strettamente limitato, a numero rigido e riservato esclusivamente ai registrati.
-                        Non saranno presenti biglietterie in cassa al castello.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="rules" class="rules-section py-5">
-    <div class="container my-5">
-        <div class="text-center mb-5">
-            <h2 class="display-4 fw-bold mb-3 rustic-title">TICKETS & ISTRUZIONI</h2>
-            <div class="rustic-divider"></div>
-        </div>
-
-        <div class="row justify-content-center g-4 mb-5">
-            <!-- Step 1 -->
-            <div class="col-md-5">
-                <div class="card h-100 rustic-card shadow-lg p-3">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-4 border-bottom border-dark pb-3">
-                            <div class="d-flex align-items-center justify-content-center rounded-circle rustic-number me-3 text-white fs-3"
-                                style="width: 50px; height: 50px;">
-                                1
-                            </div>
-                            <h3 class="card-title mb-0 fs-3 rustic-subtitle">Registrazione e Contributo</h3>
-                        </div>
-                        <p class="card-text fs-6 lh-lg rustic-text mb-4">
-                            Compila il modulo di registrazione formale caricando la distinta del versamento.
-                            A fronte del contributo base (10€ minimo), processeremo l'approvazione e ti invieremo
-                            l'e-ticket (QR Code) direttamente via email.
-                        </p>
-                        <p class="card-text fs-6 lh-lg rustic-text fw-bold" style="color: #612115 !important;">
-                            NOTA BENE: LE CONSUMAZIONI (FOOD&BEVERAGE) NON SONO INCLUSE NEL TICKET DI INGRESSO.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 2 -->
-            <div class="col-md-5">
-                <div class="card h-100 rustic-card shadow-lg p-3">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-4 border-bottom border-dark pb-3">
-                            <div class="d-flex align-items-center justify-content-center rounded-circle rustic-number me-3 text-white fs-3"
-                                style="width: 50px; height: 50px;">
-                                2
-                            </div>
-                            <h3 class="card-title mb-0 fs-3 rustic-subtitle">Regole di Accesso</h3>
-                        </div>
-                        <p class="card-text fs-6 lh-lg rustic-text mb-4">
-                            Tieni a portata di mano il QR code (digitale da smartphone o stampato) all'ingresso
-                            dell'evento. I nostri addetti scansioneranno il ticket per finalizzare l'accesso. Il
-                            biglietto è strettamente nominativo e non trasferibile.
-                        </p>
-                        <p class="card-text fs-6 lh-lg rustic-text fw-bold" style="color: #612115 !important;">
-                            APERTURA CANCELLI: ORE 16:00. LA MUSICA NON ASPETTA!
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="text-center mt-5">
-            <p class="mb-4 fs-4 rustic-text fw-bold">Hai completato tutti i passaggi necessari?</p>
-            <a href="{% url 'register' %}" class="btn btn-lg px-5 py-4 rustic-button fs-3 shadow-lg">
-                VAI ALLA REGISTRAZIONE
+    <!-- CALL TO ACTION CENTRATA -->
+    <div class="row align-items-center justify-content-center my-3 my-md-4">
+        <div class="col-12 text-center">
+            <p class="cta-subtitle fw-bold text-uppercase text-ink mb-3">Ingresso riservato ai soci APS</p>
+            <a href="{% url 'register' %}" class="btn btn-festival px-4 py-2">
+                TESSERAMENTO &rarr;
             </a>
         </div>
-
     </div>
+
+    <!-- BODY: GLI ARTISTI FLUTTUANTI -->
+    <div class="poster-artists-block text-center py-3 py-md-5">
+        <div class="d-flex flex-wrap justify-content-center align-items-center" style="gap: 5px 20px;">
+            <span class="artist-poster-text">MARTA GUIDOBONI</span>
+            <span class="artist-poster-text sec-artist">ADRIANO MARINELLI</span>
+            <span class="artist-poster-text">ENVELOPE</span>
+            <span class="artist-poster-text">TAISTOI</span>
+            <span class="artist-poster-text sec-artist">JULIETT</span>
+            <span class="artist-poster-text">CORE MATO</span>
+            <span class="artist-poster-text sec-artist">TARAB</span>
+            <span class="artist-poster-text">UMARELLL</span>
+        </div>
+    </div>
+
 </section>
 
-<style>
-    .hero-section {
-        height: 68vh;
-        min-height: 500px;
-        background-image: url('/static/img/castle.jpeg');
-        /* Fallback / Background original image */
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-    }
-
-    .hero-overlay {
-        background: radial-gradient(circle, rgba(44, 26, 22, 0.4) 0%, rgba(10, 5, 3, 0.8) 100%);
-        color: #f4e8d1;
-    }
-
-    .hero-title {
-        font-size: 5rem;
-        color: #f4e8d1 !important;
-        text-shadow: 0 4px 10px rgba(0, 0, 0, 0.8), 2px 2px 0px #b89947;
-    }
-
-    .hero-subtitle {
-        font-family: 'MedievalSharp', cursive;
-        font-size: 2rem;
-        color: #b89947;
-        text-transform: uppercase;
-        letter-spacing: 4px;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-    }
-
-    .hero-description {
-        color: #e6d3a8 !important;
-        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
-    }
-
-    .artist-list li {
-        padding: 5px 0;
-        border-bottom: 1px dashed rgba(139, 90, 43, 0.3);
-    }
-
-    .artist-list li:last-child {
-        border-bottom: none;
-    }
-
-    .artist-headliner {
-        color: #612115;
-        font-size: 1.5em;
-        /* Bigger font for main acts */
-        text-transform: uppercase;
-    }
-
-    /* Mobile optimization */
-    @media (max-width: 768px) {
-        .hero-section {
-            background-attachment: scroll;
-            height: 60vh;
-        }
-
-        .hero-title {
-            font-size: 3rem;
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-        }
-    }
-</style>
 {% endblock %}

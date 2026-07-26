@@ -1,0 +1,40 @@
+{% extends 'festival/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="card festival-card p-4 p-md-5">
+        <h1 class="display-5 fw-bold text-ink text-uppercase mb-4 text-center">Informativa Privacy (GDPR)</h1>
+        <p class="text-muted text-center mb-5">Informativa sul trattamento dei dati personali ai sensi dell'Art. 13 Regolamento UE 2016/679</p>
+
+        <div class="privacy-content text-ink">
+            <h4 class="fw-bold border-bottom pb-2">1. Titolare del Trattamento</h4>
+            <p>Il Titolare del trattamento dei dati personali è l'<strong>Associazione Flanella Fest APS</strong>, con sede legale in Fiorano Modenese (MO), C.F. <code>[INSERISCI_CODICE_FISCALE_APS]</code>, Email di contatto: <a href="mailto:flanellafest@gmail.com">flanellafest@gmail.com</a>.</p>
+
+            <h4 class="fw-bold border-bottom pb-2 mt-4">2. Tipologia dei Dati Raccolti</h4>
+            <p>Raccogliamo i seguenti dati identificativi ed anagrafici necessari per l'iscrizione al Libro Soci ed il tesseramento: Nome, Cognome, Data e Luogo di Nascita, Codice Fiscale, Indirizzo di Residenza, Città, CAP, Provincia, Indirizzo Email e Numero di Telefono.</p>
+
+            <h4 class="fw-bold border-bottom pb-2 mt-4">3. Finalità e Base Giuridica del Trattamento</h4>
+            <p>I dati forniti saranno trattati per le seguenti finalità:</p>
+            <ul>
+                <li>Gestione della richiesta di adesione all'Associazione e tenuta del Libro Soci in rispetto degli obblighi di legge previsti per le APS (D.Lgs. 117/2017).</li>
+                <li>Emissione del titolo d'ingresso (QR Code) ed erogazione dei servizi associativi legati al festival.</li>
+                <li>Gestione amministrativa, contabile e fiscale del tesseramento e dei pagamenti.</li>
+                <li>Invio di comunicazioni relative alle assemblee soci ed alle iniziative istituzionali dell'Associazione.</li>
+            </ul>
+
+            <h4 class="fw-bold border-bottom pb-2 mt-4">4. Modalità di Trattamento e Conservazione</h4>
+            <p>Il trattamento viene effettuato con strumenti informatici e telematici mediante misure adeguate a garantire la sicurezza ed il tracciamento dei dati. I dati personali saranno conservati per l'intera durata del rapporto associativo e, successivamente, per il tempo imposto dalle vigenti normative fiscali e civili (10 anni).</p>
+
+            <h4 class="fw-bold border-bottom pb-2 mt-4">5. Comunicazione e Diffusione dei Dati</h4>
+            <p>I dati non saranno mai ceduti a terzi per scopi commerciali. Potranno essere comunicati agli enti pubblici preposti (es. Agenzia delle Entrate, Enti del Terzo Settore) esclusivamente per l'adempimento di obblighi di legge.</p>
+
+            <h4 class="fw-bold border-bottom pb-2 mt-4">6. Diritti dell'Interessato</h4>
+            <p>Ai sensi degli artt. 15-22 del GDPR, l'utente ha diritto in qualsiasi momento di richiedere l'accesso ai propri dati, la rettifica, la cancellazione o la limitazione del trattamento scrivendo all'indirizzo email <a href="mailto:flanellafest@gmail.com">flanellafest@gmail.com</a>.</p>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{% url 'register' %}" class="btn btn-festival px-5 py-3">TORNA AL TESSERAMENTO</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

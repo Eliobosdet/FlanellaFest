@@ -4,49 +4,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrazione Approvata - Flanella Fest</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: #f4f4f4; padding: 10px; text-align: center; }
-        .content { padding: 20px 0; }
-        .footer { font-size: 12px; text-align: center; margin-top: 30px; color: #777; }
-    </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <img src="https://flanellafest.it/static/img/flanella_fest_bg_final.jpeg" alt="Flanella Fest" style="width: 100%; height: auto; display: block;">
-        </div>
-        <div class="content">
-            <h2>Registrazione Approvata!</h2>
-            <p>Ciao {{ participant.first_name }},</p>
-            <p>La tua registrazione per Flanella Fest è stata approvata!</p>
-            <p>In allegato troverai il tuo QR code personale. Conservalo con cura e presentalo all'ingresso dell'evento per accedere.</p>
-            <p><strong>Importante:</strong> Il QR code è valido per un solo accesso e verrà disabilitato dopo l'utilizzo.</p>
-            <p>Tutte le info utili le trovi elencate qui di seguito:</p>
-            
-            <p>29 Agosto</p>
-            <p>Castello di Spezzano e Museo della ceramica di Fiorano</p>
-            <p>Via del Castello, 12, 41042 Fiorano Modenese MO</p>
-            <p>INIZIO EVENTO ORE 16:00</p>
-            
-            <p><strong>Organizziamoci in Macchinate!!!! che se no non c'è posto per tutte</strong></p>
-            
-            <p>Si potrà mangiare e bere in loco:</p>
-            <ul>
-                <li>CIBO: CRESCENTINE e non - ci saranno anche opzioni vegane e GlutenFree - Se volete portarvi una bag con il vostro cibo, via libera!</li>
-                <li>BERE: BIRRA, COCKTAIL, BIBITE VARIE e ACQUA (si insomma le solite cose)</li>
-            </ul>
-            <p><strong>Nota importante:</strong></p>
-            <p>L'ACQUISTO DI CIBO E BEVANDE È ESCLUSO DAL CONTRIBUTO VERSATO PER LA PARTECIPAZIONE</p>
-            
-            <p>(Se hai dubbi di qualsiasi tipo, perché può essere che ci siamo scordati anche noi qualcosa, siamo persone come te, scrivi pure a flanellafest@gmail.com : ) )</p>
-            <p>Grazie e a presto!</p>
-            <p>Il team di Flanella Fest</p>
-        </div>
-        <div class="footer">
-            <p>Questo è un messaggio automatico. Per favore, non rispondere a questa email.</p>
-        </div>
-    </div>
+<body style="margin: 0; padding: 0; background-color: #f4f0ea; font-family: 'Space Grotesk', Arial, Helvetica, sans-serif; -webkit-font-smoothing: antialiased;">
+
+    <!-- CONTENITORE PRINCIPALE CENTRATO -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f0ea; padding: 20px 10px;">
+        <tr>
+            <td align="center">
+                
+                <!-- CARD BRUTALISTA (Stile Sito: Sfondo carta, bordo spesso 3px nero) -->
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #fcf8f2; border: 3px solid #1a1a1a; border-radius: 16px; overflow: hidden; box-shadow: 4px 4px 0px #1a1a1a;">
+                    
+                    <!-- BANNER HEADER -->
+                    <tr>
+                        <td align="center" style="background-color: #1a1a1a; border-bottom: 3px solid #1a1a1a;">
+                            <img src="cid:banner_header" alt="Flanella Fest" style="width: 100%; max-width: 600px; height: auto; display: block;">
+                        </td>
+                    </tr>
+
+                    <!-- CONTENUTO PRINCIPALE -->
+                    <tr>
+                        <td style="padding: 30px 25px; color: #1a1a1a;">
+                            
+                            <!-- TITOLO SEZIONE -->
+                            <h1 style="margin: 0 0 15px 0; font-size: 26px; font-weight: 800; text-transform: uppercase; letter-spacing: -0.5px; color: #1a1a1a; text-align: center;">
+                                Tesseramento Approvato! 🎉
+                            </h1>
+                            
+                            <p style="font-size: 16px; line-height: 1.5; font-weight: 600; margin-bottom: 20px;">
+                                Ciao <strong style="color: #10b952;">{{ participant.first_name }}</strong>,
+                            </p>
+                            
+                            <p style="font-size: 15px; line-height: 1.6; color: #333333; margin-bottom: 20px;">
+                                La tua registrazione per il <strong>Flanella Fest</strong> è stata approvata ed il tesseramento è confermato!
+                            </p>
+
+                            <!-- BOX QR CODE E AVVISO -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff; border: 2px solid #1a1a1a; border-radius: 12px; margin-bottom: 25px;">
+                                <tr>
+                                    <td style="padding: 15px 20px; text-align: center;">
+                                        <p style="margin: 0; font-size: 14px; font-weight: 700; text-transform: uppercase; color: #10b952;">
+                                            🎟️ QR CODE IN ALLEGATO
+                                        </p>
+                                        <p style="margin: 8px 0 0 0; font-size: 13px; color: #555555; line-height: 1.4;">
+                                            In allegato a questa email troverai il tuo <strong>QR code personale</strong>. Conservalo e mostralo all'ingresso (da smartphone o stampato).<br>
+                                            <span style="font-size: 11px; color: #d9534f;">*Il codice è strettamente personale e valido per un solo ingresso.</span>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- DETTAGLI EVENTO (BOX IN EVIDENZA) -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f0ede6; border-left: 5px solid #10b952; padding: 15px; margin-bottom: 25px;">
+                                <tr>
+                                    <td>
+                                        <p style="margin: 0 0 8px 0; font-size: 16px; font-weight: 800; text-transform: uppercase; color: #1a1a1a;">
+                                            📍 INFO UTILI EVENTO
+                                        </p>
+                                        <p style="margin: 0 0 5px 0; font-size: 14px; font-weight: 700; color: #1a1a1a;">
+                                            📅 29 AGOSTO &bull; INIZIO ORE 16:00
+                                        </p>
+                                        <p style="margin: 0 0 5px 0; font-size: 13px; color: #333333;">
+                                            🏰 Castello di Spezzano e Museo della Ceramica
+                                        </p>
+                                        <p style="margin: 0; font-size: 13px; color: #666666;">
+                                            Via del Castello 12, 41042 Fiorano Modenese (MO)
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- BOX MACCHINATE / LOGISTICA (GIALLO ACCENTO) -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #fff9db; border: 2px solid #1a1a1a; border-radius: 12px; margin-bottom: 25px;">
+                                <tr>
+                                    <td style="padding: 15px;">
+                                        <p style="margin: 0 0 5px 0; font-size: 14px; font-weight: 800; text-transform: uppercase; color: #1a1a1a;">
+                                            🚗 Organizziamoci in macchinate!
+                                        </p>
+                                        <p style="margin: 0; font-size: 13px; color: #333333; line-height: 1.4;">
+                                            Riempite le auto con gli amici: i posti auto al Castello sono limitati!
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- CIBO E BERE -->
+                            <h3 style="font-size: 15px; font-weight: 800; text-transform: uppercase; margin: 0 0 10px 0; color: #1a1a1a;">
+                                🍕 Cibo e Bere
+                            </h3>
+                            <ul style="margin: 0 0 20px 0; padding-left: 20px; font-size: 13px; color: #333333; line-height: 1.6;">
+                                <li style="margin-bottom: 5px;"><strong>CIBO:</strong> Crescentine e non solo (opzioni Vegane e Gluten Free disponibili).</li>
+                                <li><strong>BERE:</strong> Birre, Cocktail, Bibite fresche e Acqua.</li>
+                            </ul>
+
+                            <p style="font-size: 12px; background-color: #eae6de; padding: 10px; border-radius: 6px; color: #555555; margin-bottom: 25px; text-align: center;">
+                                💡 <em>Nota: L'acquisto di cibo e bevande è escluso dal contributo associativo del tesseramento.</em>
+                            </p>
+
+                            <!-- SALUTI -->
+                            <p style="font-size: 14px; line-height: 1.5; color: #333333; margin-bottom: 5px;">
+                                Per qualsiasi dubbio o domanda rispondi pure a questa mail o scrivici a <a href="mailto:flanellafest@gmail.com" style="color: #10b952; font-weight: 700; text-decoration: underline;">flanellafest@gmail.com</a>.
+                            </p>
+                            
+                            <p style="font-size: 15px; font-weight: 800; margin-top: 20px; color: #1a1a1a;">
+                                Ci vediamo al festival!<br>
+                                <span style="color: #10b952;">Il Team di Flanella Fest</span>
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <!-- FOOTER -->
+                    <tr>
+                        <td align="center" style="background-color: #1a1a1a; padding: 20px; color: #aaaaaa; font-size: 11px;">
+                            <p style="margin: 0 0 5px 0; font-weight: 700; text-transform: uppercase; color: #ffffff;">
+                                Associazione Flanella Fest &bull; Soci APS
+                            </p>
+                            <p style="margin: 0;">
+                                Questa è un'email automatica di conferma.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
 </body>
 </html>

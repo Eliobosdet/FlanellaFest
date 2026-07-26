@@ -15,6 +15,7 @@ weasyprint = ">=60.0"
 stripe = "*"
 
 [dev-packages]
+django-browser-reload = "*"
 
 [requires]
 python_version = "3.13"

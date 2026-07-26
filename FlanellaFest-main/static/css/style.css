@@ -1,144 +1,360 @@
+/* ==========================================================================
+   1. FONTS & VARIABILI
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
 
-body, html {
-    height: 100%;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.1rem;
+@font-face {
+    font-family: 'CoopBlackletter';
+    src: url('../fonts/coopblackletter-regular.ttf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
 }
 
-.hero-section {
-    height: 100vh;
-    background-image: url('../img/flanella-background.jpeg');
-    background-size: cover;
-    background-position: center;
+:root {
+    --primary-green: #10b952; /* Verde acceso locandina */
+    --bg-paper: #f0ede6;      /* Carta/Panna */
+    --ink-black: #1a1a1a;     /* Nero inchiostro */
+    --accent-yellow: #ffc439; /* Giallo evidenziatore */
+    --accent-red: #ff5252;    /* Rosso accento */
+}
+
+/* ==========================================================================
+   2. STILI GLOBALI & RESET (ZERO OMBRE)
+   ========================================================================== */
+*, *::before, *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+a, a:hover, a:focus, a:visited {
+    text-decoration: none !important;
+}
+
+body {
+    /* Il nuovo sfondo unisce il color carta, degli "aloni" astratti di luce verde e gialla, e la texture della carta sopra tutto */
+    background-color: var(--bg-paper);
+    background-image: 
+        url('https://www.transparenttextures.com/patterns/aged-paper.png'),
+        radial-gradient(circle at 15% 30%, rgba(16, 185, 82, 0.12), transparent 40%),
+        radial-gradient(circle at 85% 70%, rgba(255, 196, 57, 0.12), transparent 40%);
     background-attachment: fixed;
-    position: relative;
-    color: white;
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--ink-black);
+    min-height: 100vh;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    padding-top: 100px;
 }
 
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
+/* Titoli Generici */
+h3, .festival-title, .stage-title {
+    font-family: 'CoopBlackletter', serif;
+    color: var(--primary-green);
+    font-weight:900;
+
+}
+
+.h1, .h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    color: initial;
+}
+
+/* Utility Bordi Inchiostro */
+.border-bottom-ink {
+    border-bottom: 3px solid var(--ink-black) !important;
+}
+
+.border-top-ink {
+    border-top: 3px solid var(--ink-black) !important;
+}
+
+.border-top-thin {
+    border-top: 1px solid rgba(26, 26, 26, 0.2);
+}
+
+.fs-7 {
+    font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   3. NAVBAR FLUTTUANTE HYBRID (DESKTOP & MOBILE)
+   ========================================================================== */
+.navbar-floating-container {
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 92%;
+    max-width: 1200px;
+    z-index: 1030;
+}
+
+.navbar-floating {
+    background-color: var(--bg-paper);
+    background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+    border: 3px solid var(--ink-black);
+    border-radius: 50px;
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
+    transition: border-radius 0.2s ease;
 }
 
-.hero-content {
-    padding: 2rem 0;
+/* Quando il menu si espande su mobile ammorbidiamo gli angoli */
+.navbar-floating:has(.collapse.show) {
+    border-radius: 20px;
 }
 
-.festival-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 8rem;
-    letter-spacing: 0.5rem;
-    text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
-    margin-bottom: 1.5rem;
-    text-transform: uppercase;
+/* Link Inline */
+.nav-inline-link {
+    font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
+    font-size: 1rem;
+    color: var(--ink-black) !important;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 2px solid transparent;
+    border-radius: 20px;
+    transition: all 0.15s ease;
+    white-space: nowrap;
 }
 
-
-.register-btn {
-    font-weight: bold;
-    font-size: 1.2rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-    background-color: #ff6b6b;
-    border-color: #ff6b6b;
+.nav-inline-link:hover {
+    background-color: var(--primary-green);
+    color: var(--bg-paper) !important;
+    border-color: var(--ink-black);
 }
 
-.register-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-    background-color: #ff5252;
-    border-color: #ff5252;
-}
-
-.rules-section {
-    background-color: #f8f9fa;
-}
-
-.rule-card {
-    transition: all 0.3s ease;
+/* Bottone Menu */
+.brutalist-menu-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--ink-black) !important;
     border: none;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 5px 12px;
+    transition: all 0.15s ease;
 }
 
-.rule-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+/* --- GESTIONE CAMBIO ICONA TOGGLE (HAMBURGER -> X) --- */
+.brutalist-menu-btn .icon-close {
+    display: none;
+}
+.brutalist-menu-btn .icon-hamburger {
+    display: inline-block;
 }
 
-.rule-card .card-title {
-    font-weight: bold;
-    color: #ff6b6b;
-    margin-bottom: 1rem;
+.brutalist-menu-btn:not(.collapsed) .icon-hamburger {
+    display: none;
+}
+.brutalist-menu-btn:not(.collapsed) .icon-close {
+    display: inline-block;
 }
 
-/* Media query per la responsività */
+/* ==========================================================================
+   4. BOTTONI GLOBALI
+   ========================================================================== */
+.btn-festival {
+    background-color: var(--primary-green);
+    color: var(--bg-paper);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    border: 2px solid var(--ink-black);
+    border-radius: 50px;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+.btn-festival:hover {
+    background-color: var(--ink-black);
+    color: var(--bg-paper);
+    transform: scale(1.02);
+}
+
+.cta-subtitle {
+    font-size: 1.15rem;
+}
+
+/* ==========================================================================
+   5. ARTISTI AMMUCCHIATI & MASCOTTE
+   ========================================================================== */
+.hero-mascot-img {
+    max-width: 240px; /* Dimensione base per schermi piccoli/medi */
+    height: auto;
+    transition: max-width 0.2s ease;
+}
+
+.artist-name-free {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--bg-paper);
+    text-transform: uppercase;
+    line-height: 1;
+    letter-spacing: -1px;
+    transition: all 0.2s ease;
+    cursor: crosshair;
+    display: inline-block;
+}
+
+.artist-name-free.large {
+    font-size: 3.8rem;
+}
+
+.artist-name-free.tilt-left {
+    transform: rotate(-3deg);
+}
+
+.artist-name-free.tilt-right {
+    transform: rotate(4deg);
+}
+
+/* ==========================================================================
+   6. MARQUEE SCORREVOLE
+   ========================================================================== */
+.marquee-container {
+    background-color: var(--primary-green);
+    color: var(--bg-paper);
+    border-top: 3px solid var(--ink-black);
+    border-bottom: 3px solid var(--ink-black);
+    padding: 10px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+}
+
+.marquee-content {
+    font-family: 'CoopBlackletter', serif;
+    font-size: 2rem;
+    display: inline-block;
+    animation: marquee 15s linear infinite;
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* ==========================================================================
+   7. FOOTER MINIMALE
+   ========================================================================== */
+.footer-poplar, .footer-brutalist {
+    background-color: var(--bg-paper);
+    border-top: 3px solid var(--ink-black);
+    color: var(--ink-black);
+}
+
+.footer-minimal-link {
+    color: var(--ink-black);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.footer-minimal-link:hover {
+    color: var(--primary-green);
+    border-bottom-color: var(--primary-green);
+}
+
+.footer-social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #ffffff;
+    color: var(--ink-black);
+    border: 2px solid var(--ink-black);
+    font-size: 1.2rem;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.footer-social-icon:hover {
+    background-color: var(--primary-green);
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   8. POSTER HERO (HOMEPAGE MANIFESTO)
+   ========================================================================== */
+.poster-hero {
+    min-height: calc(100vh - 120px); 
+}
+
+.artist-poster-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(3rem, 5.5vw, 6rem); 
+    font-weight: 999;
+    line-height: .9;
+    text-transform: uppercase;
+    color: var(--ink-black);
+    letter-spacing: -2px; 
+    transition: color 0.2s ease, transform 0.2s ease;
+    cursor: default;
+    display: inline-block;
+}
+
+.sec-artist {
+    font-size: clamp(.8rem, 4vw, 4.5rem); 
+}
+
+/* ==========================================================================
+   9. MEDIA QUERIES (RESPONSIVE ADAPTATION)
+   ========================================================================== */
+
+/* 📱 MOBILE (Fino a 768px) */
 @media (max-width: 768px) {
-    .festival-title {
-        font-size: 3.5rem;
+    body {
+        padding-top: 75px;
     }
 
-    .hero-section {
-        height: auto;
-        min-height: 100vh;
+    .navbar-floating-container {
+        width: 95%;
+        top: 10px;
+    }
+
+    .navbar-floating {
+        border-radius: 25px;
+    }
+
+    .hero-mascot-img {
+        max-width: 200px;
+        max-height: 900px;
+    }
+
+    .cta-subtitle {
+        font-size: 1rem;
+    }
+
+    .artist-poster-text {
+        font-size: clamp(4.2rem, 8.5vw, 3.8rem);
+    }
+
+    .sec-artist {
+        font-size: clamp(1.4rem, 6vw, 2.8rem);
+    }
+
+}
+
+/* 💻 DESKTOP & LARGE SCREENS (Da 992px in poi) */
+@media (min-width: 992px) {
+    .hero-mascot-img {
+        max-width: 380px; /* L'omino scala in grande su PC */
+    }
+
+    .cta-subtitle {
+        font-size: 1.35rem; /* Testo tesseramento leggibile ed evidente */
+    }
+
+    .btn-festival {
+        font-size: 1.25rem;
+        padding: 10px 28px !important;
+    }
+
+    .artist-poster-text {
+        font-size: clamp(4.5rem, 6.5vw, 6.8rem);
+    }
+
+    .sec-artist {
+        font-size: clamp(1rem, 4.5vw, 3.5rem);
     }
 }
-
-@media (max-width: 576px) {
-    .festival-title {
-        font-size: 2.5rem;
-    }
-}
-
-
-
-.about-section {
-    background-color: #f8f9fa;
-    padding: 4rem 0;
-}
-
-.section-title {
-    position: relative;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
-    letter-spacing: 0.2rem;
-    margin-bottom: 2rem;
-    color: #333;
-}
-
-.section-title:after {
-    content: '';
-    display: block;
-    width: 80px;
-    height: 4px;
-    background-color: #ff6b6b;
-    margin: 1rem auto 0;
-}
-
-.about-content {
-    line-height: 1.8;
-}
-
-.about-content .lead {
-    font-size: 1.5rem;
-    font-weight: 300;
-}
-
-.about-content p {
-    color: #495057;
-}
-
-.about-content strong {
-    font-weight: 600;
-    color: #212529;
-}
-
-

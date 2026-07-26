@@ -10,7 +10,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('', include('festival.urls')),
-    path('register_organizer/', CreateOrganizerView.as_view(), name='register_organizer')
+    path('register_organizer/', CreateOrganizerView.as_view(), name='register_organizer'),
+    path("__reload__/", include("django_browser_reload.urls"))
 ]
 
 if settings.DEBUG:

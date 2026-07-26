@@ -2,175 +2,181 @@
 {% load static %}
 
 {% block content %}
-<div class="container p-2 mt-5 mb-5">
+<div class="container p-2 mt-4 mb-5">
     
+    <!-- Titolo Pagina -->
     <div class="text-center mb-5">
-        <h2 class="display-4 fw-bold mb-3 rustic-title" style="letter-spacing: 2px; text-shadow: 2px 2px 0px rgba(49, 172, 52, 0.1);">BIGLIETTERIA</h2>
-        <div class="mx-auto rustic-divider" style="width: 120px; height: 4px;"></div>
+        <h1 class="display-4 fw-bold mb-2 text-ink text-uppercase" style="letter-spacing: -1px;">Tesseramento</h1>
+        <p class="text-muted fs-5 fw-semibold mb-0">Il tesseramento è strettamente personale, inserisci i tuoi dati qui sotto.</p>
     </div>
 
-    <form hx-post="" hx-target="body" enctype="multipart/form-data" id="registration-form">
+    <form method="post" enctype="multipart/form-data" id="registration-form" novalidate>
         {% csrf_token %}
         <div class="row g-4">
             
+            <!-- COLONNA SINISTRA: FORM DI INSERIMENTO -->
             <div class="col-lg-8 col-md-12">
-                <div class="card rustic-card shadow-sm mb-4" style="z-index: 1;">
+                <div class="card festival-card">
                     <div class="card-body p-4 p-md-5">
-                        <div class="d-flex align-items-center mb-4">
-                            <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; background-box-shadow: 0 0 0 2px #31ac34;">
-                                <i class="fas fa-address-book text-white fs-4"></i>
+                        
+                        <div class="d-flex align-items-center mb-4 pb-2 border-bottom-ink">
+                            <h3 class="mb-0 fw-bold fs-4 text-ink">Dati Personali</h3>
+                        </div>
+
+                        <!-- Anagrafica Base -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-uppercase small text-ink">Nome*</label>
+                                {{ form.first_name }}
+                                {% if form.first_name.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.first_name.errors.0 }}</div>{% endif %}
                             </div>
-                            <h3 class="mb-0 rustic-subtitle fw-bold" style="font-size: 1.8rem; letter-spacing: 1px;">Referente Ordine</h3>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-uppercase small text-ink">Cognome*</label>
+                                {{ form.last_name }}
+                                {% if form.last_name.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.last_name.errors.0 }}</div>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold text-uppercase small text-ink">Data di Nascita*</label>
+                                {{ form.data_di_nascita }}
+                                {% if form.data_di_nascita.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.data_di_nascita.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold text-uppercase small text-ink">Luogo di Nascita*</label>
+                                {{ form.luogo_di_nascita }}
+                                {% if form.luogo_di_nascita.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.luogo_di_nascita.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold text-uppercase small text-ink">Codice Fiscale*</label>
+                                {{ form.codice_fiscale }}
+                                {% if form.codice_fiscale.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.codice_fiscale.errors.0 }}</div>{% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Contatti e Residenza -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-uppercase small text-ink">Indirizzo (Via e Civico)*</label>
+                                {{ form.indirizzo }}
+                                {% if form.indirizzo.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.indirizzo.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold text-uppercase small text-ink">Città*</label>
+                                {{ form.citta }}
+                                {% if form.citta.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.citta.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold text-uppercase small text-ink">CAP*</label>
+                                {{ form.cap }}
+                                {% if form.cap.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.cap.errors.0 }}</div>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold text-uppercase small text-ink">Provincia* (es. MO)</label>
+                                {{ form.provincia }}
+                                {% if form.provincia.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.provincia.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label fw-bold text-uppercase small text-ink">Telefono*</label>
+                                {{ form.phone }}
+                                {% if form.phone.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.phone.errors.0 }}</div>{% endif %}
+                            </div>
                         </div>
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold rustic-text"  for="{{ registration_form.email.id_for_label }}">Email per comunicazioni*</label>
-                                {{ registration_form.email }}
-                                {% if registration_form.email.errors %}
-                                    <div class="text-danger small mt-1 fw-bold">{{ registration_form.email.errors }}</div>
-                                {% endif %}
+                                <label class="form-label fw-bold text-uppercase small text-ink">Email*</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.email.errors.0 }}</div>{% endif %}
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold rustic-text"  for="{{ registration_form.confirm_email.id_for_label }}">Conferma Email*</label>
-                                {{ registration_form.confirm_email }}
-                                {% if registration_form.confirm_email.errors %}
-                                    <div class="text-danger small mt-1 fw-bold">{{ registration_form.confirm_email.errors }}</div>
-                                {% endif %}
+                                <label class="form-label fw-bold text-uppercase small text-ink">Conferma Email*</label>
+                                {{ form.confirm_email }}
+                                {% if form.confirm_email.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.confirm_email.errors.0 }}</div>{% endif %}
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold rustic-text"  for="{{ registration_form.phone.id_for_label }}">Telefono*</label>
-                                {{ registration_form.phone }}
-                                {% if registration_form.phone.errors %}
-                                    <div class="text-danger small mt-1 fw-bold">{{ registration_form.phone.errors }}</div>
-                                {% endif %}
+                        <!-- Spunte Associazione (Statuto e Privacy) -->
+                        <div class="p-3 mt-4 border-ink bg-white">
+                            <p class="mb-3 fw-bold text-uppercase text-primary-green fs-6">Dichiarazioni Obbligatorie APS</p>
+                            
+                            <div class="form-check mb-2">
+                                {{ form.accetta_statuto }} 
+                                <label class="form-check-label ms-2 text-ink fw-semibold" for="{{ form.accetta_statuto.id_for_label }}">
+                                    Dichiaro di aver letto e di accettare lo 
+                                    <a href="#" class="text-primary-green text-decoration-underline fw-bold" data-bs-toggle="modal" data-bs-target="#statutoModal">
+                                        Statuto dell'Associazione
+                                    </a>.
+                                </label>
                             </div>
-                        </div>
-
-                        <div class="row mt-3">
-                            <div class="col-12"> 
-                                <div class="form-check p-3 rounded" style="background-color: rgba(49, 172, 52, 0.05); ">
-                                    {{ registration_form.privacy_tick }} 
-                                    <label class="form-check-label ms-2 rustic-text" style="font-weight: 500; " for="{{ registration_form.privacy_tick.id_for_label }}">
-                                        {{ registration_form.privacy_tick.label }} 
-                                    </label>
-                                </div>
-                                {% if registration_form.privacy_tick.errors %}
-                                    <div class="text-danger small mt-1 fw-bold">{{ registration_form.privacy_tick.errors }}</div>
-                                {% endif %}
+                            {% if form.accetta_statuto.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.accetta_statuto.errors.0 }}</div>{% endif %}
+                            
+                            <div class="form-check">
+                                {{ form.accetta_privacy }} 
+                                <label class="form-check-label ms-2 text-ink fw-semibold" for="{{ form.accetta_privacy.id_for_label }}">
+                                    Acconsento al trattamento dei dati personali (
+                                    <a href="#" class="text-primary-green text-decoration-underline fw-bold" data-bs-toggle="modal" data-bs-target="#privacyModal">
+                                        Informativa Privacy
+                                    </a>).
+                                </label>
                             </div>
+                            {% if form.accetta_privacy.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.accetta_privacy.errors.0 }}</div>{% endif %}
                         </div>
-                    </div>
-                </div>
 
-                <div class="card rustic-card shadow-sm" style="z-index: 1;">
-                    <div class="card-body p-4 p-md-5">
-                        <div class="d-flex align-items-center mb-2">
-                            <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; background-box-shadow: 0 0 0 2px #31ac34;">
-                                <i class="fas fa-users text-white fs-4"></i>
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger mt-3 mb-0 fw-bold border-0 rounded-0">
+                                {{ form.non_field_errors }}
                             </div>
-                            <h3 class="mb-0 rustic-subtitle fw-bold" style="font-size: 1.8rem; letter-spacing: 1px;">Partecipanti</h3>
-                        </div>
-                        <p class="mb-4 ms-5 ps-3 rustic-text" style="font-size: 1.1rem;">Aggiungi fino a 5 partecipanti in un unico ordine. Ognuno riceverà un QR code personale.</p>
+                        {% endif %}
 
-                        {{ participant_formset.management_form }}
-
-                        <div id="participant-forms">
-                            {% for form in participant_formset %}
-                                <div class="participant-form mb-4 p-4 position-relative" style="background-border-radius: 12px;">
-                                    
-                                    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-                                        <h5 class="mb-0 fw-bold rustic-subtitle" style="font-size: 1.4rem;">
-                                            TICKET #<span class="participant-number">{{ forloop.counter }}</span>
-                                        </h5>
-                                        {% if forloop.counter > 1 %}
-                                            <button type="button" class="btn btn-sm btn-outline-danger remove-participant fw-bold">
-                                                <i class="fas fa-trash-alt me-1"></i>Rimuovi
-                                            </button>
-                                        {% endif %}
-                                    </div>
-                                    
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label fw-bold rustic-text"  for="{{ form.first_name.id_for_label }}">Nome*</label>
-                                            {{ form.first_name }}
-                                            {% if form.first_name.errors %}
-                                                <div class="text-danger small mt-1 fw-bold">{{ form.first_name.errors }}</div>
-                                            {% endif %}
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label fw-bold rustic-text"  for="{{ form.last_name.id_for_label }}">Cognome*</label>
-                                            {{ form.last_name }}
-                                            {% if form.last_name.errors %}
-                                                <div class="text-danger small mt-1 fw-bold">{{ form.last_name.errors }}</div>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label fw-bold rustic-text"  for="{{ form.email.id_for_label }}">Email Partecipante*</label>
-                                            {{ form.email }}
-                                            {% if form.email.errors %}
-                                                <div class="text-danger small mt-1 fw-bold">{{ form.email.errors }}</div>
-                                            {% endif %}
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label fw-bold rustic-text"  for="{{ form.confirm_email.id_for_label }}">Conferma Email*</label>
-                                            {{ form.confirm_email }}
-                                            {% if form.confirm_email.errors %}
-                                                <div class="text-danger small mt-1 fw-bold">{{ form.confirm_email.errors }}</div>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-
-                        <div class="text-center mt-2">
-                            <button type="button" id="add-participant" class="btn w-100 py-3 rustic-text fw-bold" style="background-color: transparent; border-radius: 12px; font-size: 1.2rem; transition: all 0.3s ease;">
-                                <i class="fas fa-plus-circle me-2"></i>AGGIUNGI UN ALTRO BIGLIETTO
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
 
+            <!-- COLONNA DESTRA: RIEPILOGO ORDINE -->
             <div class="col-lg-4 col-md-12">
-                <div class="card rustic-card shadow-lg" style="position: sticky; top: 20px; z-index: 2;">
+                <div class="card festival-card sticky-top-card">
                     <div class="card-body p-4">
-                        <h4 class="mb-4 text-center rustic-title" style="font-size: 2rem; letter-spacing: 1px;">RIEPILOGO ORDINE</h4>
+                        <h4 class="mb-4 text-center fw-bold text-uppercase text-ink fs-3">Riepilogo</h4>
                         
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="rustic-text text-muted fw-bold">Prezzo unitario:</span>
-                            <span class="fw-bold fs-5"><span id="single-ticket-price" data-price="{{ ticket_price|stringformat:'f' }}">{{ ticket_price|floatformat:2 }}</span> €</span>
+                            <span class="text-muted fw-bold text-uppercase small">Quota associativa:</span>
+                            <span class="fw-bold fs-5 text-ink">{{ ticket_price|floatformat:2 }} €</span>
                         </div>
                         
-                        <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-success border-opacity-25">
-                            <span class="rustic-text text-muted fw-bold">Quantità biglietti:</span>
-                            <span class="fw-bold fs-5">x <span id="total-participants">1</span></span>
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-top-thin pt-3">
+                            <span class="text-muted fw-bold text-uppercase small">Tessera Inclusa:</span>
+                            <span class="fw-bold fs-5 text-primary-green"><i class="fas fa-check"></i></span>
                         </div>
                         
-                        <div class="d-flex justify-content-between align-items-center mb-4 pt-2">
-                            <span class="rustic-title mb-0" style="font-size: 1.5rem; ">TOTALE:</span>
-                            <span class="rustic-title mb-0" style="font-size: 2.2rem;"><span id="total-price">{{ ticket_price|floatformat:2 }}</span> €</span>
+                        <div class="d-flex justify-content-between align-items-center mb-4 pt-2 border-top-ink">
+                            <span class="fw-bold text-uppercase fs-5 text-ink">TOTALE:</span>
+                            <span class="fw-bold text-primary-green display-6">{{ ticket_price|floatformat:2 }} €</span>
                         </div>
 
-                        <button type="submit" class="btn w-100 py-3 rustic-button text-white shadow-sm" style="border-radius: 25px; font-size: 1.2rem; font-weight: bold; letter-spacing: 1px;">
-                            <i class="fas fa-lock me-2"></i> PAGA CON STRIPE
-                        </button>
+                        <div class="d-flex flex-column gap-3">
+                            <button type="submit" name="gateway" value="stripe" class="btn btn-festival w-100 py-3">
+                                <i class="fas fa-credit-card me-2"></i> PAGA CON CARTA
+                            </button>
+                            
+                            <button type="submit" name="gateway" value="paypal" class="btn btn-paypal w-100 py-3">
+                                <i class="fab fa-paypal me-2"></i> PAGA CON PAYPAL
+                            </button>
+                        </div>
                         
                         <div class="text-center mt-4">
-                            <div class="d-flex justify-content-center gap-2 mb-2" >
+                            <div class="d-flex justify-content-center gap-3 mb-2 text-muted">
                                 <i class="fab fa-cc-visa fs-3"></i>
                                 <i class="fab fa-cc-mastercard fs-3"></i>
                                 <i class="fab fa-cc-apple-pay fs-3"></i>
                                 <i class="fab fa-google-pay fs-3"></i>
                             </div>
-                            <p class="text-muted small mb-0 rustic-text" style="font-weight: 500;">
-                                Transazione sicura e crittografata.
+                            <p class="text-muted small mb-0 fw-semibold">
+                                Transazione sicura via Stripe
                             </p>
                         </div>
                     </div>
@@ -180,93 +186,212 @@
     </form>
 </div>
 
+<!-- MODAL STATUTO -->
+<div class="modal fade" id="statutoModal" tabindex="-1" aria-labelledby="statutoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content border-ink" style="background-color: var(--bg-paper);">
+            <div class="modal-header border-bottom-ink">
+                <h5 class="modal-title fw-bold text-uppercase text-ink" id="statutoModalLabel">Statuto Flanella Fest APS</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 text-ink">
+                <h5>Articolo 1 – Costituzione</h5>
+                <p>È costituita l'Associazione di Promozione Sociale denominata "Flanella Fest APS"...</p>
+                <h5>Articolo 2 – Finalità</h5>
+                <p>L'Associazione non ha scopo di lucro e persegue finalità civiche, solidaristiche e di utilità sociale...</p>
+                <h5>Articolo 3 – Tesseramento</h5>
+                <p>La qualifica di socio si ottiene con la richiesta online e il versamento della quota associativa...</p>
+                <p class="mt-3">
+                    <a href="{% url 'statuto' %}" target="_blank" class="text-primary-green fw-bold">
+                        Apri Statuto Completo in una nuova scheda &rarr;
+                    </a>
+                </p>
+            </div>
+            <div class="modal-footer border-top-ink">
+                <button type="button" id="btn-accept-statuto" class="btn btn-festival px-4" data-bs-dismiss="modal">
+                    HO LETTO E ACCETTO
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PRIVACY -->
+<div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content border-ink" style="background-color: var(--bg-paper);">
+            <div class="modal-header border-bottom-ink">
+                <h5 class="modal-title fw-bold text-uppercase text-ink" id="privacyModalLabel">Informativa sul Trattamento dei Dati</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 text-ink">
+                <h5>Titolare del Trattamento</h5>
+                <p>Associazione Flanella Fest APS, Fiorano Modenese (MO) - <code>flanellafest@gmail.com</code>.</p>
+                <h5>Finalità della Raccolta Dati</h5>
+                <p>Tenuta del Libro Soci, emissione della tessera/QR Code, adempimenti fiscali per le APS e gestione ingressi al festival.</p>
+                <p class="mt-3">
+                    <a href="{% url 'privacy' %}" target="_blank" class="text-primary-green fw-bold">
+                        Apri Informativa Privacy Completa in una nuova scheda &rarr;
+                    </a>
+                </p>
+            </div>
+            <div class="modal-footer border-top-ink">
+                <button type="button" id="btn-accept-privacy" class="btn btn-festival px-4" data-bs-dismiss="modal">
+                    HO LETTO E ACCETTO
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
-/* Piccoli aggiustamenti specifici per i form di Bootstrap in questa pagina */
-.form-control {
-    border-radius: 8px;
-    padding: 10px 15px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+.festival-card {
+    background-color: var(--bg-paper);
+    background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+    border: 3px solid var(--ink-black);
+    border-radius: 20px;
 }
-.form-control:focus {
-    border-box-shadow: 0 0 0 0.25rem rgba(49, 172, 52, 0.25);
+
+.sticky-top-card {
+    position: sticky;
+    top: 100px;
+    z-index: 2;
 }
-#add-participant:hover {
-    background-color: rgba(49, 172, 52, 0.1) !important;
+
+.border-ink {
+    border: 2px solid var(--ink-black);
+    border-radius: 12px;
+}
+
+.form-control, .form-select {
+    border: 2px solid var(--ink-black);
+    border-radius: 12px;
+    padding: 10px 14px;
+    background-color: #ffffff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    color: var(--ink-black);
+    transition: all 0.15s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-green);
+    outline: none;
+    background-color: #ffffff;
+}
+
+.form-check-input {
+    width: 1.2em;
+    height: 1.2em;
+    border: 2px solid var(--ink-black);
+    border-radius: 4px;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-green);
+    border-color: var(--ink-black);
+}
+
+.btn-paypal {
+    background-color: var(--accent-yellow);
+    color: var(--ink-black);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    border: 2px solid var(--ink-black);
+    border-radius: 50px;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+.btn-paypal:hover {
+    background-color: var(--ink-black);
+    color: var(--accent-yellow);
+    transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+    .sticky-top-card {
+        position: static;
+    }
 }
 </style>
 {% endblock %}
 
 {% block extra_js %}
+<datalist id="lista-comuni"></datalist>
 <script>
     $(document).ready(function() {
         
-        function updateOrderSummary() {
-            var numParticipants = $('.participant-form').length;
-            var rawPrice = $('#single-ticket-price').data('price').replace(',', '.');
-            var ticketPrice = parseFloat(rawPrice);
-            var total = numParticipants * ticketPrice;
+        // 1. Autocompletamento città/provincia
+        const comuniUrl = 'https://raw.githubusercontent.com/matteocontrini/comuni-json/master/comuni.json';
+        let comuniData = [];
 
-            $('#total-participants').text(numParticipants);
-            $('#total-price').text(total.toFixed(2).replace('.', ','));
-        }
-
-        updateOrderSummary();
-
-        function updateParticipantNumbers() {
-            $('.participant-number').each(function(index) {
-                $(this).text(index + 1);
+        fetch(comuniUrl)
+            .then(response => response.json())
+            .then(data => {
+                comuniData = data;
+                let optionsComuni = '';
+                data.forEach(comune => {
+                    optionsComuni += `<option value="${comune.nome}"></option>`;
+                });
+                $('#lista-comuni').html(optionsComuni);
             });
-        }
 
-        $('#add-participant').click(function() {
-            var form_idx = $('#id_participants-TOTAL_FORMS').val();
-        
-            if (form_idx >= 5) {
-                alert('Non puoi aggiungere più di 5 partecipanti!');
-                return;
-            }
-        
-            var newForm = $('.participant-form').first().clone(true);
-        
-            newForm.find(':input').each(function() {
-                var name = $(this).attr('name');
-                if (name) {
-                    name = name.replace('-0-', '-' + form_idx + '-');
-                    $(this).attr('name', name);
-                    $(this).attr('id', 'id_' + name);
-        
-                    if ($(this).is(':checkbox')) {
-                        $(this).prop('checked', false);
-                    } else {
-                        $(this).val('');
-                    }
-                }
-            });
-        
-            newForm.find('label').each(function() {
-                var newFor = $(this).attr('for').replace('-0-', '-' + form_idx + '-');
-                $(this).attr('for', newFor);
-            });
-        
-            if (newForm.find('.remove-participant').length === 0) {
-                newForm.find('.border-bottom').append('<button type="button" class="btn btn-sm btn-outline-danger remove-participant fw-bold"><i class="fas fa-trash-alt me-1"></i>Rimuovi</button>');
-            }
-        
-            $('#participant-forms').append(newForm);
-            $('#id_participants-TOTAL_FORMS').val(parseInt(form_idx) + 1);
-            
-            updateParticipantNumbers();
-            updateOrderSummary();
+        $(document).on('focus', 'input[name$="citta"], input[name$="luogo_di_nascita"]', function() {
+            $(this).attr('list', 'lista-comuni');
+            $(this).attr('autocomplete', 'off');
         });
 
-        $(document).on('click', '.remove-participant', function() {
-            $(this).closest('.participant-form').remove();
+        $(document).on('change', 'input[name$="citta"]', function() {
+            let cittaSelezionata = $(this).val();
+            let match = comuniData.find(c => c.nome.toLowerCase() === cittaSelezionata.toLowerCase());
+            
+            if (match) {
+                $('input[name$="provincia"]').val(match.sigla);
+                if (match.cap && match.cap.length > 0) {
+                    $('input[name$="cap"]').val(match.cap[0]);
+                }
+            }
+        });
 
-            var form_idx = $('#id_participants-TOTAL_FORMS').val();
-            $('#id_participants-TOTAL_FORMS').val(parseInt(form_idx) - 1);
+        // 2. Spunta automatica Modal
+        $('#btn-accept-statuto').on('click', function() {
+            $('input[name="accetta_statuto"]').prop('checked', true);
+        });
 
-            updateParticipantNumbers();
-            updateOrderSummary();
+        $('#btn-accept-privacy').on('click', function() {
+            $('input[name="accetta_privacy"]').prop('checked', true);
+        });
+
+        // 3. Invio della Form diretto a Django
+        $('#registration-form').on('submit', function(e) {
+            var $form = $(this);
+
+            if ($form.data('is-submitting')) {
+                e.preventDefault();
+                return; 
+            }
+            $form.data('is-submitting', true);
+
+            var submitter = e.originalEvent ? e.originalEvent.submitter : null;
+            var gateway = 'stripe';
+            
+            if (submitter && submitter.name === 'gateway') {
+                gateway = submitter.value;
+            }
+
+            $form.append('<input type="hidden" name="gateway" value="' + gateway + '">');
+
+            var $submitBtns = $form.find('button[type="submit"]');
+            $submitBtns.css('pointer-events', 'none').css('opacity', '0.7'); 
+            
+            if (submitter) {
+                $(submitter).html('<i class="fas fa-spinner fa-spin me-2"></i> ATTENDI...');
+            } else {
+                $submitBtns.first().html('<i class="fas fa-spinner fa-spin me-2"></i> ATTENDI...');
+            }
         });
     });
 </script>

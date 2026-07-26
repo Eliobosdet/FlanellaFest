@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'festival',
     'crispy_forms',
     'crispy_bootstrap5',
-    'accounts'
+    'accounts',
+    "django_browser_reload"
 ]
 
 LOGIN_REDIRECT_URL = '/'
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django_browser_reload.middleware.BrowserReloadMiddleware"
 ]
 
 ROOT_URLCONF = 'FlanellaFest.urls'
@@ -153,12 +155,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 DEFAULT_FROM_EMAIL = 'noreply@flanellafest.it'
 
-EMAIL_HOST = 'smtp.gmail.com'  # Cambia con il tuo provider SMTP
+# Configurazione email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER') 
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  
-DEFAULT_FROM_EMAIL = 'Flanella Fest <noreply@flanellafest.it>'
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # Deve essere una App Password di Google a 16 lettere!
+
+# Usiamo l'email reale configurata in EMAIL_HOST_USER per evitare blocchi SMTP da Gmail
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', f"Flanella Fest <{EMAIL_HOST_USER}>")
 
 
 

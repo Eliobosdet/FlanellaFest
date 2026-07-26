@@ -1,0 +1,32 @@
+{% extends 'festival/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="card festival-card p-4 p-md-5">
+        <h1 class="display-5 fw-bold text-ink text-uppercase mb-4 text-center">Statuto dell'Associazione</h1>
+        <p class="text-muted text-center mb-5">Associazione di Promozione Sociale "Flanella Fest APS"</p>
+
+        <div class="privacy-content text-ink">
+            <h4 class="fw-bold border-bottom pb-2">Articolo 1 – Costituzione, Denominazione e Sede</h4>
+            <p>È costituita l'Associazione di Promozione Sociale denominata <strong>"Flanella Fest APS"</strong>. L'Associazione ha sede legale nel Comune di Fiorano Modenese (MO) ed opera ai sensi del D.Lgs. 117/2017 (Codice del Terzo Settore).</p>
+
+            <h4 class="fw-bold border-bottom pb-2 mt-4">Articolo 2 – Finalità e Scopi Istituzionali</h4>
+            <p>L'Associazione non ha scopo di lucro e persegue finalità civiche, solidaristiche e di utilità sociale, con particolare riguardo alla promozione della cultura, dell'aggregazione giovanile, della musica e della valorizzazione del territorio attraverso l'organizzazione del festival "Flanella Fest" e di altre iniziative socioculturali.</p>
+
+            <h4 class="fw-bold border-bottom pb-2 mt-4">Articolo 3 – Ammissione dei Soci e Tesseramento</h4>
+            <p>Possono aderire all'Associazione tutte le persone fisiche che condividano le finalità istituzionali ed accettino il presente Statuto. La richiesta di tesseramento avviene tramite la compilazione dell'apposito modulo (online o cartaceo) e il versamento della quota associativa annuale stabilita dal Consiglio Direttivo.</p>
+            <p>La qualifica di socio è personale, non trasmissibile e dà diritto di partecipazione alle assemblee ed alle attività sociali.</p>
+
+            <h4 class="fw-bold border-bottom pb-2 mt-4">Articolo 4 – Diritti e Doveri dei Soci</h4>
+            <p>I soci hanno diritto di frequentare i locali e gli eventi dell'Associazione, di votare in Assemblea (se maggiorenni) e di concorrere alle cariche sociali. I soci sono tenuti al rispetto dello Statuto, delle delibere degli organi sociali e al pagamento della quota associativa.</p>
+
+            <h4 class="fw-bold border-bottom pb-2 mt-4">Articolo 5 – Perdenza della Qualifica di Socio</h4>
+            <p>La qualifica di socio si perde per recesso scritto, per mancato rinnovo della quota associativa o per esclusione deliberata dal Consiglio Direttivo per gravi motivi o comportamenti incompatibili con le finalità dell'Associazione.</p>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{% url 'register' %}" class="btn btn-festival px-5 py-3">TORNA AL TESSERAMENTO</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
