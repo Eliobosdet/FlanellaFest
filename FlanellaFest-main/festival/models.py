@@ -13,9 +13,8 @@ class Participant(models.Model):
     ]
 
     PAYMENT_CHOICES = [
-        ('stripe', 'Stripe / Carta di Credito'),
-        ('paypal', 'PayPal'),
-        ('contanti', 'Contanti (Pagamento in loco)'),
+        ('stripe', 'Carta di Credito'),
+        ('contanti', 'Contanti'),
     ]
 
     # --- Anagrafica Base ---
@@ -44,11 +43,51 @@ class Participant(models.Model):
     
     # --- Dati di Sistema e Biglietteria ---
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    qr_code = models.ImageField(upload_to='qr_codes/', blank=True)
+
+    def save(self, *args, **kwargs):
+        # Normalizza Nome e Cognome in Title Case
+        if self.first_name:
+            self.first_name = self.first_name.strip().title()
+        if self.last_name:
+            self.last_name = self.last_name.strip().title()
+            
+        # Normalizza Luogo di Nascita e Città in Title Case
+        if self.luogo_di_nascita:
+            self.luogo_di_nascita = self.luogo_di_nascita.strip().title()
+        if self.citta:
+            self.citta = self.citta.strip().title()
+
+        # Assicura che la provincia sia sempre in maiuscolo (es. 'mo' -> 'MO')
+        if self.provincia:
+            self.provincia = self.provincia.strip().upper()
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        stato = "PAGATO" if self.pagato else "DA PAGARE"
+        if self.status in ['approved', 'checked_in']:
+            stato = "PAGATO"
+        elif self.status == 'rejected':
+            stato = "ANNULLATO"
+        else:
+            stato = "DA PAGARE"
+            
         return f"{self.first_name} {self.last_name} - CF: {self.codice_fiscale} [{stato}]"
+
+    def get_qr_code_bytes(self):
+        """Genera il PNG del QR Code al volo in memoria e ne restituisce i byte."""
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(str(self.unique_id))
+        qr.make(fit=True)
+        img = qr.make_image(fill_color="black", back_color="white")
+
+        buffer = BytesIO()
+        img.save(buffer, format='PNG')
+        return buffer.getvalue()
 
     def generate_qr_code(self):
         qr = qrcode.QRCode(

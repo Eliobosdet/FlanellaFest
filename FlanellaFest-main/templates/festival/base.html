@@ -35,7 +35,7 @@
                 
                 <!-- LOGO A SINISTRA -->
                 <a href="{% url 'home' %}" class="navbar-brand m-0 flex-shrink-0">
-                    <img src="{% static 'img/flanella_text_v2.png' %}" alt="Flanella Fest Logo" style="height: 35px;">
+                    <img src="{% static 'img/flanella_text_v2.webp' %}" alt="Flanella Fest Logo" style="height: 35px;">
                 </a>
 
                 <!-- GRUPPO DESTRO -->
@@ -45,7 +45,7 @@
                     <div class="collapse collapse-horizontal dual-collapse desktop-menu-wrapper" id="desktopNavLinks">
                         <div class="d-flex align-items-center gap-2 me-1" style="width: max-content;">
                             <a href="{% url 'home' %}" class="nav-inline-link">Home</a>
-                            <a href="{% url 'about' %}" class="nav-inline-link">About</a>
+                            {% comment %} <a href="{% url 'about' %}" class="nav-inline-link">About</a> {% endcomment %}
                             <a href="{% url 'register' %}" class="nav-inline-link">Tesseramento</a>
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                             <a class="nav-link festival-sidebar-link" href="{% url 'home' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link festival-sidebar-link" href="{% url 'about' %}">About</a>
+                            {% comment %} <a class="nav-link festival-sidebar-link" href="{% url 'about' %}">About</a> {% endcomment %}
                         </li>
                         <li class="nav-item">
                             <a class="nav-link festival-sidebar-link" href="{% url 'register' %}">Tesseramento</a>
@@ -91,7 +91,7 @@
                     <div class="pt-2 border-top-thin">
                         <h6 class="mb-2 text-uppercase fw-bold text-primary-green fs-7" style="font-family: 'Space Grotesk', sans-serif;">Area Staff</h6>
                         <ul class="navbar-nav flex-column gap-1">
-                            <li class="nav-item"><a class="nav-link festival-sidebar-link small-link" href="{% url 'admin_management' %}">Biglietti</a></li>
+                            <li class="nav-item"><a class="nav-link festival-sidebar-link small-link" href="{% url 'admin_management' %}">Configurazione</a></li>
                             <li class="nav-item"><a class="nav-link festival-sidebar-link small-link" href="{% url 'check_qr' %}">Verifica QR</a></li>
                             <li class="nav-item"><a class="nav-link festival-sidebar-link small-link" href="{% url 'all_participants' %}">Partecipanti</a></li>
                             <li class="nav-item mt-2"><a class="nav-link festival-sidebar-link text-danger small-link" style="border-color: transparent;" href="{% url 'logout' %}">Esci &rarr;</a></li>
@@ -140,10 +140,10 @@
                 <div class="col-lg-4 text-center text-lg-start">
                     <div class="d-flex flex-wrap justify-content-center justify-content-lg-start gap-3 fs-6 fw-bold text-uppercase">
                         <a href="{% url 'home' %}" class="footer-minimal-link">Home</a>
-                        <a href="{% url 'about' %}" class="footer-minimal-link">About</a>
+                        {% comment %} <a href="{% url 'about' %}" class="footer-minimal-link">About</a> {% endcomment %}
                         <a href="{% url 'register' %}" class="footer-minimal-link">Tesseramento</a>
                         <a href="https://maps.google.com/?q=Castello+di+Spezzano+MO" target="_blank" class="footer-minimal-link">
-                            <i class="fa-solid fa-location-dot me-1"></i>Mappa
+                            Mappa<i class="fa-solid fa-location-dot ms-1"></i>
                         </a>
                     </div>
                 </div>
@@ -154,9 +154,9 @@
                         <a href="https://www.instagram.com/flanellafest/" target="_blank" class="footer-social-icon" title="Instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="#" class="footer-social-icon" title="Spotify">
+                        {% comment %} <a href="https://open.spotify.com/playlist/7rf3HDG8ir0ssUpxSmMaut?si=g4tWdo0LS8-CzJCSS5QePQ&utm_source=copy-link&pi=oN1tAy85RSua7" class="footer-social-icon" title="Spotify">
                             <i class="fab fa-spotify"></i>
-                        </a>
+                        </a> {% endcomment %}
                     </div>
                 </div>
 
@@ -165,7 +165,7 @@
             <!-- RIGA COPYRIGHT, EMAIL & CREDITS -->
             <div class="row mt-4 pt-3 border-top-thin align-items-center g-3 fs-7">
                 <div class="col-md-4 text-center text-md-start text-muted fw-semibold">
-                    &copy; 2026 Associazione Flanella Fest &bull; Soci APS.
+                    &copy; 2026 Associazione Flanella
                 </div>
 
                 <div class="col-md-4 text-center">

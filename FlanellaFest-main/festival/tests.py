@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core import mail
 from festival.models import Participant
 from festival.views import send_approval_email
+from festival.utils import generate_membership_pdf
 from unittest.mock import patch
 
 class FullRegistrationAndEmailTests(TestCase):
@@ -41,32 +42,38 @@ class FullRegistrationAndEmailTests(TestCase):
 
         participant = Participant.objects.first()
         self.assertEqual(participant.status, 'pending')
-        self.assertFalse(participant.pagato)
+        self.assertFalse(getattr(participant, 'pagato', False)) # Uso sicuro se il campo è stato rimosso
 
     def test_send_approval_email_and_qr_code(self):
         """Verifica che send_approval_email generi la mail con l'oggetto e l'allegato corretto"""
+        # Svuotiamo l'outbox
+        mail.outbox = []
+        
         participant = Participant.objects.create(
             first_name='Luigi',
             last_name='Verdi',
             email='luigi.verdi@example.com',
             phone='3339876543',
-            status='approved',
-            pagato=True
+            luogo_di_nascita="Sassuolo",
+            indirizzo="Via Mazzini 5",
+            citta="Sassuolo",
+            cap="41049",
+            provincia="MO",
+            codice_fiscale="VRDLGU80A01H501K",
+            status='approved'
         )
         
-        # Generiamo il QR code
-        participant.generate_qr_code()
-        participant.save()
-
-        # Inviamo l'email
+        # Generiamo il QR code e inviamo l'email
+        qr_bytes = participant.get_qr_code_bytes()
         success = send_approval_email(participant)
 
         # Verifichiamo l'invio
-        self.assertTrue(success)
+        self.assertTrue(success, "send_approval_email ha restituito False. Controlla i log!")
         self.assertEqual(len(mail.outbox), 1)
         
         sent_email = mail.outbox[0]
-        self.assertEqual(sent_email.subject, 'Tesseramento e Registrazione approvati - Flanella Fest')
+        # FIX: L'oggetto deve combaciare con quello reale di views.py
+        self.assertEqual(sent_email.subject, 'Tesseramento e QR code di ingresso - Flanella Fest')
         self.assertIn('luigi.verdi@example.com', sent_email.to)
 
     def test_export_excel_returns_correct_content_type(self):
@@ -86,3 +93,43 @@ class FullRegistrationAndEmailTests(TestCase):
             response['Content-Type'], 
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )
+
+
+class MembershipEmailTest(TestCase):
+    def setUp(self):
+        self.participant = Participant.objects.create(
+            first_name="Mario",
+            last_name="Rossi",
+            email="eliobosdet@gmail.com",
+            luogo_di_nascita="Modena",
+            indirizzo="Via Roma 1",
+            citta="Fiorano Modenese",
+            cap="41042",
+            provincia="MO",
+            codice_fiscale="RSSMRA80A01H501U",
+            status="approved"
+        )
+
+    def test_pdf_generation_does_not_crash(self):
+        """Verifica che la generazione del PDF con ReportLab avvenga senza crash"""
+        try:
+            pdf_bytes = generate_membership_pdf(self.participant)
+            self.assertIsInstance(pdf_bytes, bytes)
+            self.assertTrue(len(pdf_bytes) > 0)
+        except Exception as e:
+            self.fail(f"La generazione del PDF è andata in crash con l'errore: {str(e)}")
+
+    def test_send_approval_email_works(self):
+        """Verifica che l'email venga inviata con successo unitamente a PDF e QR code"""
+        mail.outbox = []
+        
+        result = send_approval_email(self.participant)
+        
+        self.assertTrue(result, "La funzione send_approval_email ha restituito False. C'è stato un errore nell'invio!")
+        self.assertEqual(len(mail.outbox), 1)
+        
+        sent_email = mail.outbox[0]
+        self.assertEqual(sent_email.to, ["eliobosdet@gmail.com"])
+        
+        pdf_attachments = [att for att in sent_email.attachments if isinstance(att, tuple) and att[0].endswith('.pdf')]
+        self.assertTrue(len(pdf_attachments) > 0, "Il PDF del verbale non risulta allegato all'email.")

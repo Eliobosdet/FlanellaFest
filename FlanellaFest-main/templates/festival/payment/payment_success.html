@@ -21,16 +21,16 @@
                     </div>
 
                     <p class="fs-4 lh-lg rustic-text mb-4" style="font-weight: 500;">
-                        Ci siamo, sei ufficialmente dei nostri!<br>
+                        Ci siamo, sei ufficialmente un socio flanella!<br>
                         Il tuo ingresso è stato riservato.
                     </p>
                     
-                    <!-- NOVITÀ: BOX DEL QR CODE MOSTRATO SUBITO -->
-                    {% if participant and participant.qr_code %}
+                    <!-- BOX DEL QR CODE MOSTRATO IN BASE64 (GENERATO IN RAM) -->
+                    {% if qr_base64 %}
                     <div class="p-4 mb-4 mx-auto rounded" style="background-color: #ffffff; border: 3px dashed #31ac34; max-width: 350px;">
-                        <h4 class="rustic-subtitle mb-3" style="color: #495057;">Tessera per {{ participant.first_name }}</h4>
-                        <img src="{{ participant.qr_code.url }}" alt="QR Code Ingresso" class="img-fluid mb-2" style="border: 4px solid #000; border-radius: 8px;">
-                        <p class="small fw-bold mt-2 mb-0" style="color: #e63946;">Fai subito uno screenshot di questa schermata!</p>
+                        <h4 class="rustic-subtitle mb-3" style="color: #495057;">QR code</h4>
+                        <img src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code Ingresso" class="img-fluid mb-2" style="border: 4px solid #000; border-radius: 8px;">
+                        <p class="small fw-bold mt-2 mb-0" style="color: #e63946;">Per sicurezza fai uno screenshot di questa schermata!</p>
                     </div>
                     {% endif %}
                     

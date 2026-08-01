@@ -1,4 +1,4 @@
-import time, logging, json, uuid, stripe, openpyxl
+import time, logging, json, uuid, stripe, openpyxl, base64, io
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from datetime import timedelta
 from django.utils import timezone
@@ -17,8 +17,9 @@ from django.template.loader import get_template
 from django.contrib.auth import logout as auth_logout
 from django.db import transaction
 from django.conf import settings
+from .utils import generate_membership_pdf
+from datetime import datetime
 
-# IMPORTIAMO SOLO PARTICIPANT E FESTIVALCONFIG
 from .models import Participant, FestivalConfig
 from .forms import ParticipantForm
 
@@ -26,15 +27,19 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 logger = logging.getLogger(__name__)
 
 def is_admin(user):
+    """ Verifica se l'utente è un superuser (admin) o appartiene al gruppo "Organizer"   """
     return user.is_staff
 
 def is_organizer(user):
+    """ Verifica se l'utente appartiene al gruppo "Organizer" o è un superuser (admin) """
     return user.groups.filter(name="Organizer").exists() or user.is_staff
 
 def get_current_ticket_price():
-    return 1025
+    """ Recupera il prezzo del biglietto dal modello FestivalConfig, se esiste; altrimenti usa il valore di default dalle impostazioni. """
+    return FestivalConfig.objects.first().ticket_price_centesimi if FestivalConfig.objects.exists() else settings.TICKET_PRICE_CENTESIMI
 
 def is_event_full():
+    """ Controlla se l'evento ha raggiunto il limite massimo di partecipanti (300) considerando sia i confermati che quelli approvati negli ultimi 30 minuti. """
     time_threshold = timezone.now() - timedelta(minutes=30)
     firmly_booked = Participant.objects.filter(status__in=['approved', 'checked_in']).count()
     recently_approved = Participant.objects.filter(status='pending', created_at__gte=time_threshold).count()
@@ -42,28 +47,27 @@ def is_event_full():
     return total_count >= 300
 
 def event_full(request):
+    """ Mostra la pagina di evento pieno se l'evento ha raggiunto il limite massimo di partecipanti. """
     return render(request, 'festival/event_full.html')
 
 def home(request):
-    if is_event_full():
-        return render(request, 'festival/event_full.html')
-    else:
-        return render(request, 'festival/home.html')
+    """ Mostra la home page del festival. """
+    return render(request, 'festival/home.html')
 
-def about(request):
-    return render(request, 'festival/about.html')
-
-def statuto_view(request):
-    return render(request, 'festival/statuto.html')
+# def about(request):
+#     return render(request, 'festival/about.html')
 
 def privacy_view(request):
+    """ Mostra la pagina della privacy policy. """
     return render(request, 'festival/privacy.html')
 
 def payment_cancel(request):
+    """ Mostra la pagina di annullamento del pagamento. """
     return render(request, 'festival/payment/payment_cancel.html')
 
 # --- VISTA REGISTRAZIONE AGGIORNATA (SINGOLO UTENTE) ---
 def register(request):
+    """ Gestisce la registrazione dei partecipanti, il pagamento tramite Stripe e la logica di approvazione. """
     if is_event_full():
         return render(request, 'festival/event_full.html')
 
@@ -79,8 +83,6 @@ def register(request):
                     participant.status = 'pending'
                     participant.save() # Ottiene UUID e salva nel DB
 
-                    # RIMOSSO participant.generate_qr_code() da qui. 
-                    # Lo generiamo solo se paga per non intasare il server!
 
                     base_url = request.build_absolute_uri('/')[:-1]
                     gateway = request.POST.get('gateway', 'stripe')
@@ -128,60 +130,56 @@ def register(request):
     })
 
 def payment_success(request):
+    """ Gestisce la logica dopo il pagamento riuscito, approva il partecipante e invia l'email con il PDF e il QR code. """
     session_id = request.GET.get('session_id')
     participant = None
+    qr_base64 = None
     
     if session_id:
         try:
             session = stripe.checkout.Session.retrieve(session_id)
-            participant_id = session.metadata.get('participant_id')
+            
+            # Accesso sicuro ai metadata
+            metadata = getattr(session, 'metadata', None)
+            participant_id = getattr(metadata, 'participant_id', None) if metadata else None
             
             if participant_id:
                 participant = Participant.objects.get(unique_id=participant_id)
                 
-                # FALLBACK DI SICUREZZA AGGIORNATO
                 if participant.status == 'pending':
                     participant.status = 'approved'
-                    participant.pagato = True
                     participant.metodo_pagamento = 'stripe'
-                    
-                    if not participant.qr_code:
-                        participant.generate_qr_code()
-                    
                     participant.save()
-                    
-                    # Invio email con log
                     send_approval_email(participant)
+                
+                # Generiamo la stringa Base64 per la visualizzazione a schermo
+                qr_bytes = participant.get_qr_code_bytes()
+                qr_base64 = base64.b64encode(qr_bytes).decode('utf-8')
                     
         except Exception as e:
-            print(f"Errore nel recupero sessione Stripe: {str(e)}")
+            logger.error(f"Errore nel recupero sessione Stripe: {str(e)}")
             
-    return render(request, 'festival/payment/payment_success.html', {'participant': participant})
+    return render(request, 'festival/payment/payment_success.html', {
+        'participant': participant,
+        'qr_base64': qr_base64
+    })
 
 # --- VISTE ADMIN / STAFF ---
-# @login_required
-# @user_passes_test(is_organizer)
-# def approved_requests(request):
-#     # Non essendoci più gli ordini raggruppati, mostriamo solo i soci pagati
-#     participants_approved = Participant.objects.filter(status='approved').order_by('-created_at')
-#     users_approved = participants_approved.count()
-#     users_checked_in = Participant.objects.filter(status='checked_in').count()
-
-#     return render(request, 'festival/approved_requests.html', {
-#         'participants': participants_approved,
-#         'users_checked_in': users_checked_in,
-#         'users_approved': users_approved
-#     })
 
 @login_required
 @user_passes_test(is_admin)
 def participant_detail(request, pk):
+    """ Mostra i dettagli di un partecipante specifico per gli admin/staff. """
     participant = get_object_or_404(Participant, pk=pk)
     return render(request, 'festival/participant_detail.html', {'participant': participant})
 
 def send_approval_email(participant):
+    """ Invia l'email di approvazione al partecipante con allegati PDF e QR code. """
     try:
-        subject = 'Tesseramento e Registrazione approvati - Flanella Fest'
+        # Generazione PDF richiamando la funzione da utils.py
+        pdf_bytes = generate_membership_pdf(participant)
+
+        subject = 'Tesseramento e QR code di ingresso - Flanella Fest'
         html_message = render_to_string('festival/approval_email.html', {'participant': participant})
         
         email = EmailMessage(
@@ -192,22 +190,22 @@ def send_approval_email(participant):
         )
         email.content_subtype = 'html'
 
-        # --- 1. Allegato Banner Header via CID ---
-        banner_path = finders.find('img/elmo.png')
+        # Banner Header Inline
+        banner_path = finders.find('img/elmo.webp')
         if banner_path:
             with open(banner_path, 'rb') as f:
-                banner_img = MIMEImage(f.read())
-                # Assegniamo l'ID che richiameremo nell'HTML
+                banner_img = MIMEImage(f.read(), _subtype='webp')
                 banner_img.add_header('Content-ID', '<banner_header>')
-                banner_img.add_header('Content-Disposition', 'inline', filename='banner.jpeg')
+                banner_img.add_header('Content-Disposition', 'inline', filename='banner.webp')
                 email.attach(banner_img)
 
-        # --- 2. Allegato QR Code ---
-        if participant.qr_code and hasattr(participant.qr_code, 'path'):
-            try:
-                email.attach_file(participant.qr_code.path)
-            except Exception as e:
-                logger.error(f"Impossibile allegare QR Code: {str(e)}")
+        # Allegato 1: Verbale PDF
+        filename_pdf = f"Verbale_Ammissione_{participant.last_name}_{participant.first_name}.pdf"
+        email.attach(filename_pdf, pdf_bytes, 'application/pdf')
+
+        # Allegato 2: QR Code PNG
+        qr_bytes = participant.get_qr_code_bytes()
+        email.attach(f'qrcode_{participant.unique_id}.png', qr_bytes, 'image/png')
 
         email.send(fail_silently=False)
         return True
@@ -215,8 +213,9 @@ def send_approval_email(participant):
     except Exception as e:
         logger.error(f"Errore invio mail a {participant.email}: {str(e)}")
         return False
-
+        
 def send_payment_failed_email(participant):
+    """ Invia un'email al partecipante in caso di pagamento fallito o annullato. """
     subject = 'Aggiornamento registrazione - Flanella Fest'
     html_message = render_to_string('festival/rejection_email.html', {'participant': participant})
     email = EmailMessage(subject=subject, body=html_message, from_email=settings.DEFAULT_FROM_EMAIL, to=[participant.email])
@@ -231,6 +230,7 @@ def send_payment_failed_email(participant):
 @login_required
 @user_passes_test(is_organizer)
 def check_qr(request):
+    """ Gestisce la logica di controllo del QR code per gli organizer, sia tramite POST che GET. """
     n_approved = Participant.objects.filter(status='approved').count()
     n_checked_in = Participant.objects.filter(status='checked_in').count()
     result = None
@@ -257,6 +257,7 @@ def check_qr(request):
 
 @csrf_exempt
 def check_qr_result(request):
+    """ Gestisce la logica di verifica del QR code inviato tramite POST, restituendo un JSON con il risultato. """
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -295,12 +296,14 @@ def check_qr_result(request):
 
 
 def approved_partecipants(request):
+    """ Mostra la lista dei partecipanti approvati per gli organizer. """
     approved_partecipants = Participant.objects.filter(status='approved')
     return render(request, 'festival/approved_partecipants.html', {'participants': approved_partecipants})
 
 @login_required
 @user_passes_test(is_organizer)
 def checked_in_partecipants(request):
+    """ Mostra la lista dei partecipanti che hanno effettuato il check-in per gli organizer. """
     checked_in_partecipants = Participant.objects.filter(status='checked_in')
     n_checked_in = checked_in_partecipants.count()
     return render(request, 'festival/checked_in_participants.html', {
@@ -310,27 +313,19 @@ def checked_in_partecipants(request):
 @login_required
 @user_passes_test(is_organizer)
 def all_participants(request):
-    participants = Participant.objects.all().order_by('-created_at')
+    """ Mostra la lista completa dei partecipanti approvati e checked-in per gli organizer. """
+    participants = Participant.objects.filter(status__in=['approved', 'checked_in']).order_by('-created_at')
     n_checked_in = Participant.objects.filter(status='checked_in').count()
-    return render(request, 'festival/all_participants.html', { 'participants' : participants, 'n_checked_in': n_checked_in })
-
-# @login_required
-# @user_passes_test(is_organizer)
-# def all_participants_pdf(request):
-#     from weasyprint import HTML
-#     participants = Participant.objects.filter(status__in=['approved', 'checked_in'])
-#     n_checked_in = Participant.objects.filter(status='checked_in').count()
-#     template = get_template('festival/all_participants_pdf.html')
-#     html_string = template.render({'participants' : participants, 'n_checked_in': n_checked_in })
-#     base_url = request.build_absolute_uri('/')
-#     pdf_file = HTML(string=html_string, base_url=base_url).write_pdf()
-#     response = HttpResponse(pdf_file, content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment;filename="partecipanti.pdf"'
-#     return response
+    
+    return render(request, 'festival/all_participants.html', {
+        'participants': participants, 
+        'n_checked_in': n_checked_in
+    })
 
 @login_required
 @user_passes_test(is_organizer)
 def export_participants_excel(request):
+    """ Esporta la lista dei partecipanti approvati e checked-in in un file Excel per gli organizer. """
     workbook = openpyxl.Workbook()
     sheet = workbook.active
     sheet.title = "Libro Soci & Partecipanti"
@@ -412,6 +407,7 @@ def export_participants_excel(request):
 @login_required
 @user_passes_test(is_organizer)
 def logout(request):
+    """ Effettua il logout dell'utente e lo reindirizza alla home page. """
     auth_logout(request)
     return redirect('home')
 
@@ -419,6 +415,7 @@ def logout(request):
 # --- WEBHOOK STRIPE AGGIORNATO PER IL SINGOLO PARTECIPANTE ---
 @csrf_exempt
 def stripe_webhook(request):
+    """ Gestisce gli eventi webhook di Stripe, aggiornando lo stato del partecipante in base al pagamento e inviando le email appropriate. """
     payload = request.body
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
     event = None
@@ -433,7 +430,11 @@ def stripe_webhook(request):
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
         
-        is_test_payment = session.get('metadata', {}).get('is_test_payment', 'false')
+        # 1. ACCESSO SICURO AI METADATA
+        metadata = getattr(session, 'metadata', None)
+        is_test_payment = getattr(metadata, 'is_test_payment', 'false') if metadata else 'false'
+        participant_id = getattr(metadata, 'participant_id', None) if metadata else None
+        
         if is_test_payment == 'true':
             send_mail(
                 'Stripe Prod Test OK - Flanella Fest',
@@ -442,19 +443,12 @@ def stripe_webhook(request):
             )
             return HttpResponse(status=200)
 
-        participant_id = session.get('metadata', {}).get('participant_id')
-        
         if participant_id:
             try:
                 participant = Participant.objects.get(unique_id=participant_id)
-                # Se è ancora in pending, lo approviamo
                 if participant.status == 'pending':
                     participant.status = 'approved'
-                    participant.pagato = True
                     participant.metodo_pagamento = 'stripe'
-                    
-                    if not participant.qr_code:
-                        participant.generate_qr_code()
                     participant.save()
                     
                     send_approval_email(participant)
@@ -463,10 +457,15 @@ def stripe_webhook(request):
 
     elif event['type'] == 'checkout.session.expired':
         session = event['data']['object']
-        if session.get('metadata', {}).get('is_test_payment') == 'true':
+        
+        # 1. ACCESSO SICURO AI METADATA
+        metadata = getattr(session, 'metadata', None)
+        is_test_payment = getattr(metadata, 'is_test_payment', 'false') if metadata else 'false'
+        participant_id = getattr(metadata, 'participant_id', None) if metadata else None
+        
+        if is_test_payment == 'true':
             return HttpResponse(status=200)
 
-        participant_id = session.get('metadata', {}).get('participant_id')
         if participant_id:
             try:
                 participant = Participant.objects.get(unique_id=participant_id)
@@ -476,11 +475,14 @@ def stripe_webhook(request):
             except Participant.DoesNotExist:
                 pass 
 
+    # 2. IL RETURN FONDAMENTALE (DEVE STARE QUI IN FONDO!)
+    # Questo assicura che qualsiasi altro evento di Stripe riceva sempre un bel [200 OK]
     return HttpResponse(status=200)
 
 @login_required
 @user_passes_test(is_admin)
 def admin_management(request):
+    """ Gestisce la pagina di amministrazione per gli admin, permettendo di visualizzare e modificare il prezzo del biglietto. """
     config = FestivalConfig.objects.first()
     if not config:
         config = FestivalConfig.objects.create(ticket_price_centesimi=settings.TICKET_PRICE_CENTESIMI)
@@ -504,24 +506,36 @@ def admin_management(request):
 @login_required
 @user_passes_test(is_admin)
 def stripe_test_checkout(request):
+    """ Permette agli admin di effettuare un test di pagamento Stripe da 50 centesimi per verificare l'integrazione. """
+
     base_url = request.build_absolute_uri('/')[:-1]
+    
+    # FIX ERRORE EMAIL: Se l'admin non ha l'email nel DB, usiamo quella di sistema
+    admin_email = request.user.email if request.user.email else settings.EMAIL_HOST_USER
+    
     try:
         checkout_session = stripe.checkout.Session.create(
-            customer_email=request.user.email,
+            customer_email=admin_email,
             line_items=[{
                 'price_data': {
                     'currency': 'eur',
-                    'product_data': {'name': 'TEST SISTEMA DI PAGAMENTO (50 CENTESIMI)'},
-                    'unit_amount': 50, 
+                    'product_data': {
+                        'name': 'TEST SISTEMA DI PAGAMENTO LIVE',
+                        'description': 'Transazione di test per verifica API e Webhook.'
+                    },
+                    'unit_amount': 50, # 50 centesimi è il MINIMO assoluto consentito da Stripe
                 },
                 'quantity': 1,
             }],
             mode='payment',
-            metadata={'is_test_payment': 'true'},
-            success_url = base_url + '/register/success/?session_id={CHECKOUT_SESSION_ID}',
+            metadata={
+                'is_test_payment': 'true', # Questo dice al Webhook di non creare un QR code
+            },
+            success_url=base_url + '/register/success/?session_id={CHECKOUT_SESSION_ID}',
             cancel_url=base_url + '/register/cancel/',
         )
         return redirect(checkout_session.url, code=303)
+        
     except Exception as e:
         messages.error(request, f"Errore test Stripe: {str(e)}")
         return redirect('admin_management')

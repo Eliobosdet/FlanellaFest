@@ -30,6 +30,21 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ["*"]  # Cambia questo in produzione per limitare gli host consentiti
 
+TICKET_PRICE_CENTESIMI = 1025
+
+# PRIMA (con lo slash finale / che causava l'errore)
+# CSRF_TRUSTED_ORIGINS = ['https://flanellafest.it', 'https://www.flanellafest.it', 'http://localhost:8000', 'https://tricycle-neurotic-habitant.ngrok-free.dev/']
+
+# DOPO (Corretto - senza slash finale e con i wildcard per ngrok)
+CSRF_TRUSTED_ORIGINS = [
+    'https://flanellafest.it',
+    'https://www.flanellafest.it',
+    'http://localhost:8000',
+    'https://tricycle-neurotic-habitant.ngrok-free.dev',
+    'https://*.ngrok-free.dev',
+    'https://*.ngrok-free.app',
+    'https://*.ngrok.io',
+]
 
 # Application definition
 
@@ -132,15 +147,27 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = '/static/'  # Assicurati che ci siano gli slash / prima e dopo!
-
-# DOVE TROVARE I FILE IN LOCALE (Se manca questo, hai i 404!)
+STATIC_URL = '/static/'
+# DOVE RACCOGLIERE I FILE PER LA PRODUZIONE
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+# DOVE TROVARE I FILE IN LOCALE
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-# DOVE RACCOGLIERE I FILE PER LA PRODUZIONE
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# Configurazione dello Storage con WhiteNoise (Gestione Hash + Compressione)
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+# Imposta l'header Cache-Control degli asset statici a 1 anno (31.536.000 secondi)
+WHITENOISE_MAX_AGE = 31536000
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

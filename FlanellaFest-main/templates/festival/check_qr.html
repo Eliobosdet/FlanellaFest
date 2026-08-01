@@ -16,10 +16,10 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card shadow-lg border-0" style="border-radius: 15px; overflow: hidden;">
-                    <div class="card-header text-white text-center py-4" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
-                        <h3 class="mb-0 fw-bold">
+                    <div class="card-header text-white text-center py-4" style="background: linear-gradient(135deg, #aaff9d 0%, #026400 100%);">
+                        <h4 class="mb-0 fw-bold">
                             <i class="fas fa-qrcode me-2"></i>Scanner QR Code
-                        </h3>
+                        </h4>
                     </div>
                     <div class="card-body p-4">
                         <p class="card-text fs-5 text-center mb-4 text-muted">Scansiona il QR code del partecipante:</p>
@@ -37,7 +37,7 @@
                                 <p id="result-status" class="mb-0"></p>
                             </div>
                             <div class="text-center mt-3">
-                                <button id="scan-again" class="btn btn-lg px-4 py-2 text-white shadow-sm" style="background-border: none; border-radius: 25px; font-weight: 500; transition: all 0.3s ease;">
+                                <button id="scan-again" class="btn btn-lg px-4 py-2 shadow-sm" style="background-border: none; border-radius: 25px; font-weight: 500; transition: all 0.3s ease;">
                                     <i class="fas fa-redo me-2"></i>Scansiona un altro QR Code
                                 </button>
                             </div>
@@ -72,7 +72,7 @@
                             </div>
 
                             <div class="text-center">
-                                <button type="submit" class="btn btn-lg px-5 py-3 text-white shadow-sm" 
+                                <button type="submit" class="btn btn-lg px-5 py-3 shadow-sm" 
                                         style="background-border: none; border-radius: 25px; font-weight: 600; transition: all 0.3s ease;">
                                     <i class="fas fa-search me-2"></i>Verifica manualmente
                                 </button>
@@ -157,26 +157,22 @@
     function startScanning() {
         resultArea.classList.add('d-none');
 
-        // Inizia la scansione con la fotocamera posteriore (se disponibile)
-        Html5Qrcode.getCameras().then(devices => {
-            if (devices && devices.length) {
-                // Cerca di utilizzare la fotocamera posteriore (di solito è l'ultima)
-                const cameraId = devices.length > 1 ? devices[devices.length - 1].id : devices[0].id;
-
-                html5QrCode.start(
-                    cameraId,
-                    config,
-                    onScanSuccess,
-                    (errorMessage) => {
-                        // Gestisci gli errori (opzionale)
-                        console.log(errorMessage);
-                    }
-                ).catch(err => {
-                    console.log(`Errore nell'inizializzazione della fotocamera: ${err}`);
-                });
+        // Su Safari iOS, facingMode: "environment" forza l'uso della fotocamera posteriore
+        html5QrCode.start(
+            { facingMode: "environment" },
+            config,
+            onScanSuccess,
+            (errorMessage) => {
+                // Ignora gli errori di scansione frame per frame
             }
-        }).catch(err => {
-            console.log(`Errore nell'ottenere le fotocamere: ${err}`);
+        ).catch(err => {
+            console.error("Errore avvio fotocamera posteriore:", err);
+            // Fallback: se fallisce, riprova chiedendo la fotocamera generica
+            html5QrCode.start(
+                { facingMode: "user" },
+                config,
+                onScanSuccess
+            ).catch(e => console.error("Nessuna fotocamera disponibile:", e));
         });
     }
 

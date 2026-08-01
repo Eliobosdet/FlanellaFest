@@ -1,98 +1,91 @@
 {% extends 'festival/base.html' %}
+
+{% block extra_css %}
+<!-- DataTables & Responsive CSS inseriti correttamente nell'HEAD -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); min-height: 100vh;">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h1 class="display-4 fw-bold mb-3" >Lista Partecipanti</h1>
-            <div class="mx-auto mb-4" style="width: 80px; height: 3px; background-border-radius: 2px;"></div>
-            <div class="alert border-0 shadow-sm d-inline-block" style="background-border-left: 4px solid #dc3545 !important;">
-                <p class="mb-0 fs-5 fw-bold" >
-                    <i class="fas fa-users me-2"></i>Totale Partecipanti: {{ participants|length }}, Arrivati: {{ n_checked_in }}
+    <div class="container-fluid px-4">
+        
+        <!-- Header e Contatori -->
+        <div class="text-center mb-4">
+            <h1 class="display-5 fw-bold mb-2 text-uppercase text-ink" style="letter-spacing: -1px;">Libro Soci</h1>
+            
+            <div class="alert border-0 shadow-sm d-inline-block px-4 py-2 my-2" style="background-color: #ffffff; border-left: 4px solid var(--primary-green, #31ac34) !important;">
+                <p class="mb-0 fs-5 fw-bold text-ink">
+                    <i class="fas fa-users me-2 text-primary-green"></i>Tesserati: {{ participants|length }} ---   
+                    <i class="fas fa-user-check me-2 text-success"></i>Arrivati: {{ n_checked_in }}
                 </p>
             </div>
-            <div class="mx-auto mb-4" style="width: 80px; height: 3px; background-border-radius: 2px;"></div>
-            <a href="{% url 'export_participants_excel' %}" hx-boost="false" class="btn btn-light btn-sm shadow-sm" style="pointer-events: auto; font-size: 0.9rem; border-radius: 25px; font-weight: 500; ">
-                <i class="fas fa-file-excel me-1"></i>Scarica Excel
-            </a>
+            
+            <div class="mt-2">
+                <a href="{% url 'export_participants_excel' %}" class="btn btn-dark btn-sm shadow-sm px-4 py-2" style="border-radius: 25px; font-weight: 600;">
+                    <i class="fas fa-file-excel me-2 text-success"></i>Esporta in Excel (Libro Soci)
+                </a>
+            </div>
         </div>
 
+        <!-- Tabella con Tutti i Dati -->
         <div class="row">
             <div class="col-12">
-                <div class="card shadow-lg border-0" style="border-radius: 15px; overflow: hidden;">
-                    <div class="card-header text-white py-3" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
-                        <h3 class="mb-0 fw-bold text-center">
-                            <i class="fas fa-table me-2"></i>Elenco Completo
-                        </h3>
+                <div class="card shadow-lg border-ink p-3" style="border-radius: 15px; background-color: #ffffff;">
+                    <div class="card-header text-white py-3 rounded-top mb-3" style="background-color: var(--ink-black, #1a1a1a);">
+                        <h4 class="mb-0 fw-bold text-center fs-4">
+                            <i class="fas fa-address-book me-2"></i>Elenco Anagrafico Completo
+                        </h4>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table table-hover mb-0" style="font-size: 0.95rem;">
-                                <thead style="background-border-bottom: 2px solid #dc3545;">
+                            <table id="participantsTable" class="table table-hover table-striped mb-0 align-middle w-100" style="font-size: 0.88rem;">
+                                <thead class="table-dark" style="background-color: #1a1a1a;">
                                     <tr>
-                                        <th scope="col" class="py-3 px-4 fw-bold" style="border-right: 1px solid #dee2e6;">
-                                            <i class="fas fa-fingerprint me-2"></i>ID Unico
-                                        </th>
-                                        <th scope="col" class="py-3 px-4 fw-bold" style="border-right: 1px solid #dee2e6;">
-                                            <i class="fas fa-user me-2"></i>Nome
-                                        </th>
-                                        <th scope="col" class="py-3 px-4 fw-bold" style="border-right: 1px solid #dee2e6;">
-                                            <i class="fas fa-user me-2"></i>Cognome
-                                        </th>
-                                        <th scope="col" class="py-3 px-4 fw-bold" style="border-right: 1px solid #dee2e6;">
-                                            <i class="fas fa-envelope me-2"></i>Email
-                                        </th>
-                                        <th scope="col" class="py-3 px-4 fw-bold" style="border-right: 1px solid #dee2e6;">
-                                            <i class="fas fa-envelope me-2"></i>Telefono
-                                        </th>
-                                        <th scope="col" class="py-3 px-4 fw-bold" style="border-right: 1px solid #dee2e6;">
-                                            <i class="fas fa-info-circle me-2"></i>Stato
-                                        </th>
-                                        <th scope="col" class="py-3 px-4 fw-bold" >
-                                            <i class="fas fa-calendar me-2"></i>Data Creazione
-                                        </th>
+                                        <th scope="col" class="py-3 px-3">Nome</th>
+                                        <th scope="col" class="py-3 px-3">CF</th>
+                                        <th scope="col" class="py-3 px-3">Nascita</th>
+                                        <th scope="col" class="py-3 px-3 text-center">Stato</th>
+                                        <th scope="col" class="py-3 px-3 text-center">Data Iscrizione</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for p in participants %}
-                                    <tr style="transition: all 0.3s ease;">
-                                        <td class="py-3 px-4 border-end" style="font-size: 0.85rem; color: #666;">
-                                            {{ p.unique_id }}
-                                        </td>
-                                        <td class="py-3 px-4 border-end fw-semibold">
-                                            {{ p.first_name }}
-                                        </td>
-                                        <td class="py-3 px-4 border-end fw-semibold">
-                                            {{ p.last_name }}
-                                        </td>
-                                        <td class="py-3 px-4 border-end" style="color: #666;">
-                                            {{ p.email }}
-                                        </td>
-                                        <td class="py-3 px-4 border-end" style="color: #666;">
-                                            {{ p.phone }}
-                                        </td>
-                                        <td class="py-3 px-4 border-end">
-                                            <span class="badge rounded-pill px-3 py-2 fw-normal" 
-                                                  style="font-size: 0.8rem;
-                                                         {% if p.status == 'checked_in' %}
-                                                             background-{% else%}
-                                                             background-{% endif %}">
-                                                         {% if p.status == 'checked_in' %}
-                                                            Arrivato
-                                                         {% else%}
-                                                            Non arrivato
-                                                         {% endif %}
-                                            </span>
-                                        </td>
-                                        <td class="py-3 px-4" style="color: #666;">
-                                            <i class="fas fa-calendar-alt me-2" ></i>
-                                            {{ p.created_at|date }}
-                                        </td>
-                                    </tr>
-                                    {% empty %}
                                     <tr>
-                                        <td colspan="6" class="text-center py-5 text-muted">
-                                            <i class="fas fa-users-slash fa-3x mb-3" ></i>
-                                            <p class="fs-5 mb-0">Nessun partecipante trovato</p>
+                                        <!-- Nome e Cognome -->
+                                        <td class="py-3 px-3 fw-bold text-ink fs-6">
+                                            {{ p.first_name }} {{ p.last_name }}
+                                        </td>
+                                        
+                                        <!-- Codice Fiscale -->
+                                        <td class="py-3 px-3 fw-semibold text-uppercase" style="font-family: monospace;">
+                                            {{ p.codice_fiscale|default:"-" }}
+                                        </td>
+                                        
+                                        <!-- Data e Luogo di Nascita -->
+                                        <td class="py-3 px-3" data-order="{{ p.data_di_nascita|date:'Y-m-d' }}">
+                                            {% if p.data_di_nascita %}
+                                                <div><i class="fas fa-birthday-cake text-muted me-1"></i>{{ p.data_di_nascita|date:"d/m/Y" }}</div>
+                                            {% endif %}
+                                            <div class="text-muted small"><i class="fas fa-map-marker-alt text-muted me-1"></i>{{ p.luogo_di_nascita|default:"-" }}</div>
+                                        </td>
+                                        
+                                        <!-- Badge Stato -->
+                                        <td class="py-3 px-3 text-center" data-order="{{ p.status }}">
+                                            {% if p.status == 'checked_in' %}
+                                                <span class="badge bg-success px-3 py-2">
+                                                    <i class="fas fa-check-circle me-1"></i>Arrivato
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-warning text-dark px-3 py-2">
+                                                    <i class="fas fa-clock me-1"></i>Non arrivato
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        
+                                        <!-- Data Iscrizione -->
+                                        <td class="py-3 px-3 text-center text-muted small" data-order="{{ p.created_at|date:'Y-m-d H:i:s' }}">
+                                            {{ p.created_at|date:"d/m/Y H:i" }}
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -105,56 +98,43 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
-<style>
-.table tbody tr:hover {
-    background-!important;
-    transform: scale(1.01);
-    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.1);
-}
+{% block extra_js %}
+<!-- DataTables Core & Extensions (Dipendono da jQuery caricato in base.html) -->
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+{% comment %} <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script> {% endcomment %}
 
-.table tbody tr {
-    border-bottom: 1px solid #f0f0f0;
-}
+<script>
+$(document).ready(function() {
+    $('#participantsTable').DataTable({
+        "language": {
+            "search": "",
+            "searchPlaceholder": "Cerca partecipante...",
+            "lengthMenu": "mostra _MENU_ voci",
+            "info": "Mostrati da _START_ a _END_ di _TOTAL_ partecipanti",
+            "infoEmpty": "Nessun partecipante trovato",
+            "infoFiltered": "(filtrati da _MAX_ totali)",
+            "zeroRecords": "Nessun risultato corrispondente",
+            "paginate": {
+                "first": "Primo",
+                "last": "Ultimo",
+                "next": "Successivo",
+                "previous": "Precedente"
+            }
+        },
+        "pageLength": 25,
+        "order": [[ 4, "desc" ]], // Ordina per Data Iscrizione (indice 4)
+        "responsive": true,
+        "columnDefs": [
+            { "responsivePriority": 1, "targets": 0 }, // Nome (Sempre visibile su mobile)
+            { "responsivePriority": 2, "targets": 3 }  // Stato (Secondo campo prioritario)
+        ]
+    });
 
-.table tbody tr:last-child {
-    border-bottom: none;
-}
-
-@media (max-width: 768px) {
-    .table {
-        font-size: 0.8rem !important;
-    }
-    
-    .table th,
-    .table td {
-        padding: 0.5rem !important;
-    }
-    
-    .display-4 {
-        font-size: 2rem !important;
-    }
-    
-    .badge {
-        font-size: 0.7rem !important;
-        padding: 0.25rem 0.5rem !important;
-    }
-}
-
-@media (max-width: 576px) {
-    .table-responsive {
-        border-radius: 0.5rem;
-    }
-    
-    .table th,
-    .table td {
-        padding: 0.375rem !important;
-        font-size: 0.75rem !important;
-    }
-    
-    .table th {
-        white-space: nowrap;
-    }
-}
-</style>
+    $('.dataTables_filter input').attr('type', 'search');
+});
+</script>
 {% endblock %}

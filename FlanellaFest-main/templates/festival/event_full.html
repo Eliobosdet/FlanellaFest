@@ -1,53 +1,46 @@
 {% extends 'festival/base.html' %}
 {% load static %}
-{% block navbar %}
-{% endblock %}
+{% load auth_extras %}
+
 {% block content %}
-<div class="hero-section position-relative overflow-hidden d-flex align-items-center" style="min-height: 100vh;">
+<div class="container py-5 my-md-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            
+            <!-- SCHEDA CARD BRUTALIST -->
+            <div class="rustic-soldout-card text-center p-4 p-md-5">
+                
+                <!-- MASCOTTE / ELMO / ICONA (Opzionale) -->
+                <div class="mb-3">
+                    <img src="{% static 'img/elmo.webp' %}" alt="Flanella Fest" class="soldout-mascot img-fluid" style="max-width: 150px; height: auto;">
+                </div>
 
-    {% load auth_extras %}
-    {% if user.is_staff or request.user|has_group:"Organizer" %}
-    <div class="admin-buttons position-fixed d-flex flex-wrap gap-2" style="z-index: 9999; top: 20px; left: 20px;">
-        <a href="{% url 'approved_partecipants' %}" class="btn admin-btn btn-sm shadow-sm rounded-pill px-3">
-            <i class="fas fa-clock me-1"></i>Richieste
-        </a>
-        <a href="{% url 'check_qr' %}" class="btn admin-btn btn-sm shadow-sm rounded-pill px-3">
-            <i class="fas fa-qrcode me-1"></i>Verifica QR
-        </a>
-        <a href="{% url 'all_participants' %}" class="btn admin-btn btn-sm shadow-sm rounded-pill px-3">
-            <i class="fas fa-users me-1"></i>Partecipanti
-        </a>
-        {% if user.is_staff %}
-        <a href="{% url 'register_organizer' %}" class="btn admin-btn btn-sm shadow-sm rounded-pill px-3">
-            <i class="fas fa-user-plus me-1"></i>Registra Organizzatore
-        </a>
-        {% endif %}
-    </div>
-    {% endif %}
+                <!-- TITOLO PRINCIPALE IN COOPBLACKLETTER -->
+                <h5 class="festival-title display-3 mb-2">
+                    Sold Out!
+                </h5>
+                
+                <div class="border-bottom-ink w-50 mx-auto mb-4" style="border-bottom-width: 4px !important;"></div>
 
-    <div class="overlay w-100 h-100 d-flex align-items-center" style="background: rgba(0,0,0,0.4);">
-        <div class="container text-center">
-            <div class="alert rustic-card p-5 mx-auto shadow-lg" style="max-width: 650px;">
-                <h3 class="rustic-title mb-4 fs-1">Ci dispiace!</h3>
-                <div class="rustic-divider mb-4"></div>
-                <p class="rustic-text fs-4 fw-bold">
-                    Tutti i posti disponibili per l'evento sono esauriti (SOLD OUT).
+                <!-- TESTO EXPLANATION -->
+                <p class="fs-4 fw-bold text-uppercase text-ink mb-3">
+                    Ci dispiace, le iscrizioni sono chiuse.
                 </p>
-                <p class="rustic-text fs-5">
-                    Abbiamo raggiunto la capienza massima autorizzata per la location.
+
+                <p class="fs-6 fw-semibold text-ink opacity-75 mb-4 px-md-3">
+                    Abbiamo raggiunto la capienza massima autorizzata per la location del <strong>Castello di Spezzano</strong>. Non è più possibile richiedere nuovi tesseramenti online o in loco.
                 </p>
+
+                <!-- BOTTONE HOME NELLO STILE FESTIVAL -->
+                <div class="pt-2">
+                    <a href="{% url 'home' %}" class="btn btn-festival px-4 py-2">
+                        <i class="fa-solid fa-arrow-left me-2"></i>Torna alla Home
+                    </a>
+                </div>
+
             </div>
+
         </div>
     </div>
-
 </div>
-
-<style>
-    .hero-section {
-        background-image: url('/static/img/flanella_fest_bg_final.jpeg');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-</style>
 {% endblock %}

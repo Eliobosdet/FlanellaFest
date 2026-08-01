@@ -145,27 +145,31 @@
                         
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="text-muted fw-bold text-uppercase small">Quota associativa:</span>
-                            <span class="fw-bold fs-5 text-ink">{{ ticket_price|floatformat:2 }} €</span>
+                            <span class="fw-bold fs-5 text-ink">10.00 €</span>
                         </div>
-                        
+
                         <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-top-thin pt-3">
                             <span class="text-muted fw-bold text-uppercase small">Tessera Inclusa:</span>
                             <span class="fw-bold fs-5 text-primary-green"><i class="fas fa-check"></i></span>
                         </div>
                         
-                        <div class="d-flex justify-content-between align-items-center mb-4 pt-2 border-top-ink">
+                        <div class="d-flex justify-content-between align-items-center pt-2 border-top-ink">
                             <span class="fw-bold text-uppercase fs-5 text-ink">TOTALE:</span>
-                            <span class="fw-bold text-primary-green display-6">{{ ticket_price|floatformat:2 }} €</span>
+                            <span class="fw-bold text-primary-green display-6">10.00 €</span>
                         </div>
-
+                        
+                        <div class="text-end">
+                            <span class="text-muted small d-block mb-4">+ commissioni</span>
+                        </div>
+                        
                         <div class="d-flex flex-column gap-3">
                             <button type="submit" name="gateway" value="stripe" class="btn btn-festival w-100 py-3">
                                 <i class="fas fa-credit-card me-2"></i> PAGA CON CARTA
                             </button>
                             
-                            <button type="submit" name="gateway" value="paypal" class="btn btn-paypal w-100 py-3">
+                            {% comment %} <button type="submit" name="gateway" value="paypal" class="btn btn-paypal w-100 py-3">
                                 <i class="fab fa-paypal me-2"></i> PAGA CON PAYPAL
-                            </button>
+                            </button> {% endcomment %}
                         </div>
                         
                         <div class="text-center mt-4">
@@ -186,7 +190,7 @@
     </form>
 </div>
 
-<!-- MODAL STATUTO -->
+<!-- MODAL STATUTO CON LINK A GOOGLE DRIVE -->
 <div class="modal fade" id="statutoModal" tabindex="-1" aria-labelledby="statutoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content border-ink" style="background-color: var(--bg-paper);">
@@ -196,14 +200,18 @@
             </div>
             <div class="modal-body p-4 text-ink">
                 <h5>Articolo 1 – Costituzione</h5>
-                <p>È costituita l'Associazione di Promozione Sociale denominata "Flanella Fest APS"...</p>
-                <h5>Articolo 2 – Finalità</h5>
-                <p>L'Associazione non ha scopo di lucro e persegue finalità civiche, solidaristiche e di utilità sociale...</p>
-                <h5>Articolo 3 – Tesseramento</h5>
-                <p>La qualifica di socio si ottiene con la richiesta online e il versamento della quota associativa...</p>
-                <p class="mt-3">
-                    <a href="{% url 'statuto' %}" target="_blank" class="text-primary-green fw-bold">
-                        Apri Statuto Completo in una nuova scheda &rarr;
+                <p>E' costituita, ai sensi del Codice Civile, della legge nazionale 6 giugno 2016 n. 106 e del
+D.Lgs. 3 luglio 2017 n. 117, così come modificato dal D.Lgs. 3 agosto 2018 n. 105, d’ora
+in avanti “Codice del Terzo Settore”, una Associazione di Promozione Sociale avente la
+seguente denominazione Flanella APS con sede legale nel comune di Fiorano
+Modenese, provincia di Modena
+L'Assemblea e il Consiglio Direttivo potranno svolgere le loro riunioni anche in luoghi
+diversi dalla sede dell'Associazione...</p>
+                
+                <!-- LINK AL PDF SU GOOGLE DRIVE PRIVATO -->
+                <p class="mt-4 pt-2 border-top">
+                    <a href="https://drive.google.com/file/d/1jhyH1E-GV26rC-2iG_gP4NWQkTOGwBgY/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-sm fw-bold">
+                        <i class="fas fa-file-pdf text-danger me-2"></i> Apri lo Statuto Ufficiale Completo (PDF)
                     </a>
                 </p>
             </div>
@@ -226,9 +234,9 @@
             </div>
             <div class="modal-body p-4 text-ink">
                 <h5>Titolare del Trattamento</h5>
-                <p>Associazione Flanella Fest APS, Fiorano Modenese (MO) - <code>flanellafest@gmail.com</code>.</p>
+                <p>Associazione Flanella, Fiorano Modenese (MO) - <code>flanellafest@gmail.com</code>.</p>
                 <h5>Finalità della Raccolta Dati</h5>
-                <p>Tenuta del Libro Soci, emissione della tessera/QR Code, adempimenti fiscali per le APS e gestione ingressi al festival.</p>
+                <p>Tenuta del Libro Soci, emissione del QR Code, adempimenti fiscali e gestione degli ingressi al festival.</p>
                 <p class="mt-3">
                     <a href="{% url 'privacy' %}" target="_blank" class="text-primary-green fw-bold">
                         Apri Informativa Privacy Completa in una nuova scheda &rarr;

@@ -335,7 +335,7 @@ h3, .festival-title, .stage-title {
 
 }
 
-/* 💻 DESKTOP & LARGE SCREENS (Da 992px in poi) */
+/* DESKTOP & LARGE SCREENS (Da 992px in poi) */
 @media (min-width: 992px) {
     .hero-mascot-img {
         max-width: 380px; /* L'omino scala in grande su PC */
@@ -356,5 +356,33 @@ h3, .festival-title, .stage-title {
 
     .sec-artist {
         font-size: clamp(1rem, 4.5vw, 3.5rem);
+    }
+}
+
+/* --- ALL_PARTICIPANTS.HTML --- */
+.border-ink {
+    border: 2px solid #1a1a1a;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(49, 172, 52, 0.05) !important;
+}
+
+.table th {
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.dataTables_filter input:focus {
+    border-color: #31ac34;
+    box-shadow: 0 0 5px rgba(49, 172, 52, 0.5);
+}
+
+/* Layout Responsivo Mobile */
+@media (max-width: 768px) {
+    .dataTables_filter {
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 }
