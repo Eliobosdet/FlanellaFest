@@ -28,24 +28,27 @@ STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ["*"]  # Cambia questo in produzione per limitare gli host consentiti
+ALLOWED_HOSTS = [
+    'flanellafest.com',
+    'www.flanellafest.com',
+    '187.124.2.71',
+    'localhost',
+    '127.0.0.1',
+]
 
 TICKET_PRICE_CENTESIMI = 1025
 
 # PRIMA (con lo slash finale / che causava l'errore)
 # CSRF_TRUSTED_ORIGINS = ['https://flanellafest.it', 'https://www.flanellafest.it', 'http://localhost:8000', 'https://tricycle-neurotic-habitant.ngrok-free.dev/']
 
-# DOPO (Corretto - senza slash finale e con i wildcard per ngrok)
 CSRF_TRUSTED_ORIGINS = [
-    'https://flanellafest.it',
-    'https://www.flanellafest.it',
+    'https://flanellafest.com',
+    'https://www.flanellafest.com',
     'http://localhost:8000',
-    'https://tricycle-neurotic-habitant.ngrok-free.dev',
     'https://*.ngrok-free.dev',
     'https://*.ngrok-free.app',
     'https://*.ngrok.io',
 ]
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -59,8 +62,10 @@ INSTALLED_APPS = [
     'festival',
     'crispy_forms',
     'crispy_bootstrap5',
-    "django_browser_reload"
 ]
+
+if DEBUG:
+    INSTALLED_APPS.append("django_browser_reload")
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -68,15 +73,18 @@ LOGOUT_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Gestisce i file statici in prod
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "django_browser_reload.middleware.BrowserReloadMiddleware"
 ]
 
+if DEBUG:
+    MIDDLEWARE.append("django_browser_reload.middleware.BrowserReloadMiddleware")
+    
 ROOT_URLCONF = 'FlanellaFest.urls'
 
 TEMPLATES = [
