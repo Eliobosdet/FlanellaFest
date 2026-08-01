@@ -59,7 +59,6 @@ INSTALLED_APPS = [
     'festival',
     'crispy_forms',
     'crispy_bootstrap5',
-    'accounts',
     "django_browser_reload"
 ]
 
