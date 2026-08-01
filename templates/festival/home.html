@@ -3,11 +3,11 @@
 {% block content %}
 
 <!-- HOMEPAGE ASTRATTA / TIPOGRAFICA -->
-<section class="poster-hero d-flex flex-column justify-content-between px-3 px-md-5 py-4">
-    
+<section class="poster-hero d-flex flex-column justify-content-between px-5 my-3">
+
     <!-- IMMAGINE MASCOTTE RESPONSIVE -->
-    <div class="text-center my-2 my-md-4">
-        <img src="{% static 'img/illustrazione_completa.webp' %}" alt="Mascotte Flanella" class="hero-mascot-img" style="max-: 800px;">
+    <div class="text-center">
+        <img src="{% static 'img/illustrazione_completa.webp' %}" alt="Mascotte Flanella" class="hero-mascot-img" style="max-width: 250px;">
     </div>
 
     <!-- CALL TO ACTION CENTRATA -->
@@ -21,7 +21,7 @@
     </div>
 
     <!-- BODY: GLI ARTISTI FLUTTUANTI -->
-    <div class="poster-artists-block text-center py-3 py-md-5">
+    <div class="poster-artists-block text-center mt-3 py-3 py-md-5">
         <div class="d-flex flex-wrap justify-content-center align-items-center" style="gap: 5px 20px;">
             {% comment %} <span class="artist-poster-text">MARTA GUIDOBONI</span>
             <span class="artist-poster-text sec-artist">ADRIANO MARINELLI</span>

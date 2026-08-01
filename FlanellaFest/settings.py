@@ -28,7 +28,10 @@ STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = [
+if DEBUG:
+    ALLOWED_HOSTS = ['*']  # In modalità DEBUG, consenti tutte le origini
+else:
+    ALLOWED_HOSTS = [
     'flanellafest.com',
     'www.flanellafest.com',
     '187.124.2.71',

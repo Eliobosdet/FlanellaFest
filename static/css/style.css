@@ -276,9 +276,9 @@ h3, .festival-title, .stage-title {
 /* ==========================================================================
    8. POSTER HERO (HOMEPAGE MANIFESTO)
    ========================================================================== */
-.poster-hero {
+/* .poster-hero {
     min-height: calc(100vh - 120px); 
-}
+} */
 
 .artist-poster-text {
     font-family: 'Space Grotesk', sans-serif;
