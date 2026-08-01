@@ -79,6 +79,9 @@ def register(request):
         if form.is_valid():
             try:
                 with transaction.atomic():
+                    if is_event_full():
+                        return render(request, 'festival/event_full.html')
+                    
                     participant = form.save(commit=False)
                     participant.status = 'pending'
                     participant.save() # Ottiene UUID e salva nel DB
