@@ -22,6 +22,7 @@ from datetime import datetime
 
 from .models import Participant, FestivalConfig
 from .forms import ParticipantForm
+from .google_wallet import generate_google_wallet_link
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 logger = logging.getLogger(__name__)
@@ -179,11 +180,20 @@ def participant_detail(request, pk):
 def send_approval_email(participant):
     """ Invia l'email di approvazione al partecipante con allegati PDF e QR code. """
     try:
+        # google_wallet_url = None
+        # try:
+        #     google_wallet_url = generate_google_wallet_link(participant)
+        # except Exception as gw_err:
+        #     logger.error(f"Errore generazione Google Wallet per {participant.email}: {str(gw_err)}")
+            
         # Generazione PDF richiamando la funzione da utils.py
         pdf_bytes = generate_membership_pdf(participant)
 
         subject = 'Tesseramento e QR code di ingresso - Flanella Fest'
-        html_message = render_to_string('festival/approval_email.html', {'participant': participant})
+        html_message = render_to_string('festival/approval_email.html', {
+            'participant': participant,
+            # 'google_wallet_url': google_wallet_url
+        })
         
         email = EmailMessage(
             subject=subject,

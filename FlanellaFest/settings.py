@@ -203,6 +203,9 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # Deve essere una App Pa
 # Usiamo l'email reale configurata in EMAIL_HOST_USER per evitare blocchi SMTP da Gmail
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', f"Flanella Fest <{EMAIL_HOST_USER}>")
 
-
+# Configurazione Google Wallet
+# GOOGLE_WALLET_ISSUER_ID = os.getenv('GOOGLE_WALLET_ISSUER_ID')
+# GOOGLE_WALLET_CLASS_ID = os.getenv('GOOGLE_WALLET_CLASS_ID')
+# GOOGLE_SERVICE_ACCOUNT_FILE = os.getenv('GOOGLE_SERVICE_ACCOUNT_FILE')
 
 

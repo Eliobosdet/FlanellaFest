@@ -44,3 +44,5 @@ ehthumbs.db
 
 media/*
 !media/.gitkeep
+
+service_account.json

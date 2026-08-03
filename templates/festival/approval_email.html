@@ -39,6 +39,19 @@
                                 La tua registrazione per il <strong>Flanella Fest</strong> è stata approvata ed il tesseramento è confermato!
                             </p>
 
+                            {% comment %} {% if google_wallet_url %}
+                                <div style="margin: 25px 0; text-align: center;">
+                                    <p style="font-size: 14px; color: #555; margin-bottom: 10px;">
+                                    Aggiungi il tuo biglietto direttamente su Google Wallet:
+                                    </p>
+                                    <a href="{{ google_wallet_url }}" target="_blank" style="display: inline-block;">
+                                    <img src="https://e3p.googleusercontent.com/f/f/0/0/0/0/0/0/0/0/en_add_to_google_wallet_add-to-wallet-badge.png" 
+                                        alt="Add to Google Wallet" 
+                                        style="height: 48px; border: 0;" />
+                                    </a>
+                                </div>
+                            {% endif %} {% endcomment %}
+
                             <!-- BOX QR CODE, VERBALE E AVVISO -->
                             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff; border: 2px solid #1a1a1a; border-radius: 12px; margin-bottom: 25px;">
                                 <tr>
