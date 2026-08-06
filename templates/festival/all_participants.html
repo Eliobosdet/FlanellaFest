@@ -14,16 +14,21 @@
         <div class="text-center mb-4">
             <h1 class="display-5 fw-bold mb-2 text-uppercase text-ink" style="letter-spacing: -1px;">Libro Soci</h1>
             
-            <div class="alert border-0 shadow-sm d-inline-block px-4 py-2 my-2" style="background-color: #ffffff; border-left: 4px solid var(--primary-green, #31ac34) !important;">
-                <p class="mb-0 fs-5 fw-bold text-ink">
-                    <i class="fas fa-users me-2 text-primary-green"></i>Tesserati: {{ participants|length }} ---   
-                    <i class="fas fa-user-check me-2 text-success"></i>Arrivati: {{ n_checked_in }}
-                </p>
+            <div>
+                <p class="text-muted mb-0 fs-6">Elenco completo dei partecipanti approvati e checked-in</p>
             </div>
+
+            <div class="alert border-0 shadow-sm d-inline-block px-4 py-2 my-2 width-responsive-stat" style="background-color: #ffffff; border-left: 4px solid var(--primary-green, #31ac34) !important;">
+    <p class="mb-0 fs-5 fw-bold text-ink d-flex flex-column flex-md-row gap-2 gap-md-0">
+        <span><i class="fas fa-users me-2 text-primary-green"></i><span class="me-md-3">Tesserati: {{ participants|length }}</span></span>
+        <span><i class="fas fa-users me-2 text-primary-green"></i><span class="me-md-3">Partecipanti: {{ tesserati }}</span></span>
+        <span><i class="fas fa-user-check me-2 text-success"></i><span class="me-md-3">Arrivati: {{ n_checked_in }}</span></span>
+    </p>
+</div>
             
             <div class="mt-2">
                 <a href="{% url 'export_participants_excel' %}" class="btn btn-dark btn-sm shadow-sm px-4 py-2" style="border-radius: 25px; font-weight: 600;">
-                    <i class="fas fa-file-excel me-2 text-success"></i>Esporta in Excel (Libro Soci)
+                    <i class="fas fa-file-excel me-2 text-success"></i>Esporta in Excel
                 </a>
             </div>
         </div>

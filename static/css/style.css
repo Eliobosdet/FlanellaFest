@@ -291,6 +291,7 @@ h3, .festival-title, .stage-title {
     transition: color 0.2s ease, transform 0.2s ease;
     cursor: default;
     display: inline-block;
+    margin: 0 15px; /* Spaziatura tra i nomi degli artisti */
 }
 
 .sec-artist {
@@ -305,6 +306,10 @@ h3, .festival-title, .stage-title {
 @media (max-width: 768px) {
     body {
         padding-top: 75px;
+    }
+
+    .footer-brutalist {
+        margin-top: 0;
     }
 
     .navbar-floating-container {
@@ -327,12 +332,12 @@ h3, .festival-title, .stage-title {
 
     .artist-poster-text {
         font-size: clamp(4.2rem, 8.5vw, 3.8rem);
+        margin-bottom: 10px;
     }
 
     .sec-artist {
         font-size: clamp(1.4rem, 6vw, 2.8rem);
     }
-
 }
 
 /* DESKTOP & LARGE SCREENS (Da 992px in poi) */

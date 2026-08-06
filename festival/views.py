@@ -45,7 +45,7 @@ def is_event_full():
     firmly_booked = Participant.objects.filter(status__in=['approved', 'checked_in']).count()
     recently_approved = Participant.objects.filter(status='pending', created_at__gte=time_threshold).count()
     total_count = firmly_booked + recently_approved
-    return total_count >= 300
+    return total_count >= settings.MAX_PARTICIPANTS
 
 def event_full(request):
     """ Mostra la pagina di evento pieno se l'evento ha raggiunto il limite massimo di partecipanti. """
@@ -246,6 +246,7 @@ def check_qr(request):
     """ Gestisce la logica di controllo del QR code per gli organizer, sia tramite POST che GET. """
     n_approved = Participant.objects.filter(status='approved').count()
     n_checked_in = Participant.objects.filter(status='checked_in').count()
+    n_volounteers = settings.TOTAL_VOLUNTEERS
     result = None
     if request.method == 'POST':
         qr_uuid = request.POST.get('qr_uuid')
@@ -264,7 +265,8 @@ def check_qr(request):
 
     return render(request, 'festival/check_qr.html', {
         'n_checked_in': n_checked_in,
-        'total_approved': n_approved + n_checked_in,
+        'total': n_checked_in + n_approved,
+        'free_spots': settings.MAX_PARTICIPANTS - (n_approved + n_checked_in + settings.TOTAL_VOLUNTEERS),
         'result': result
     })
 
@@ -328,10 +330,12 @@ def checked_in_partecipants(request):
 def all_participants(request):
     """ Mostra la lista completa dei partecipanti approvati e checked-in per gli organizer. """
     participants = Participant.objects.filter(status__in=['approved', 'checked_in']).order_by('-created_at')
+    participants_count = participants.count()
     n_checked_in = Participant.objects.filter(status='checked_in').count()
     
     return render(request, 'festival/all_participants.html', {
         'participants': participants, 
+        'tesserati': participants_count - settings.TOTAL_VOLUNTEERS,
         'n_checked_in': n_checked_in
     })
 
