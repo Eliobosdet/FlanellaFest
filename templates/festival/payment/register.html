@@ -353,9 +353,22 @@ diversi dalla sede dell'Associazione...</p>
                 $('#lista-comuni').html(optionsComuni);
             });
 
+        // 1. Spegne semplicemente l'autocomplete nativo di sistema quando clicchi
         $(document).on('focus', 'input[name$="citta"], input[name$="luogo_di_nascita"]', function() {
-            $(this).attr('list', 'lista-comuni');
             $(this).attr('autocomplete', 'off');
+        });
+
+        // 2. Attacca il datalist dei comuni SOLO quando si inizia a digitare
+        $(document).on('input', 'input[name$="citta"], input[name$="luogo_di_nascita"]', function() {
+            let valoreDigitato = $(this).val().trim();
+            
+            // Se ha digitato almeno 2 lettere, mostra i suggerimenti
+            if (valoreDigitato.length >= 2) { 
+                $(this).attr('list', 'lista-comuni');
+            } else {
+                // Se cancella o c'è una sola lettera, nascondi la lista enorme
+                $(this).removeAttr('list');
+            }
         });
 
         $(document).on('change', 'input[name$="citta"]', function() {
