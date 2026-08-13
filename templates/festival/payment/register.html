@@ -338,39 +338,50 @@ diversi dalla sede dell'Associazione...</p>
 <script>
     $(document).ready(function() {
         
-        // 1. Autocompletamento città/provincia
+        // 1. Autocompletamento città/provincia (Ottimizzato)
         const comuniUrl = 'https://raw.githubusercontent.com/matteocontrini/comuni-json/master/comuni.json';
         let comuniData = [];
 
+        // Scarichiamo i dati, ma NON popoliamo ancora il datalist (così resta vuoto all'inizio)
         fetch(comuniUrl)
             .then(response => response.json())
             .then(data => {
                 comuniData = data;
-                let optionsComuni = '';
-                data.forEach(comune => {
-                    optionsComuni += `<option value="${comune.nome}"></option>`;
-                });
-                $('#lista-comuni').html(optionsComuni);
             });
 
-        // 1. Spegne semplicemente l'autocomplete nativo di sistema quando clicchi
-        $(document).on('focus', 'input[name$="citta"], input[name$="luogo_di_nascita"]', function() {
-            $(this).attr('autocomplete', 'off');
-        });
+        // Appena carichiamo la pagina, agganciamo il datalist agli input e spegniamo l'autocomplete di sistema.
+        // Dato che il datalist è vuoto, cliccandoci sopra non apparirà nulla.
+        $('input[name$="citta"], input[name$="luogo_di_nascita"]')
+            .attr('list', 'lista-comuni')
+            .attr('autocomplete', 'off');
 
-        // 2. Attacca il datalist dei comuni SOLO quando si inizia a digitare
+        // Quando l'utente digita (o cancella) un carattere
         $(document).on('input', 'input[name$="citta"], input[name$="luogo_di_nascita"]', function() {
-            let valoreDigitato = $(this).val().trim();
+            let valoreDigitato = $(this).val().trim().toLowerCase();
+            let $datalist = $('#lista-comuni');
             
-            // Se ha digitato almeno 2 lettere, mostra i suggerimenti
-            if (valoreDigitato.length >= 2) { 
-                $(this).attr('list', 'lista-comuni');
-            } else {
-                // Se cancella o c'è una sola lettera, nascondi la lista enorme
-                $(this).removeAttr('list');
+            // Svuotiamo i vecchi suggerimenti
+            $datalist.empty();
+
+            // Se ha digitato almeno 2 caratteri, cerchiamo le corrispondenze
+            if (valoreDigitato.length >= 2) {
+                // Filtra solo i comuni che iniziano con le lettere digitate
+                let comuniFiltrati = comuniData.filter(c => c.nome.toLowerCase().startsWith(valoreDigitato));
+                
+                // Per evitare lag estremi, limitiamo i risultati visibili a massimo 50
+                comuniFiltrati = comuniFiltrati.slice(0, 50);
+                
+                let options = '';
+                comuniFiltrati.forEach(comune => {
+                    options += `<option value="${comune.nome}"></option>`;
+                });
+                
+                // Inseriamo i suggerimenti freschi nel datalist
+                $datalist.html(options);
             }
         });
 
+        // Autocompilazione di Provincia e CAP al click su un suggerimento
         $(document).on('change', 'input[name$="citta"]', function() {
             let cittaSelezionata = $(this).val();
             let match = comuniData.find(c => c.nome.toLowerCase() === cittaSelezionata.toLowerCase());
