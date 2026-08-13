@@ -90,7 +90,7 @@
                     <!-- AREA STAFF (Se l'utente è staff/organizzatore) -->
                     {% if user.is_staff or request.user|has_group:"Organizer" %}
                     <div class="pt-2 border-top-thin">
-                        <h6 class="mb-2 text-uppercase fw-bold text-primary-green fs-7" style="font-family: 'Space Grotesk', sans-serif;">Area Staff</h6>
+                        <h6 class="my-2 text-uppercase fw-bold text-primary-green fs-7" style="font-family: 'Space Grotesk', sans-serif;">Area Staff</h6>
                         <ul class="navbar-nav flex-column gap-1">
                             <li class="nav-item"><a class="nav-link festival-sidebar-link small-link" href="{% url 'admin_management' %}">Configurazione</a></li>
                             <li class="nav-item"><a class="nav-link festival-sidebar-link small-link" href="{% url 'check_qr' %}">Verifica QR</a></li>
