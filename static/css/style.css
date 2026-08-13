@@ -327,7 +327,8 @@ h3, .festival-title, .stage-title {
     }
 
     .cta-subtitle {
-        font-size: 1rem;
+        font-size: 1000rem;
+        color:#f0ede6;
     }
 
     .artist-poster-text {
