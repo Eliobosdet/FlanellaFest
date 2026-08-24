@@ -1,31 +1,144 @@
-
 {% extends 'festival/base.html' %}
+{% load static %}
 
 {% block content %}
-    <h1>Dettagli Partecipante</h1>
+<div class="container p-3 p-md-4 mt-4 mb-5">
+    
+    <!-- Pulsante Indietro -->
+    <div class="mb-4">
+        <a href="{% url 'all_participants' %}" class="btn btn-outline-dark fw-bold rounded-pill" style="border: 2px solid var(--ink-black);">
+            <i class="fas fa-arrow-left me-2"></i>Torna al Libro Soci
+        </a>
+    </div>
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title">{{ participant.first_name }} {{ participant.last_name }}</h5>
-            <p><strong>Email:</strong> {{ participant.email }}</p>
-            <p><strong>Telefono:</strong> {{ participant.phone }}</p>
-            <p><strong>Stato:</strong> {{ participant.get_status_display }}</p>
-            <p><strong>Data richiesta:</strong> {{ participant.created_at|date:"d/m/Y H:i" }}</p>
+    <!-- Intestazione Partecipante -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 pb-3 border-bottom-ink">
+        <div>
+            <h1 class="display-5 fw-bold mb-1 text-ink text-uppercase" style="letter-spacing: -1px;">
+                {{ participant.first_name }} {{ participant.last_name }}
+            </h1>
+            <p class="text-muted fs-5 fw-semibold mb-0" style="font-family: monospace;">
+                ID: {{ participant.id }}
+            </p>
+        </div>
+        
+        <div class="mt-3 mt-md-0">
+            {% if participant.status == 'checked_in' %}
+                <span class="badge bg-success px-4 py-2 fs-5 border border-2 border-dark shadow-sm">
+                    <i class="fas fa-check-circle me-2"></i>ARRIVATO
+                </span>
+            {% elif participant.status == 'approved' %}
+                <span class="badge bg-warning text-dark px-4 py-2 fs-5 border border-2 border-dark shadow-sm">
+                    <i class="fas fa-clock me-2"></i>NON ARRIVATO
+                </span>
+            {% elif participant.status == 'pending' %}
+                <span class="badge bg-warning text-dark px-4 py-2 fs-5 border border-2 border-dark shadow-sm">
+                    <i class="fas fa-hourglass-half me-2"></i>IN ATTESA
+                </span>
+            {% else %}
+                <span class="badge bg-danger px-4 py-2 fs-5 border border-2 border-dark shadow-sm">
+                    <i class="fas fa-times-circle me-2"></i>RIFIUTATO/ANNULLATO
+                </span>
+            {% endif %}
         </div>
     </div>
 
-    {% if participant.status == 'pending' %}
-        <div class="d-flex gap-2 mb-4">
-            <form hx-post="{% url 'approve_participant' participant.pk %}" hx-target="body" >
-                {% csrf_token %}
-                <button type="submit" class="btn btn-success">Approva</button>
-            </form>
-            <form hx-post="{% url 'reject_participant' participant.pk %}" hx-target="body" >
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Rifiuta</button>
-            </form>
+    <!-- Griglia Dati -->
+    <div class="row g-4">
+        
+        <!-- CARD 1: Anagrafica e Nascita -->
+        <div class="col-md-6">
+            <div class="card festival-card h-100">
+                <div class="card-header border-bottom-ink bg-transparent py-3">
+                    <h4 class="mb-0 fw-bold text-uppercase text-ink fs-5">
+                        <i class="fas fa-id-card me-2 text-primary-green"></i>Dati Anagrafici
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-3">
+                            <span class="text-muted small text-uppercase fw-bold d-block">Codice Fiscale</span>
+                            <span class="fs-5 fw-bold text-ink" style="font-family: monospace;">{{ participant.codice_fiscale|default:"-" }}</span>
+                        </li>
+                        <li class="mb-3">
+                            <span class="text-muted small text-uppercase fw-bold d-block">Data di Nascita</span>
+                            <span class="fs-5 fw-semibold text-ink">{{ participant.data_di_nascita|date:"d/m/Y"|default:"-" }}</span>
+                        </li>
+                        <li>
+                            <span class="text-muted small text-uppercase fw-bold d-block">Luogo di Nascita</span>
+                            <span class="fs-5 fw-semibold text-ink">{{ participant.luogo_di_nascita|default:"-" }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    {% endif %}
 
-    <a href="{% url 'approved_partecipants' %}" class="btn btn-secondary">Torna alla lista</a>
+        <!-- CARD 2: Contatti e Residenza -->
+        <div class="col-md-6">
+            <div class="card festival-card h-100">
+                <div class="card-header border-bottom-ink bg-transparent py-3">
+                    <h4 class="mb-0 fw-bold text-uppercase text-ink fs-5">
+                        <i class="fas fa-address-book me-2 text-primary-green"></i>Recapiti & Residenza
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-3">
+                            <span class="text-muted small text-uppercase fw-bold d-block">Email</span>
+                            <a href="mailto:{{ participant.email }}" style="text-decoration: underline; color: var(--primary-green);" class="fs-5 fw-bold text-ink">{{ participant.email }}</a>
+                        </li>
+                        <li class="mb-3">
+                            <span class="text-muted small text-uppercase fw-bold d-block">Telefono</span>
+                            <a href="tel:{{ participant.phone }}" style="text-decoration: underline; color: var(--primary-green);" class="fs-5 fw-semibold text-ink">{{ participant.phone }}</a>
+                        </li>
+                        <li>
+                            <span class="text-muted small text-uppercase fw-bold d-block">Indirizzo</span>
+                            <span class="fs-5 fw-semibold text-ink">
+                                {{ participant.indirizzo }}<br>
+                                {{ participant.cap }} {{ participant.citta }} ({{ participant.provincia }})
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 3: Info Iscrizione -->
+        <div class="col-12">
+            <div class="card border-ink shadow-sm mt-2" style="background-color: #ffffff;">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        
+                        <div class="col-md-4 mb-3 mb-md-0 border-end border-2">
+                            <span class="text-muted small text-uppercase fw-bold d-block">Data Iscrizione</span>
+                            <span class="fs-5 fw-semibold text-ink">{{ participant.created_at|date:"d/m/Y H:i" }}</span>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3 mb-md-0 border-end border-2">
+                            <span class="text-muted small text-uppercase fw-bold d-block">Metodo Pagamento</span>
+                            <span class="fs-5 fw-semibold text-ink text-uppercase">
+                                {% if participant.metodo_pagamento == 'stripe' %}
+                                    <i class="fab fa-cc-stripe fs-4 align-middle me-1"></i> Carta di Credito
+                                {% else %}
+                                    <i class="fas fa-money-bill-wave fs-5 align-middle me-1"></i> Contanti
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <span class="text-muted small text-uppercase fw-bold d-block">Stato Pagamento</span>
+                            {% if participant.pagato %}
+                                <span class="fs-5 fw-bold text-success"><i class="fas fa-check me-1"></i> Quota Versata</span>
+                            {% else %}
+                                <span class="fs-5 fw-bold text-danger"><i class="fas fa-times me-1"></i> Non Pagato</span>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 {% endblock %}

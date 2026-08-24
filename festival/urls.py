@@ -12,6 +12,7 @@ urlpatterns = [
     path('check-qr-result/', views.check_qr_result, name='check_qr_result'),
     path('all-participants', views.all_participants, name='all_participants'),
     path('all-participants/excel', views.export_participants_excel, name='export_participants_excel'),
+    path('participant/<int:pk>/', views.participant_detail, name='participant_detail'),
     path('register/success/', views.payment_success, name='payment_success'),
     path('register/cancel/', views.payment_cancel, name='payment_cancel'),
     path('privacy-policy/', views.privacy_view, name='privacy'),

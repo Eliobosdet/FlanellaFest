@@ -48,53 +48,59 @@
                                 <thead class="table-dark" style="background-color: #1a1a1a;">
                                     <tr>
                                         <th scope="col" class="py-3 px-3">Nome</th>
-                                        <th scope="col" class="py-3 px-3">CF</th>
-                                        <th scope="col" class="py-3 px-3">Nascita</th>
-                                        <th scope="col" class="py-3 px-3 text-center">Stato</th>
-                                        <th scope="col" class="py-3 px-3 text-center">Data Iscrizione</th>
+                                        <!-- Colonne nascoste su smartphone -->
+                                        <th scope="col" class="py-3 px-3 d-none d-md-table-cell">CF</th>
+                                        <th scope="col" class="py-3 px-3 d-none d-md-table-cell">Nascita</th>
+                                        
+                                        <th scope="col" class="py-3 px-3 text-center d-none d-md-table-cell">Stato</th>
+                                        
+                                        <!-- Colonna nascosta su smartphone -->
+                                        <th scope="col" class="py-3 px-3 text-center">Data</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for p in participants %}
-                                    <tr>
-                                        <!-- Nome e Cognome -->
-                                        <td class="py-3 px-3 fw-bold text-ink fs-6">
-                                            {{ p.first_name }} {{ p.last_name }}
-                                        </td>
-                                        
-                                        <!-- Codice Fiscale -->
-                                        <td class="py-3 px-3 fw-semibold text-uppercase" style="font-family: monospace;">
-                                            {{ p.codice_fiscale|default:"-" }}
-                                        </td>
-                                        
-                                        <!-- Data e Luogo di Nascita -->
-                                        <td class="py-3 px-3" data-order="{{ p.data_di_nascita|date:'Y-m-d' }}">
-                                            {% if p.data_di_nascita %}
-                                                <div><i class="fas fa-birthday-cake text-muted me-1"></i>{{ p.data_di_nascita|date:"d/m/Y" }}</div>
-                                            {% endif %}
-                                            <div class="text-muted small"><i class="fas fa-map-marker-alt text-muted me-1"></i>{{ p.luogo_di_nascita|default:"-" }}</div>
-                                        </td>
-                                        
-                                        <!-- Badge Stato -->
-                                        <td class="py-3 px-3 text-center" data-order="{{ p.status }}">
-                                            {% if p.status == 'checked_in' %}
-                                                <span class="badge bg-success px-3 py-2">
-                                                    <i class="fas fa-check-circle me-1"></i>Arrivato
-                                                </span>
-                                            {% else %}
-                                                <span class="badge bg-warning text-dark px-3 py-2">
-                                                    <i class="fas fa-clock me-1"></i>Non arrivato
-                                                </span>
-                                            {% endif %}
-                                        </td>
-                                        
-                                        <!-- Data Iscrizione -->
-                                        <td class="py-3 px-3 text-center text-muted small" data-order="{{ p.created_at|date:'Y-m-d H:i:s' }}">
-                                            {{ p.created_at|date:"d/m/Y H:i" }}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
+    {% for p in participants %}
+    <!-- RIGA CLICCABILE -->
+    <tr onclick="window.location='{% url 'participant_detail' p.pk %}';" style="cursor: pointer;" title="Clicca per i dettagli">
+        
+        <!-- Nome e Cognome (Sempre visibile) -->
+        <td class="py-3 px-3 fw-bold text-ink fs-6">
+            {{ p.first_name }} {{ p.last_name }}
+        </td>
+        
+        <!-- Codice Fiscale (Nascosto su mobile) -->
+        <td class="py-3 px-3 fw-semibold text-uppercase d-none d-md-table-cell" style="font-family: monospace;">
+            {{ p.codice_fiscale|default:"-" }}
+        </td>
+        
+        <!-- Data e Luogo di Nascita (Nascosto su mobile) -->
+        <td class="py-3 px-3 d-none d-md-table-cell" data-order="{{ p.data_di_nascita|date:'Y-m-d' }}">
+            {% if p.data_di_nascita %}
+                <div><i class="fas fa-birthday-cake text-muted me-1"></i>{{ p.data_di_nascita|date:"d/m/Y" }}</div>
+            {% endif %}
+            <div class="text-muted small"><i class="fas fa-map-marker-alt text-muted me-1"></i>{{ p.luogo_di_nascita|default:"-" }}</div>
+        </td>
+        
+        <!-- Badge Stato (Nascosto su mobile) -->
+        <td class="py-3 px-3 text-center d-none d-md-table-cell" data-order="{{ p.status }}">
+            {% if p.status == 'checked_in' %}
+                <span class="badge bg-success px-3 py-2">
+                    <i class="fas fa-check-circle me-1"></i>Arrivato
+                </span>
+            {% else %}
+                <span class="badge bg-warning text-dark px-3 py-2">
+                    <i class="fas fa-clock me-1"></i>Non arrivato
+                </span>
+            {% endif %}
+        </td>
+        
+        <!-- Data Iscrizione (sempre visibile su mobile) -->
+        <td class="py-3 px-3 text-center text-muted small" data-order="{{ p.created_at|date:'Y-m-d H:i:s' }}">
+            {{ p.created_at|date:"d/m/Y H:i" }}
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
                             </table>
                         </div>
                     </div>
