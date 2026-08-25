@@ -330,12 +330,12 @@ def checked_in_partecipants(request):
 def all_participants(request):
     """ Mostra la lista completa dei partecipanti approvati e checked-in per gli organizer. """
     participants = Participant.objects.filter(status__in=['approved', 'checked_in']).order_by('-created_at')
-    participants_count = participants.count()
+    # participants_count = participants.count()
     n_checked_in = Participant.objects.filter(status='checked_in').count()
     
     return render(request, 'festival/all_participants.html', {
         'participants': participants, 
-        'tesserati': participants_count - settings.TOTAL_VOLUNTEERS,
+        # 'tesserati': participants_count - settings.TOTAL_VOLUNTEERS,
         'n_checked_in': n_checked_in
     })
 

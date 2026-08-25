@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); min-height: 100vh;">
+<div class="container-fluid py-5" style="min-height: 100vh;">
     <div class="container-fluid px-4">
         
         <!-- Header e Contatori -->
@@ -21,7 +21,7 @@
             <div class="alert border-0 shadow-sm d-inline-block px-4 py-2 my-2 width-responsive-stat" style="background-color: #ffffff; border-left: 4px solid var(--primary-green, #31ac34) !important;">
     <p class="mb-0 fs-5 fw-bold text-ink d-flex flex-column flex-md-row gap-2 gap-md-0">
         <span><i class="fas fa-users me-2 text-primary-green"></i><span class="me-md-3">Tesserati: {{ participants|length }}</span></span>
-        <span><i class="fas fa-users me-2 text-primary-green"></i><span class="me-md-3">Partecipanti: {{ tesserati }}</span></span>
+        {% comment %} <span><i class="fas fa-users me-2 text-primary-green"></i><span class="me-md-3">Partecipanti: {{ tesserati }}</span></span> {% endcomment %}
         <span><i class="fas fa-user-check me-2 text-success"></i><span class="me-md-3">Arrivati: {{ n_checked_in }}</span></span>
     </p>
 </div>
