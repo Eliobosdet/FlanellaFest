@@ -22,24 +22,43 @@
             </p>
         </div>
         
-        <div class="mt-3 mt-md-0">
-            {% if participant.status == 'checked_in' %}
-                <span class="badge bg-success px-4 py-2 fs-5 border border-2 border-dark shadow-sm">
-                    <i class="fas fa-check-circle me-2"></i>ARRIVATO
-                </span>
-            {% elif participant.status == 'approved' %}
-                <span class="badge bg-warning text-dark px-4 py-2 fs-5 border border-2 border-dark shadow-sm">
-                    <i class="fas fa-clock me-2"></i>NON ARRIVATO
-                </span>
-            {% elif participant.status == 'pending' %}
-                <span class="badge bg-warning text-dark px-4 py-2 fs-5 border border-2 border-dark shadow-sm">
-                    <i class="fas fa-hourglass-half me-2"></i>IN ATTESA
-                </span>
-            {% else %}
-                <span class="badge bg-danger px-4 py-2 fs-5 border border-2 border-dark shadow-sm">
-                    <i class="fas fa-times-circle me-2"></i>RIFIUTATO/ANNULLATO
-                </span>
-            {% endif %}
+        <div class="mt-3 mt-md-0 text-md-end">
+            <!-- Badge Stato Attuale -->
+            <div class="mb-3">
+                {% if participant.status == 'checked_in' %}
+                    <span class="badge bg-success px-4 py-2 fs-5 border border-2 border-dark shadow-sm">
+                        <i class="fas fa-check-circle me-2"></i>ARRIVATO
+                    </span>
+                {% elif participant.status == 'approved' %}
+                    <span class="badge bg-warning text-dark px-4 py-2 fs-5 border border-2 border-dark shadow-sm">
+                        <i class="fas fa-clock me-2"></i>NON ARRIVATO
+                    </span>
+                {% elif participant.status == 'pending' %}
+                    <span class="badge bg-warning text-dark px-4 py-2 fs-5 border border-2 border-dark shadow-sm">
+                        <i class="fas fa-hourglass-half me-2"></i>IN ATTESA
+                    </span>
+                {% else %}
+                    <span class="badge bg-danger px-4 py-2 fs-5 border border-2 border-dark shadow-sm">
+                        <i class="fas fa-times-circle me-2"></i>RIFIUTATO/ANNULLATO
+                    </span>
+                {% endif %}
+            </div>
+
+            <!-- Bottone Azione (Cambio Stato) -->
+            <form method="POST" action="{% url 'toggle_checkin' participant.pk %}">
+                {% csrf_token %}
+                {% if participant.status == 'checked_in' %}
+                    <!-- Se è già arrivato, mostriamo il tasto per annullare -->
+                    <button type="submit" class="btn btn-warning fw-bold rounded-pill" style="border: 2px solid var(--ink-black);">
+                        <i class="fas fa-undo me-2"></i>Annulla Arrivo
+                    </button>
+                {% else %}
+                    <!-- Se non è ancora arrivato, mostriamo il tasto verde -->
+                    <button type="submit" class="btn btn-festival px-4 rounded-pill">
+                        <i class="fas fa-user-check me-2"></i>Segna come Arrivato
+                    </button>
+                {% endif %}
+            </form>
         </div>
     </div>
 

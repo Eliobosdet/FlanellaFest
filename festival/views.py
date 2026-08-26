@@ -556,3 +556,24 @@ def stripe_test_checkout(request):
     except Exception as e:
         messages.error(request, f"Errore test Stripe: {str(e)}")
         return redirect('admin_management')
+
+@login_required
+def toggle_checkin(request, pk):
+    """ Cambia lo stato del partecipante da approvato ad arrivato (e viceversa) """
+    if request.method == 'POST':
+        participant = get_object_or_404(Participant, pk=pk)
+        
+        # Se è già arrivato, lo riportiamo ad 'approved'
+        if participant.status == 'checked_in':
+            participant.status = 'approved'
+            messages.warning(request, f"Arrivo annullato per {participant.first_name} {participant.last_name}.")
+        
+        # Altrimenti, se è approvato o in attesa, lo segniamo come arrivato
+        else:
+            participant.status = 'checked_in'
+            messages.success(request, f"{participant.first_name} {participant.last_name} segnato come arrivato!")
+            
+        participant.save()
+        
+    # Reindirizza l'utente alla stessa pagina di dettaglio
+    return redirect('participant_detail', pk=pk)

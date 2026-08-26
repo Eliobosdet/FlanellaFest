@@ -8,6 +8,7 @@ urlpatterns = [
     path('event-full/', views.event_full, name='event_full'),
     path('checked-in-partecipants/', views.checked_in_partecipants, name='checked_in_partecipants'),
     path('participant/<int:pk>/', views.participant_detail, name='participant_detail'),
+    path('participant/<int:pk>/toggle-checkin/', views.toggle_checkin, name='toggle_checkin'),
     path('check-qr/', views.check_qr, name='check_qr'),
     path('check-qr-result/', views.check_qr_result, name='check_qr_result'),
     path('all-participants', views.all_participants, name='all_participants'),
