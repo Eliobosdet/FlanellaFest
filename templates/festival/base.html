@@ -48,6 +48,7 @@
                             <a href="{% url 'home' %}" class="nav-inline-link">Home</a>
                             {% comment %} <a href="{% url 'about' %}" class="nav-inline-link">About</a> {% endcomment %}
                             <a href="{% url 'register' %}" class="nav-inline-link">Tesseramento</a>
+                            <a href="{% url 'info' %}" class="nav-inline-link">Informazioni</a>
                         </div>
                     </div>
 
@@ -80,10 +81,10 @@
                             <a class="nav-link festival-sidebar-link" href="{% url 'home' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            {% comment %} <a class="nav-link festival-sidebar-link" href="{% url 'about' %}">About</a> {% endcomment %}
+                            <a class="nav-link festival-sidebar-link" href="{% url 'register' %}">Tesseramento</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link festival-sidebar-link" href="{% url 'register' %}">Tesseramento</a>
+                            <a class="nav-link festival-sidebar-link" href="{% url 'info' %}">Informazioni</a>
                         </li>
                     </ul>
 
@@ -130,7 +131,10 @@
             <div class="row g-4 align-items-center mb-2 pb-4">
                 <div class="col-lg-7 text-center text-lg-start">
                     <p class="fs-4 fw-bold text-uppercase mb-0 text-ink">
-                        DALLE 16:00 ALLE 02:00 <br> 29 AGOSTO &bull; CASTELLO DI SPEZZANO (MO)
+                        29 AGOSTO <br> CASTELLO DI SPEZZANO (MO)
+                    </p>
+                    <p class="fs-4 fw-bold text-uppercase mt-4 mb-0 text-ink">
+                        <u>DALLE 16:00 ALLE 02:00</u>
                     </p>
                 </div>
             </div>

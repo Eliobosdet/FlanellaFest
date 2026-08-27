@@ -66,6 +66,10 @@ def payment_cancel(request):
     """ Mostra la pagina di annullamento del pagamento. """
     return render(request, 'festival/payment/payment_cancel.html')
 
+def info(request):
+    """ Mostra la pagina delle informazioni sul festival. """
+    return render(request, 'festival/info.html')
+
 # --- VISTA REGISTRAZIONE AGGIORNATA (SINGOLO UTENTE) ---
 def register(request):
     """ Gestisce la registrazione dei partecipanti, il pagamento tramite Stripe e la logica di approvazione. """
