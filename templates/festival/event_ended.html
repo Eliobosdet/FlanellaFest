@@ -5,38 +5,44 @@
 {% block content %}
 <div class="container py-5 my-md-4">
     <div class="row justify-content-center">
-        <div class="col-lg-8 col-xl-7">
+        <div class="col-12 col-md-10 col-lg-8 col-xl-7">
             
             <!-- SCHEDA CARD BRUTALIST -->
-            <div class="rustic-soldout-card text-center p-4 p-md-5">
+            <div class="rustic-soldout-card text-center p-4 p-md-5 mx-auto">
                 
-                <!-- MASCOTTE / ELMO / ICONA (Opzionale) -->
-                <div class="mb-3">
-                    <img src="{% static 'img/elmo.webp' %}" alt="Flanella Fest" class="soldout-mascot hero-mascot-img">
+                <!-- MASCOTTE / ELMO -->
+                <div class="mb-3 d-flex justify-content-center">
+                    <img src="{% static 'img/elmo.webp' %}" alt="Flanella Fest" class="soldout-mascot hero-mascot-img d-block mx-auto">
                 </div>
 
-                <!-- TITOLO PRINCIPALE IN COOPBLACKLETTER -->
-                <h3 class="festival-title display-2 mb-2">
-                    Evento concluso!
-                </h3>
+                <!-- TITOLO PRINCIPALE -->
+                <div class="w-100 text-center mb-2">
+                    <h3 class="festival-title display-3 m-0 d-inline-block text-center" style="letter-spacing: 0px; line-height: 1.05;">
+                        Evento concluso!
+                    </h3>
+                </div>
                 
-                <div class="my-4 d-flex align-items-center justify-content-center gap-2">
-                    <span class="border-top-ink w-25"></span>
-                    <i class="fa-solid fa-asterisk text-primary-green fs-6"></i>
-                    <span class="border-top-ink w-25"></span>
+                <!-- DIVISORE BILANCIATO AL CENTRO CON FLEX -->
+                <div class="my-4 d-flex align-items-center justify-content-center mx-auto" style="max-width: 320px; width: 100%;">
+                    <span class="flex-grow-1 border-top-ink"></span>
+                    <i class="fa-solid fa-asterisk text-primary-green fs-6 px-3"></i>
+                    <span class="flex-grow-1 border-top-ink"></span>
                 </div>
 
-                <!-- TESTO EXPLANATION -->
-                <p class="fs-4 fw-bold text-uppercase text-ink mb-3">
-                    La 3ª edizione del Flanella Fest è terminata.
-                </p>
+                <!-- TESTI ESPLICATIVI CENTRATI -->
+                <div class="mx-auto" style="max-width: 480px;">
+                    <p class="fs-4 fw-bold text-uppercase text-ink mb-2 lh-sm text-center">
+                        La 3ª edizione del Flanella Fest è terminata.
+                    </p>
 
-                <p class="fs-6 fw-semibold text-ink opacity-75 mb-4 px-md-3">
-                    Grazie a chi ha urlato, ballato e supportato tutto ciò.
-                </p>
+                    <p class="fs-6 fw-semibold text-ink opacity-75 mb-4 text-center">
+                        Grazie a chi ha urlato, ballato e supportato tutto ciò.
+                    </p>
+                </div>
 
-                <div class="pt-2">
-                    <a href="{% url 'recap' %}" class="btn btn-festival text-decoration-none">
+                <!-- BOTTONE -->
+                <div class="pt-2 text-center">
+                    <a href="{% url 'recap' %}" class="btn btn-festival text-decoration-none px-4 py-2">
                         RECAP EDIZIONE
                     </a>
                 </div>

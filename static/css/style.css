@@ -333,6 +333,21 @@ h3, .festival-title, .stage-title {
     font-size: clamp(.8rem, 4vw, 4.5rem); 
 }
 
+/* Assicura che la card rimanga ancorata perfettamente al centro */
+.rustic-soldout-card {
+    background-color: var(--bg-paper);
+    border: 3px solid var(--ink-black);
+    border-radius: 12px;
+    width: 100%;
+}
+
+/* Evita che l'immagine sfondi o crei margini asimmetrici */
+.soldout-mascot {
+    max-height: 130px;
+    width: auto;
+    object-fit: contain;
+}
+
 /* ==========================================================================
    9. MEDIA QUERIES (RESPONSIVE ADAPTATION)
    ========================================================================== */
