@@ -164,6 +164,41 @@ h3, .festival-title, .stage-title {
     display: inline-block;
 }
 
+.press-badge-ticket {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    border: 2px solid var(--ink-black);
+    padding: 5px 10px;
+}
+
+.press-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--ink-black);
+    margin-right: 5px;
+}
+
+.press-domain {
+    font-family: 'CoopBlackletter', serif;
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--primary-green);
+    margin-right: 5px;
+    /* Sposta il font gotico verso l'alto di 1-2px per allinearlo al baricentro visivo */
+    display: inline-block;
+}
+
+.press-icon {
+    font-size: 1rem;
+    color: var(--ink-black);
+    display: inline-flex;
+    align-items: center;
+}
+
 .btn-festival:hover {
     background-color: var(--ink-black);
     color: var(--bg-paper);
@@ -178,9 +213,9 @@ h3, .festival-title, .stage-title {
    5. ARTISTI AMMUCCHIATI & MASCOTTE
    ========================================================================== */
 .hero-mascot-img {
-    max-width: 240px; /* Dimensione base per schermi piccoli/medi */
+    max-width: 250px; /* Dimensione base per schermi piccoli/medi */
     height: auto;
-    transition: max-width 0.2s ease;
+    /* transition: max-width 0.2s ease; */
 }
 
 .artist-name-free {
@@ -308,6 +343,11 @@ h3, .festival-title, .stage-title {
         padding-top: 75px;
     }
 
+    .info-hr {
+        margin-bottom: 0px;
+        
+    }
+
     .footer-brutalist {
         margin-top: 0;
     }
@@ -322,8 +362,7 @@ h3, .festival-title, .stage-title {
     }
 
     .hero-mascot-img {
-        max-width: 200px;
-        max-height: 900px;
+        max-width: 250px;
     }
 
     .cta-subtitle {
@@ -343,7 +382,7 @@ h3, .festival-title, .stage-title {
 /* DESKTOP & LARGE SCREENS (Da 992px in poi) */
 @media (min-width: 992px) {
     .hero-mascot-img {
-        max-width: 380px; /* L'omino scala in grande su PC */
+        max-width: 300px; /* L'omino scala in grande su PC */
     }
 
     .cta-subtitle {
@@ -391,3 +430,10 @@ h3, .festival-title, .stage-title {
         margin-bottom: 10px;
     }
 }
+
+
+
+
+
+
+

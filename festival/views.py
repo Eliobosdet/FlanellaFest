@@ -51,9 +51,13 @@ def event_full(request):
     """ Mostra la pagina di evento pieno se l'evento ha raggiunto il limite massimo di partecipanti. """
     return render(request, 'festival/event_full.html')
 
-def home(request):
-    """ Mostra la home page del festival. """
-    return render(request, 'festival/home.html')
+def event_ended(request):
+    """ Mostra la pagina di evento terminato se l'evento è concluso. """
+    return render(request, 'festival/event_ended.html')
+
+def recap(request):
+    """ Mostra la pagina del riepilogo del festival. """
+    return render(request, 'festival/2026/recap.html')
 
 # def about(request):
 #     return render(request, 'festival/about.html')
@@ -65,10 +69,6 @@ def privacy_view(request):
 def payment_cancel(request):
     """ Mostra la pagina di annullamento del pagamento. """
     return render(request, 'festival/payment/payment_cancel.html')
-
-def info(request):
-    """ Mostra la pagina delle informazioni sul festival. """
-    return render(request, 'festival/info.html')
 
 # --- VISTA REGISTRAZIONE AGGIORNATA (SINGOLO UTENTE) ---
 def register(request):

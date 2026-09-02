@@ -47,8 +47,8 @@
                         <div class="d-flex align-items-center gap-2 me-1" style="width: max-content;">
                             <a href="{% url 'home' %}" class="nav-inline-link">Home</a>
                             {% comment %} <a href="{% url 'about' %}" class="nav-inline-link">About</a> {% endcomment %}
-                            <a href="{% url 'register' %}" class="nav-inline-link">Tesseramento</a>
-                            <a href="{% url 'info' %}" class="nav-inline-link">Informazioni</a>
+                            {% comment %} <a href="{% url 'register' %}" class="nav-inline-link">Tesseramento</a> {% endcomment %}
+                            <a href="{% url 'recap' %}" class="nav-inline-link">Riepilogo</a>
                         </div>
                     </div>
 
@@ -80,13 +80,13 @@
                         <li class="nav-item">
                             <a class="nav-link festival-sidebar-link" href="{% url 'home' %}">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link festival-sidebar-link" href="{% url 'register' %}">Tesseramento</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link festival-sidebar-link" href="{% url 'info' %}">Informazioni</a>
-                        </li>
-                    </ul>
+                            {% comment %} <li class="nav-item">
+                                <a class="nav-link festival-sidebar-link" href="{% url 'register' %}">Tesseramento</a>
+                            </li> {% endcomment %}
+                            <li class="nav-item">
+                                <a class="nav-link festival-sidebar-link" href="{% url 'recap' %}">Riepilogo</a>
+                            </li>
+                        </ul>
 
                     <!-- AREA STAFF (Se l'utente è staff/organizzatore) -->
                     {% if user.is_staff or request.user|has_group:"Organizer" %}
@@ -131,7 +131,7 @@
             <div class="row g-4 align-items-center mb-2 pb-4">
                 <div class="col-lg-7 text-center text-lg-start">
                     <p class="fs-4 fw-bold text-uppercase mb-0 text-ink">
-                        29 AGOSTO <br> CASTELLO DI SPEZZANO (MO)
+                        29 AGOSTO 2026<br> CASTELLO DI SPEZZANO (MO)
                     </p>
                     <p class="fs-4 fw-bold text-uppercase mt-4 mb-0 text-ink">
                         <u>DALLE 16:00 ALLE 02:00</u>
@@ -146,9 +146,10 @@
                     <div class="d-flex flex-wrap justify-content-center justify-content-lg-start gap-3 fs-6 fw-bold text-uppercase">
                         <a href="{% url 'home' %}" class="footer-minimal-link">Home</a>
                         {% comment %} <a href="{% url 'about' %}" class="footer-minimal-link">About</a> {% endcomment %}
-                        <a href="{% url 'register' %}" class="footer-minimal-link">Tesseramento</a>
+                        {% comment %} <a href="{% url 'register' %}" class="footer-minimal-link">Tesseramento</a> {% endcomment %}
+                        <a href="{% url 'recap' %}" class="footer-minimal-link">Riepilogo</a>
                         <a href="https://maps.google.com/?q=Castello+di+Spezzano+MO" target="_blank" class="footer-minimal-link">
-                            Mappa<i class="fa-solid fa-location-dot ms-1"></i>
+                            MAPS
                         </a>
                     </div>
                 </div>

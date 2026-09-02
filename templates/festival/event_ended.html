@@ -1,0 +1,49 @@
+{% extends 'festival/base.html' %}
+{% load static %}
+{% load auth_extras %}
+
+{% block content %}
+<div class="container py-5 my-md-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            
+            <!-- SCHEDA CARD BRUTALIST -->
+            <div class="rustic-soldout-card text-center p-4 p-md-5">
+                
+                <!-- MASCOTTE / ELMO / ICONA (Opzionale) -->
+                <div class="mb-3">
+                    <img src="{% static 'img/elmo.webp' %}" alt="Flanella Fest" class="soldout-mascot hero-mascot-img">
+                </div>
+
+                <!-- TITOLO PRINCIPALE IN COOPBLACKLETTER -->
+                <h3 class="festival-title display-2 mb-2">
+                    Evento concluso!
+                </h3>
+                
+                <div class="my-4 d-flex align-items-center justify-content-center gap-2">
+                    <span class="border-top-ink w-25"></span>
+                    <i class="fa-solid fa-asterisk text-primary-green fs-6"></i>
+                    <span class="border-top-ink w-25"></span>
+                </div>
+
+                <!-- TESTO EXPLANATION -->
+                <p class="fs-4 fw-bold text-uppercase text-ink mb-3">
+                    La 3ª edizione del Flanella Fest è terminata.
+                </p>
+
+                <p class="fs-6 fw-semibold text-ink opacity-75 mb-4 px-md-3">
+                    Grazie a chi ha urlato, ballato e supportato tutto ciò.
+                </p>
+
+                <div class="pt-2">
+                    <a href="{% url 'recap' %}" class="btn btn-festival text-decoration-none">
+                        RECAP EDIZIONE
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

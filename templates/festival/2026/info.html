@@ -1,0 +1,99 @@
+{% extends 'festival/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- HOMEPAGE ASTRATTA / TIPOGRAFICA -->
+<section class="poster-hero d-flex flex-column justify-content-between px-5 my-3">
+    
+    <div class="row align-items-center justify-content-center my-3">
+        <div class="col-12 text-center">
+            <h1 class="fw-bold text-uppercase text-ink mb-1">FLANELLA III</h1>
+        </div>
+        <hr>
+    </div>
+
+
+    <!-- IMMAGINE MASCOTTE RESPONSIVE -->
+    <div class="text-center mb-5">
+        <img src="{% static 'img/locandina.webp' %}" alt="Mascotte Flanella" class="hero-mascot-img" style="max-width: 300px;">
+        
+        <span class="d-block align-center mt-2 italic">( locandina )</span>
+    </div>
+    
+    <div class="text-center mb-5">
+        <img src="{% static 'img/schedule.webp' %}" alt="Mascotte Flanella" class="hero-mascot-img" style="max-width: 300px;">
+        
+        <span class="d-block align-center mt-2 italic">( programma )</span>
+    </div>
+    
+    <div class="text-center mb-5">
+    <div class="position-relative d-inline-block" style="max-width: 300px; width: 100%;">
+        
+        <video id="promoVideo" autoplay loop muted playsinline class="w-100 rounded border-ink d-block">
+            <source src="{% static 'video/prnd1pstcn.mp4' %}" type="video/mp4">
+        </video>
+
+        <!-- Pulsante Volume Sovrapposto Trasparente -->
+        <button type="button" id="volumeToggleBtn" 
+                class="btn position-absolute top-0 end-0 m-2 rounded-circle d-flex align-items-center justify-content-center p-0"
+                style="width: 38px; height: 38px; background-color: #1a1a1a47; color: #ffffff; border: 2px solid var(--ink-black); z-index: 5; backdrop-filter: blur(4px);"
+                aria-label="Gestisci Audio">
+            <i id="volumeIcon" class="fa-solid fa-volume-xmark fs-6"></i>
+        </button>
+
+    </div>
+
+    <a href="{% url 'register' %}" style="text-decoration: none; color: inherit;">
+        <span class="d-block align-center mt-2 italic"> ( prendi un posticino ) </span>
+    </a>
+</div>
+
+<script>
+    
+</script>
+    
+    {% comment %} <hr class="mb-3"> {% endcomment %}
+
+    <div class="text-end mb-4">
+        <ul style="list-style-position: inside;">
+            <li>c'è da bere? SI</li>
+            <li>c'è da nutrirsi? SI</li>
+            <li>opzioni vegane? SI</li>
+            <li>c'è da far casino? TANTO</li>
+            <li>c'è da far casino? TANTO</li>
+            <li>opzioni vegane? SI</li>
+            <li>c'è da nutrirsi? SI</li>
+            <li>c'è da bere? SI</li>
+        </ul>
+    </div>
+
+    <span><u>ci si becca sotto il palco</u></span>
+
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const video = document.getElementById('promoVideo');
+        const btn = document.getElementById('volumeToggleBtn');
+        const icon = document.getElementById('volumeIcon');
+
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation(); // Evita conflitti con eventuali link esterni
+
+            if (video.muted) {
+                video.muted = false;
+                video.volume = 0.25; // 25% di volume
+                icon.className = 'fa-solid fa-volume-low fs-6';
+                btn.style.backgroundColor = 'rgba(16, 185, 82, 0.85)'; // Tinta verde tenue attiva
+            } else {
+                video.muted = true;
+                icon.className = 'fa-solid fa-volume-xmark fs-6';
+                btn.style.backgroundColor = '#1a1a1a47';
+            }
+        });
+    });
+</script>
+{% endblock %}

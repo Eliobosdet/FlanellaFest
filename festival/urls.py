@@ -2,10 +2,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', views.event_ended, name='home'),  # Mostra la pagina di evento terminato se l'evento è concluso.
     # path('about/', views.about, name='about'),
-    path('register/', views.register, name='register'),
-    path('info/', views.info, name='info'),
+    path('register/', views.event_ended, name='register'),
+    path('2026/recap/', views.recap, name='recap'),
     path('event-full/', views.event_full, name='event_full'),
     path('checked-in-partecipants/', views.checked_in_partecipants, name='checked_in_partecipants'),
     path('participant/<int:pk>/', views.participant_detail, name='participant_detail'),
@@ -21,5 +21,5 @@ urlpatterns = [
     path('stripe-webhook/', views.stripe_webhook, name='stripe_webhook'),
     path('logout/', views.logout, name='logout'),
     path('admin-management/', views.admin_management, name='admin_management'),
-    path('admin-management/test-stripe/', views.stripe_test_checkout, name='stripe_test_checkout')
+    path('admin-management/test-stripe/', views.stripe_test_checkout, name='stripe_test_checkout'),
 ]
