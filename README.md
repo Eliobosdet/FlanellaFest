@@ -1,32 +1,75 @@
-# RUN THE WEBSITE ON YOUR PC
+# Flanella Fest Website
 
-## 1. START THE ENVIRONMENT
+Official website repository for Flanella Fest.
 
-pipenv shell
+Official website: www.flanellafest.it
+Instagram: https://www.instagram.com/flanellafest/
 
-## 2. INSTALL THE REQUIREMENTS
+## Technology Stack
 
-pip install -r requirements.txt
+* Python 3.12
 
-## 3. START THE SERVER 
+* Django 4.2
 
-python manage.py runserver
+* SQLite / PostgreSQL
 
-# TEST THE PAYMENTS THROUGH STRIPE
+* Stripe API
 
-## 1. LOGIN IN YOUR STRIPE DASHBOARD
+* Bootstrap / HTML5
 
-https://dashboard.stripe.com/
+## Prerequisites
 
-## 2. COPY YOUR SECRET TEST KEYS IN THE .ENV FILE
+* Python 3.12 or higher
 
-STRIPE_PUBLIC_KEY='pk_test_...'
-STRIPE_SECRET_KEY='sk_test_...'
-STRIPE_WEBHOOK_SECRET='whsec_...'
+* Pipenv or venv
 
-## 3. START THE STRIPE CLI
+## Local Setup and Running
 
-stripe listen --forward-to localhost:8000/stripe-webhook/
+1. Clone the repository:
 
+   ```
+   git clone https://github.com/eliobosdet/flanellafest.git
+   cd FlanellaFest-main
+   
+   ```
 
+2. Set up the virtual environment and install dependencies:
 
+   ```
+   pipenv shell
+   pip install -r requirements.txt
+   
+   ```
+
+3. Create a `.env` file in the project root with the following environment variables:
+
+   ```
+   SECRET_KEY=your_secret_key
+   DEBUG=True
+   STRIPE_SECRET_KEY=your_stripe_secret_key
+   STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+   
+   ```
+
+4. Run database migrations:
+
+   ```
+   python manage.py migrate
+   
+   ```
+
+5. Start the development server:
+
+   ```
+   python manage.py runserver
+   
+   ```
+
+## Running Tests
+
+To run the automated test suite:
+
+```
+python manage.py test festival
+
+```
