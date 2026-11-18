@@ -4,122 +4,6 @@ import qrcode
 from io import BytesIO
 from django.core.files import File
 
-class Participant(models.Model):
-    STATUS_CHOICES = [
-        ('pending', 'In attesa di pagamento'), # Aggiunto lo stato pending
-        ('approved', 'Approvato'),
-        ('rejected', 'Rifiutato'),
-        ('checked_in', 'Partecipante arrivato'),
-    ]
-
-    PAYMENT_CHOICES = [
-        ('stripe', 'Carta di Credito'),
-        ('contanti', 'Contanti'),
-    ]
-
-    # --- Anagrafica Base ---
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
-    
-    # --- Campi Obbligatori APS (Libro Soci) ---
-    data_di_nascita = models.DateField(null=True, blank=False)
-    luogo_di_nascita = models.CharField(max_length=100, null=True, blank=False)
-    codice_fiscale = models.CharField(max_length=16, null=True, blank=False)
-    indirizzo = models.CharField(max_length=200, null=True, blank=False)
-    citta = models.CharField(max_length=100, null=True, blank=False)
-    provincia = models.CharField(max_length=2, null=True, blank=False) # Es. 'MO', 'BO'
-    cap = models.CharField(max_length=5, null=True, blank=False)
-    
-    accetta_statuto = models.BooleanField(default=False)
-    accetta_privacy = models.BooleanField(default=False)
-    
-    # --- Gestione Pagamenti e Stato ---
-    metodo_pagamento = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default='stripe')
-    pagato = models.BooleanField(default=False)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending') # Default in attesa
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    # --- Dati di Sistema e Biglietteria ---
-    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-
-    def save(self, *args, **kwargs):
-        # Normalizza Nome e Cognome in Title Case
-        if self.first_name:
-            self.first_name = self.first_name.strip().title()
-        if self.last_name:
-            self.last_name = self.last_name.strip().title()
-            
-        # Normalizza Luogo di Nascita e Città in Title Case
-        if self.luogo_di_nascita:
-            self.luogo_di_nascita = self.luogo_di_nascita.strip().title()
-        if self.citta:
-            self.citta = self.citta.strip().title()
-
-        # Assicura che la provincia sia sempre in maiuscolo (es. 'mo' -> 'MO')
-        if self.provincia:
-            self.provincia = self.provincia.strip().upper()
-
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        if self.status in ['approved', 'checked_in']:
-            stato = "PAGATO"
-        elif self.status == 'rejected':
-            stato = "ANNULLATO"
-        else:
-            stato = "DA PAGARE"
-            
-        return f"{self.first_name} {self.last_name} - CF: {self.codice_fiscale} [{stato}]"
-
-    def get_qr_code_bytes(self):
-        """Genera il PNG del QR Code al volo in memoria e ne restituisce i byte."""
-        qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-        )
-        qr.add_data(str(self.unique_id))
-        qr.make(fit=True)
-        img = qr.make_image(fill_color="black", back_color="white")
-
-        buffer = BytesIO()
-        img.save(buffer, format='PNG')
-        return buffer.getvalue()
-
-    def generate_qr_code(self):
-        qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-        )
-        qr.add_data(str(self.unique_id))
-        qr.make(fit=True)
-        img = qr.make_image(fill_color="black", back_color="white")
-
-        buffer = BytesIO()
-        img.save(buffer)
-        filename = f'qr_{self.unique_id}.png'
-        self.qr_code.save(filename, File(buffer), save=False)
-
-
-class FestivalConfig(models.Model):
-    ticket_price_centesimi = models.PositiveIntegerField(default=1050) # Default 10.50€ (1050 centesimi)
-
-    class Meta:
-        verbose_name = "Configurazione Festival"
-        verbose_name_plural = "Configurazioni Festival"
-
-    def __str__(self):
-        return f"Prezzo Corrente: {self.ticket_price_centesimi / 100} €"
-
-
-# ... (Lascia intatti Participant e FestivalConfig sopra) ...
-
-
 class Member(models.Model):
     """
     1. ANAGRAFICA UNICA SOCIO / UTENTE
@@ -223,6 +107,14 @@ class Event(models.Model):
         verbose_name = "Evento"
         verbose_name_plural = "Eventi"
 
+    @property
+    def membership_price_euro(self):
+        return self.membership_price_centesimi / 100
+
+    @property
+    def ticket_price_euro(self):
+        return self.ticket_price_centesimi / 100
+
     def __str__(self):
         return f"{self.title} ({self.year})"
 
@@ -261,6 +153,57 @@ class EventRegistration(models.Model):
         unique_together = ('event', 'member')
         verbose_name = "Iscrizione Evento"
         verbose_name_plural = "Iscrizioni Eventi"
+
+    @property
+    def first_name(self):
+        return self.member.first_name
+
+    @property
+    def last_name(self):
+        return self.member.last_name
+
+    @property
+    def email(self):
+        return self.member.email
+
+    @property
+    def phone(self):
+        return self.member.phone
+
+    @property
+    def data_di_nascita(self):
+        return self.member.data_di_nascita
+
+    @property
+    def luogo_di_nascita(self):
+        return self.member.luogo_di_nascita
+
+    @property
+    def codice_fiscale(self):
+        return self.member.codice_fiscale
+
+    @property
+    def indirizzo(self):
+        return self.member.indirizzo
+
+    @property
+    def citta(self):
+        return self.member.citta
+
+    @property
+    def provincia(self):
+        return self.member.provincia
+
+    @property
+    def cap(self):
+        return self.member.cap
+
+    @property
+    def unique_id(self):
+        return self.member.unique_id
+
+    def get_qr_code_bytes(self):
+        return self.member.get_qr_code_bytes()
 
     def __str__(self):
         return f"{self.member} @ {self.event.title} [{self.status}]"

@@ -216,3 +216,9 @@ if DEBUG:
     MAX_PARTICIPANTS = 999999  # Limite per test in locale
 
 
+import sys
+
+if 'test' in sys.argv:
+    STORAGES["staticfiles"] = {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    }

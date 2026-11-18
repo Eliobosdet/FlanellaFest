@@ -292,3 +292,86 @@ class MultiEventArchitectureTests(TestCase):
         res_duplicate = verify_and_checkin_qr(str(member.unique_id), self.event_membership_only)
         self.assertFalse(res_duplicate['valid'])
         self.assertEqual(res_duplicate['code'], 'ALREADY_CHECKED_IN')
+
+    def test_form_blocks_duplicate_on_same_event_but_allows_new_event(self):
+        """Il form blocca chi è già iscritto allo stesso evento, ma permette ai vecchi soci di iscriversi a un nuovo evento."""
+        from .forms import EventRegistrationForm
+
+        # 1. L'utente si iscrive e paga per il primo evento
+        member, reg, _ = create_or_update_registration(self.event_membership_only, self.user_data)
+        confirm_registration_payment(reg)
+
+        # 2. Riprova a compilare il form per lo STESSO evento -> Deve essere bloccato
+        form_same_event = EventRegistrationForm(data=self.user_data, event=self.event_membership_only)
+        self.assertFalse(form_same_event.is_valid())
+        self.assertIn('codice_fiscale', form_same_event.errors)
+
+        # 3. Compila il form per un NUOVO evento (es. Concerto Estivo solo biglietto) -> Deve passare
+        minimal_ticket_data = {
+            'first_name': 'Mario',
+            'last_name': 'Rossi',
+            'email': 'mario.rossi@example.com',
+            'phone': '3331234567',
+            'codice_fiscale': 'RSSMRA98E20F257X',
+            'accetta_privacy': True,
+        }
+        form_ticket_event = EventRegistrationForm(data=minimal_ticket_data, event=self.event_ticket_only)
+        self.assertTrue(form_ticket_event.is_valid())
+
+
+from django.urls import reverse
+from django.contrib.auth.models import User
+import json
+
+
+class ViewsIntegrationTests(TestCase):
+
+    def setUp(self):
+        self.event_2026, _ = Event.objects.update_or_create(
+            slug="flanella-fest-3",
+            defaults={
+                'title': "Flanella Fest III",
+                'year': 2026,
+                'is_active': False,  # Evento concluso
+                'requires_membership': True,
+                'membership_price_centesimi': 1050,
+            }
+        )
+        self.member = Member.objects.create(
+            first_name="Luca",
+            last_name="Bianchi",
+            email="luca@example.com",
+            phone="3339876543",
+            codice_fiscale="BNCLCU95A01F257Z",
+        )
+        Membership.objects.create(member=self.member, year=2026, is_active=True)
+        self.reg = EventRegistration.objects.create(
+            event=self.event_2026,
+            member=self.member,
+            pagato=True,
+            status='approved',
+            include_membership=True,
+            total_paid_centesimi=1050,
+        )
+        
+    def test_register_view_shows_event_ended_when_inactive(self):
+        """Se l'evento ha is_active=False, la pagina /register/ mostra event_ended.html."""
+        response = self.client.get(reverse('register'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'festival/event_ended.html')
+
+    def test_check_qr_result_endpoint_json(self):
+        """Lo scanner QR via POST JSON valida il socio e blocca il secondo passaggio."""
+        url = reverse('check_qr_result')
+        payload = json.dumps({'qr_data': str(self.member.unique_id)})
+
+        # 1. Primo passaggio allo scanner -> Valido
+        res1 = self.client.post(url, data=payload, content_type='application/json')
+        data1 = res1.json()
+        self.assertTrue(data1['valid'])
+        self.assertEqual(data1['name'], "Luca Bianchi")
+
+        # 2. Secondo passaggio allo scanner -> Già entrato (Falso)
+        res2 = self.client.post(url, data=payload, content_type='application/json')
+        data2 = res2.json()
+        self.assertFalse(data2['valid'])

@@ -4,10 +4,24 @@
 {% block content %}
 <div class="container p-2 mt-4 mb-4">
     
-    <!-- Titolo Pagina -->
+    <!-- Titolo Pagina Dinamico in base al tipo di Evento -->
     <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold mb-2 text-ink text-uppercase" style="letter-spacing: -1px;">Tesseramento</h1>
-        <p class="text-muted fs-5 fw-semibold mb-0">Il tesseramento è strettamente personale, inserisci i tuoi dati qui sotto.</p>
+        <h1 class="display-4 fw-bold mb-2 text-ink text-uppercase" style="letter-spacing: -1px;">
+            {% if event.requires_membership and event.requires_ticket %}
+                Tesseramento & Biglietto
+            {% elif event.requires_membership %}
+                Tesseramento
+            {% else %}
+                Biglietteria {{ event.title }}
+            {% endif %}
+        </h1>
+        <p class="text-muted fs-5 fw-semibold mb-0">
+            {% if event.requires_membership %}
+                Il tesseramento è strettamente personale, inserisci i tuoi dati qui sotto.
+            {% else %}
+                Inserisci i tuoi dati per ricevere il QR Code di ingresso per {{ event.title }}.
+            {% endif %}
+        </p>
     </div>
 
     <form method="post" enctype="multipart/form-data" id="registration-form" novalidate>
@@ -19,11 +33,12 @@
                 <div class="card festival-card">
                     <div class="card-body p-4 p-md-5">
                         
-                        <div class="d-flex align-items-center mb-4 pb-2 border-bottom-ink">
+                        <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom-ink">
                             <h3 class="mb-0 fw-bold fs-4 text-ink">Dati Personali</h3>
+                            {% if event %}<span class="badge bg-dark text-uppercase">{{ event.title }}</span>{% endif %}
                         </div>
 
-                        <!-- Anagrafica Base -->
+                        <!-- Anagrafica Base (Sempre visibile) -->
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold text-uppercase small text-ink">Nome*</label>
@@ -38,6 +53,7 @@
                         </div>
 
                         <div class="row">
+                            {% if not event or event.requires_membership %}
                             <div class="col-md-4 mb-3">
                                 <label class="form-label fw-bold text-uppercase small text-ink">Data di Nascita*</label>
                                 {{ form.data_di_nascita }}
@@ -48,14 +64,26 @@
                                 {{ form.luogo_di_nascita }}
                                 {% if form.luogo_di_nascita.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.luogo_di_nascita.errors.0 }}</div>{% endif %}
                             </div>
-                            <div class="col-md-4 mb-3">
+                            {% endif %}
+                            <div class="{% if not event or event.requires_membership %}col-md-4{% else %}col-md-6{% endif %} mb-3">
                                 <label class="form-label fw-bold text-uppercase small text-ink">Codice Fiscale*</label>
                                 {{ form.codice_fiscale }}
                                 {% if form.codice_fiscale.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.codice_fiscale.errors.0 }}</div>{% endif %}
+                                <div id="member-recognized-badge" class="text-primary-green small mt-1 fw-bold d-none">
+                                    <i class="fas fa-check-circle me-1"></i> Tessera Socio {{ event.year }} già attiva!
+                                </div>
                             </div>
+                            {% if event and not event.requires_membership %}
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-uppercase small text-ink">Telefono*</label>
+                                {{ form.phone }}
+                                {% if form.phone.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.phone.errors.0 }}</div>{% endif %}
+                            </div>
+                            {% endif %}
                         </div>
 
-                        <!-- Contatti e Residenza -->
+                        {% if not event or event.requires_membership %}
+                        <!-- Contatti e Residenza (Richiesti solo per Tesseramento Libro Soci APS) -->
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold text-uppercase small text-ink">Indirizzo (Via e Civico)*</label>
@@ -86,6 +114,7 @@
                                 {% if form.phone.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.phone.errors.0 }}</div>{% endif %}
                             </div>
                         </div>
+                        {% endif %}
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -102,8 +131,11 @@
 
                         <!-- Spunte Associazione (Statuto e Privacy) -->
                         <div class="p-3 mt-4 border-ink bg-white">
-                            <p class="mb-3 fw-bold text-uppercase text-primary-green fs-6">Dichiarazioni Obbligatorie APS</p>
+                            <p class="mb-3 fw-bold text-uppercase text-primary-green fs-6">
+                                {% if not event or event.requires_membership %}Dichiarazioni Obbligatorie APS{% else %}Consenso Privacy{% endif %}
+                            </p>
                             
+                            {% if not event or event.requires_membership %}
                             <div class="form-check mb-2">
                                 {{ form.accetta_statuto }} 
                                 <label class="form-check-label ms-2 text-ink fw-semibold" for="{{ form.accetta_statuto.id_for_label }}">
@@ -114,12 +146,13 @@
                                 </label>
                             </div>
                             {% if form.accetta_statuto.errors %}<div class="text-danger small mt-1 fw-bold">{{ form.accetta_statuto.errors.0 }}</div>{% endif %}
+                            {% endif %}
                             
                             <div class="form-check">
                                 {{ form.accetta_privacy }} 
                                 <label class="form-check-label ms-2 text-ink fw-semibold" for="{{ form.accetta_privacy.id_for_label }}">
                                     Acconsento al trattamento dei dati personali (
-                                    <a href="#" class="text-decoration-underline fw-bold" style="color: var(--primary-green);"  data-bs-toggle="modal" data-bs-target="#privacyModal">
+                                    <a href="#" class="text-decoration-underline fw-bold" style="color: var(--primary-green);" data-bs-toggle="modal" data-bs-target="#privacyModal">
                                         Informativa Privacy
                                     </a>).
                                 </label>
@@ -137,48 +170,53 @@
                 </div>
             </div>
 
-            <!-- COLONNA DESTRA: RIEPILOGO ORDINE -->
+            <!-- COLONNA DESTRA: RIEPILOGO ORDINE DINAMICO -->
             <div class="col-lg-4 col-md-12">
                 <div class="card festival-card sticky-top-card">
                     <div class="card-body p-4">
                         <h4 class="mb-4 text-center fw-bold text-uppercase text-ink fs-3">Riepilogo</h4>
                         
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="text-muted fw-bold text-uppercase small">Quota associativa:</span>
-                            <span class="fw-bold fs-5 text-ink">10.00 €</span>
+                        {% if not event or event.requires_membership %}
+                        <div class="d-flex justify-content-between align-items-center mb-3" id="row-membership">
+                            <span class="text-muted fw-bold text-uppercase small">Quota associativa {{ event.year }}:</span>
+                            <span class="fw-bold fs-5 text-ink" id="summary-membership-price">
+                                {{ event.membership_price_euro|floatformat:2 }} €
+                            </span>
                         </div>
+                        {% endif %}
 
-                        {% comment %} <div class="d-flex justify-content-between align-items-center mb-1 pb-3 border-top-thin pt-3">
-                            <span class="text-muted fw-bold text-uppercase small">Tessera Inclusa:</span>
-                            <span class="fw-bold fs-5 text-primary-green"><i class="fas fa-check"></i></span>
-                        </div> {% endcomment %}
-
+                        {% if event and event.requires_ticket %}
+                        <div class="d-flex justify-content-between align-items-center mb-2 pb-3 border-top-thin pt-3" id="row-ticket">
+                            <span class="text-muted fw-bold text-uppercase small">Biglietto Ingresso:</span>
+                            <span class="fw-bold fs-5 text-ink" id="summary-ticket-price">
+                                {{ event.ticket_price_euro|floatformat:2 }} €
+                            </span>
+                        </div>
+                        {% else %}
                         <div class="d-flex justify-content-between align-items-center mb-2 pb-3 border-top-thin pt-3">
-                            <span class="text-muted fw-bold text-uppercase small">Ingresso <span style="text-decoration: underline;">Gratuito</span>:</span>
+                            <span class="text-muted fw-bold text-uppercase small">Ingresso <span style="text-decoration: underline;">Gratuito</span> Soci:</span>
                             <span class="fw-bold fs-5 text-primary-green"><i class="fas fa-check"></i></span>
                         </div>
-
+                        {% endif %}
                         
                         <div class="d-flex justify-content-between align-items-center pt-2 border-top-ink">
                             <span class="fw-bold text-uppercase fs-5 text-ink">TOTALE:</span>
-                            <span class="fw-bold text-primary-green display-6">10.00 €</span>
+                            <span class="fw-bold text-primary-green display-6" id="summary-total-price">
+                                {{ ticket_price|floatformat:2 }} €
+                            </span>
                         </div>
                         
-                        <div class="text-end">
+                        <div class="text-end" id="commission-note">
                             <span class="text-muted small d-block mb-4">+ commissioni</span>
                         </div>
                         
                         <div class="d-flex flex-column gap-3">
-                            <button type="submit" name="gateway" value="stripe" class="btn btn-festival w-100 py-3">
+                            <button type="submit" name="gateway" value="stripe" id="btn-submit-main" class="btn btn-festival w-100 py-3">
                                 <i class="fas fa-credit-card me-2"></i> PAGA CON CARTA
                             </button>
-                            
-                            {% comment %} <button type="submit" name="gateway" value="paypal" class="btn btn-paypal w-100 py-3">
-                                <i class="fab fa-paypal me-2"></i> PAGA CON PAYPAL
-                            </button> {% endcomment %}
                         </div>
                         
-                        <div class="text-center mt-4">
+                        <div class="text-center mt-4" id="stripe-badges">
                             <div class="d-flex justify-content-center gap-3 mb-2 text-muted">
                                 <i class="fab fa-cc-visa fs-3"></i>
                                 <i class="fab fa-cc-mastercard fs-3"></i>
@@ -214,7 +252,6 @@ Modenese, provincia di Modena
 L'Assemblea e il Consiglio Direttivo potranno svolgere le loro riunioni anche in luoghi
 diversi dalla sede dell'Associazione...</p>
                 
-                <!-- LINK AL PDF SU GOOGLE DRIVE PRIVATO -->
                 <p class="mt-4 pt-2 border-top">
                     <a href="https://drive.google.com/file/d/1jhyH1E-GV26rC-2iG_gP4NWQkTOGwBgY/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-sm fw-bold">
                         <i class="fas fa-file-pdf text-danger me-2"></i> Apri lo Statuto Ufficiale Completo (PDF)
@@ -306,25 +343,6 @@ diversi dalla sede dell'Associazione...</p>
     border-color: var(--ink-black);
 }
 
-.btn-paypal {
-    background-color: var(--accent-yellow);
-    color: var(--ink-black);
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    border: 2px solid var(--ink-black);
-    border-radius: 50px;
-    transition: all 0.2s ease;
-    display: inline-block;
-}
-
-.btn-paypal:hover {
-    background-color: var(--ink-black);
-    color: var(--accent-yellow);
-    transform: scale(1.02);
-}
-
 @media (max-width: 768px) {
     .sticky-top-card {
         position: static;
@@ -341,7 +359,7 @@ diversi dalla sede dell'Associazione...</p>
         // 1. Autocompletamento città/provincia (Con Debouncing per zero lag)
         const comuniUrl = 'https://raw.githubusercontent.com/matteocontrini/comuni-json/master/comuni.json';
         let comuniData = [];
-        let debounceTimer; // Variabile per gestire la pausa di digitazione
+        let debounceTimer;
 
         fetch(comuniUrl)
             .then(response => response.json())
@@ -361,14 +379,10 @@ diversi dalla sede dell'Associazione...</p>
             clearTimeout(debounceTimer);
 
             debounceTimer = setTimeout(function() {
-                
-                // CONTROLLO ANTI-RIMBALZO:
-                // Controlliamo se ciò che è scritto corrisponde esattamente a un comune (es. ho appena cliccato "Modena").
-                // Se sì, svuotiamo la lista (per far chiudere la tendina) e blocchiamo la ricerca.
                 let matchEsatto = comuniData.some(c => c.nome.toLowerCase() === valoreDigitatoLower);
                 if (matchEsatto) {
                     $datalist.empty();
-                    return; // Ferma l'esecuzione della funzione qui
+                    return;
                 }
                 
                 if (valoreDigitatoLower.length >= 2) {
@@ -384,11 +398,9 @@ diversi dalla sede dell'Associazione...</p>
                 } else {
                     $datalist.empty();
                 }
-                
             }, 250);
         });
 
-        // Autocompilazione di Provincia e CAP al click su un suggerimento
         $(document).on('change', 'input[name$="citta"]', function() {
             let cittaSelezionata = $(this).val();
             let match = comuniData.find(c => c.nome.toLowerCase() === cittaSelezionata.toLowerCase());
@@ -401,7 +413,38 @@ diversi dalla sede dell'Associazione...</p>
             }
         });
 
-        // 2. Spunta automatica Modal
+        // 2. Calcolo preventivo in tempo reale quando l'utente inserisce il Codice Fiscale (16 caratteri)
+        $('input[name="codice_fiscale"]').on('input change', function() {
+            let cf = $(this).val().trim().toUpperCase();
+            if (cf.length === 16) {
+                fetch(`{% url 'check_quote_api' %}?cf=${encodeURIComponent(cf)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.error) return;
+                        $('#summary-membership-price').text(data.membership_euro + ' €');
+                        $('#summary-ticket-price').text(data.ticket_euro + ' €');
+                        $('#summary-total-price').text(data.total_euro + ' €');
+
+                        if (data.already_member) {
+                            $('#member-recognized-badge').removeClass('d-none');
+                        } else {
+                            $('#member-recognized-badge').addClass('d-none');
+                        }
+
+                        if (!data.requires_payment) {
+                            $('#btn-submit-main').html('<i class="fas fa-check-circle me-2"></i> CONFERMA INGRESSO GRATUITO');
+                            $('#commission-note, #stripe-badges').addClass('d-none');
+                        } else {
+                            $('#btn-submit-main').html('<i class="fas fa-credit-card me-2"></i> PAGA CON CARTA');
+                            $('#commission-note, #stripe-badges').removeClass('d-none');
+                        }
+                    });
+            } else {
+                $('#member-recognized-badge').addClass('d-none');
+            }
+        });
+
+        // 3. Spunta automatica Modal
         $('#btn-accept-statuto').on('click', function() {
             $('input[name="accetta_statuto"]').prop('checked', true);
         });
@@ -410,7 +453,7 @@ diversi dalla sede dell'Associazione...</p>
             $('input[name="accetta_privacy"]').prop('checked', true);
         });
 
-        // 3. Invio della Form diretto a Django
+        // 4. Invio della Form diretto a Django
         $('#registration-form').on('submit', function(e) {
             var $form = $(this);
 

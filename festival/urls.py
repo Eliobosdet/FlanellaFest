@@ -2,9 +2,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.event_ended, name='home'),  # Mostra la pagina di evento terminato se l'evento è concluso.
+    path('', views.event_ended, name='home'),
     # path('about/', views.about, name='about'),
-    path('register/', views.event_ended, name='register'),
+    path('register/', views.register, name='register'),
+    path('api/check-quote/', views.check_quote_api, name='check_quote_api'),
     path('2026/recap/', views.recap, name='recap'),
     path('event-full/', views.event_full, name='event_full'),
     path('checked-in-partecipants/', views.checked_in_partecipants, name='checked_in_partecipants'),
@@ -14,7 +15,6 @@ urlpatterns = [
     path('check-qr-result/', views.check_qr_result, name='check_qr_result'),
     path('all-participants', views.all_participants, name='all_participants'),
     path('all-participants/excel', views.export_participants_excel, name='export_participants_excel'),
-    path('participant/<int:pk>/', views.participant_detail, name='participant_detail'),
     path('register/success/', views.payment_success, name='payment_success'),
     path('register/cancel/', views.payment_cancel, name='payment_cancel'),
     path('privacy-policy/', views.privacy_view, name='privacy'),
